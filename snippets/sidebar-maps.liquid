@@ -1,0 +1,45 @@
+{% for c in product.collections %}
+    {% if c.handle contains 'oahu' %}
+        {% assign collection = 'oahu' %}
+    {% elsif c.handle contains 'maui' %}
+        {% assign collection = 'maui' %}
+    {% elsif c.handle contains 'kauai' %}
+        {% assign collection = 'kauai' %}
+    {% elsif c.handle contains 'big-island' %}
+        {% assign collection = 'big-island' %}
+    {% elsif c.handle contains 'lanai-golf' %}
+        {% assign collection = 'lanai-golf' %}
+    {% endif %}
+{%endfor %}
+
+<div class="course-maps">
+{% if collection.handle contains 'oahu' or collection == 'oahu' %}
+<hr>
+<a href="/collections/oahu-golf-courses-map-view"><img src="{{ 'oahufish-mini-map.jpg' | asset_url }}" /></a>
+
+
+{% elsif collection.handle contains 'maui' or collection == 'maui' %}
+<hr>
+<a href="/collections/maui-golf-courses-map-view"><img src="{{ 'mauifish-mini-map.jpg' | asset_url }}" /></a>
+
+
+{% elsif collection.handle contains 'kauai' or collection == 'kauai' %}
+<hr>
+<a href="/collections/kauai-golf-courses-map-view"><img src="{{ 'kauaifish-mini-map.jpg' | asset_url }}" /></a>
+
+
+{% elsif collection.handle contains 'big-island' or collection == 'big-island' %}
+<hr>
+<a href="/collections/big-island-golf-courses-map-view"><img src="{{ 'bigislandfish-mini-map.jpg' | asset_url }}" /></a>
+
+{% elsif collection.handle contains 'kona' or collection == 'kona' %}
+  <hr>
+<a href="/collections/big-island-golf-courses-map-view"><img src="{{ 'bigislandfish-mini-map.jpg' | asset_url }}" /></a>
+
+{% elsif collection.handle contains 'lanai-golf' or collection == 'lanai-golf' %}
+<hr>
+<a href="/collections/lanai-golf-courses-map-view"><img src="{{ 'lanaigolfmap-mini.jpg' | asset_url }}" /></a>
+
+
+{% endif %}
+</div>

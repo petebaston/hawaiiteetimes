@@ -1,0 +1,89 @@
+{%- capture section_settings -%}
+  {
+    "title": "{{ section.settings.title | default: 'Upsell products'}}",
+    "description": "{{ section.settings.description }}",
+    "buttonText": "{{ section.settings.button_text }}"
+  }
+{%- endcapture -%}
+{%- capture upsell_products -%}
+  {% assign countUpseelProducts = 0 %}
+  {"items": [
+    {%- for item in cart.items -%}
+      {%- assign upsell_variant = all_products[item.variant.metafields.upsell-pop-up.related_product] -%}
+      {% if upsell_variant == empty %}
+        {%- assign upsell_product = all_products[item.product.metafields.upsell-pop-up.related_product] -%}
+      {% else %}
+        {%- assign upsell_product = upsell_variant -%}
+      {% endif %}
+      {% unless upsell_product == empty %}
+      {%- assign countUpseelProducts = countUpseelProducts | plus: 1 -%}
+      {% endunless %}
+    {%- endfor -%}
+    {%- for item in cart.items -%}
+      {%- assign upsell_variant = all_products[item.variant.metafields.upsell-pop-up.related_product] -%}
+      {% if upsell_variant == empty %}
+        {%- assign upsell_product = all_products[item.product.metafields.upsell-pop-up.related_product] -%}
+      {% else %}
+        {%- assign upsell_product = upsell_variant -%}
+      {% endif %}
+      {% unless upsell_product == empty %}
+        {%- assign selected_variant = upsell_product.selected_or_first_available_variant -%}
+        {%- assign countUpseelProducts = countUpseelProducts | minus: 1 -%}
+        {
+          "available": {{ upsell_product.available }},
+          "handle": "{{ upsell_product.handle }}",
+          "title": "{{ upsell_product.title }}",
+          "compare_at_price": "{{ selected_variant.compare_at_price | money }}",
+          "price": "{{ selected_variant.price | money }}",
+          "id": {{ upsell_product.id }},
+          "featured_image": "{{ upsell_product.featured_image | img_url: "large" }}",
+          "selected_variant": {{ selected_variant.id }},
+          "variants": [
+            {%- for variant in upsell_product.variants -%}
+            {
+              "available": {{ variant.available }},
+              "id": {{ variant.id }},
+              "compare_at_price": "{{ variant.compare_at_price | money }}",
+              "price": "{{ variant.price | money }}",
+              "featured_image": "{{ variant.featured_image | img_url: "large" }}",
+              "title": "{{ variant.title }}"
+            }{%- unless forloop.last -%},{%- endunless -%}
+            {%- endfor -%}
+          ]
+        }{%- if countUpseelProducts != 0 -%},{%- endif -%}
+      {% endunless %}
+    {%- endfor -%}
+  ]}
+{%- endcapture -%}
+<div id="section-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="upsell-pop-up" data-settings='{{- section_settings | strip_newlines -}}' data-upsell='{{- upsell_products | strip_newlines -}}'></div>
+{% schema %}
+  {
+    "name": "Upsell pop-up",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": {
+          "en": "Title"
+        },
+        "default": "Need Golf Clubs?"
+      },
+      {
+        "type": "text",
+        "id": "description",
+        "label": {
+          "en": "description"
+        },
+        "default": "Add golf club rentals to your order and pick them up right at the golf course."
+      },
+      {
+        "type": "text",
+        "id": "button_text",
+        "label": {
+          "en": "Button text"
+        },
+        "default": "Continue"
+      }
+    ]
+  }
+{% endschema %}

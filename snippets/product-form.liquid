@@ -1,0 +1,100 @@
+<div class="additional-metafield" style="margin-bottom:30px;">
+  {{product.metafields.sh_sbve.additional_text_metafield}}
+</div>
+{% if product.available %}
+  <form action="/cart/add" method="post" class="clearfix product_form" data-money-format="{{ shop.money_format }}" data-shop-currency="{{ shop.currency }}" id="product-form-{{ product.id }}">
+  
+    {% if product.options.size > 1 %}
+      <div class="select">
+        <select id="product-select-{{ product.id }}" name='id'>
+         {% assign flagfirsttime = true %}
+          {% for variant in product.variants %}
+          {% assign firstvisible = false %}
+            {% if variant.metafields.sh_sbve.invisible  != '1' %}
+               {% if flagfirsttime  == true %}
+                   {% assign firstvisible = true %}
+                   {% assign flagfirsttime = false %}
+               {% endif %}
+            <option {% if firstvisible %}selected="selected"{% endif %} value="{{ variant.id }}">{{ variant.title }}</option>
+          {% endif %}
+            
+          {% endfor %}
+        </select>
+      </div>
+      
+    {% elsif product.options.size == 1 and (product.variants.size > 1 or product.options[0] != "Title") %}
+      <div class="select">
+        
+        <select id="product-select-{{ product.id }}" name='id'>
+          {% assign flagfirsttime = true %}
+          {% for variant in product.variants %}
+          {% assign firstvisible = false %}
+            {% if variant.metafields.sh_sbve.invisible  != '1' %}
+               {% if flagfirsttime  == true %}
+                   {% assign firstvisible = true %}
+                   {% assign flagfirsttime = false %}
+               {% endif %}
+          	<option {% if firstvisible %}selected="selected"{% endif %} value="{{ variant.id }}">{{ variant.title }}</option>
+            {% endif %}
+            
+          {% endfor %}
+        </select>
+      </div>
+    
+    	{% if product.available and product.variants.size > 1 %}
+          {% for option in product.options %}
+            {% include 'swatch' with option %}
+          {% endfor %}
+        {% endif %}
+    {% else %}
+      <input type="hidden" name="id" value="{{ product.variants.first.id }}" />
+    {% endif %}
+
+
+    {% include 'booking-form' %}
+ 
+    {% if settings.display_product_quantity %}
+      <div class="left">
+       <label for="quantity">{{ 'products.product.quantity' | t }}:</label>
+       <input type="number" min="1" size="2" class="quantity" name="quantity" id="quantity" value="1" />
+      </div>
+    {% endif %}
+    <div class="purchase clearfix {% if settings.display_product_quantity %}inline_purchase{% endif %}">
+      {% if settings.cart_return == 'back' %}
+        <input type="hidden" name="return_to" value="back" />
+      {% endif %}
+      {% if product.metafields.bookthatapp.config %}
+        <input type="submit" name="add" value="{{ 'products.product.add_to_cart' | t }}" class="action_button add_to_cart bta-load-enable" disabled="disabled" style="display:none"/>
+      {% else %}
+        <input type="submit" name="add" value="{{ 'products.product.add_to_cart' | t }}" class="action_button add_to_cart" />
+      {% endif %}
+    </div>  
+
+    {% if settings.display_inventory_left %}
+      <div class="items_left">
+        {% if product.variants.first.inventory_management == "shopify" and product.variants.first.inventory_quantity > 0 %}
+          {% capture items_left_text %}
+            {% if product.variants.first.inventory_quantity == 1 %}
+              {{ 'products.product.items_left_count.one' | t }}
+            {% else %}
+              {{ 'products.product.items_left_count.other' | t }}
+            {% endif %}
+          {% endcapture %}
+
+          <p><em>{{ product.variants.first.inventory_quantity }} {{ items_left_text }}</em></p>
+        {% endif %}
+      </div>
+    {% endif %}
+  </form>
+
+  {% if product.variants.size > 1 or product.options.size > 1 %}
+    <script type="text/javascript">
+      // <![CDATA[  
+        $(function() {    
+          $product = $('#product-' + {{ product.id }});
+          new Shopify.OptionSelectors("product-select-{{ product.id }}", { product: {{ product | json }}, onVariantSelected: selectCallback{% if product-form == 'product' %}, enableHistoryState: true{% endif %} });          
+        });
+      // ]]>
+    </script>
+  {% endif %}
+{% endif %}

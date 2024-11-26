@@ -1,0 +1,38 @@
+<script type="text/javascript">
+    var getDatesArray = [];
+    var testObject = {};
+    var ezlinksVariants = {{ product.variants | json }};
+    var ezlinksTags = {{ product.tags | json }};
+    var ezlinksMetafields = {
+    {% for variant in product.variants %}
+    {{ variant.id }}: {{ variant.metafields.shoppad | json }}{% if forloop.last != true %},{% endif %}
+    {% endfor %}
+    }
+    ;
+
+    /* Added functionality for BookThatApp */
+    function loadPackageTimes() {
+        var packageVariantId = $('.product_form input:checked').data('variantid');
+
+        if (packageVariantId) {
+            bta.variantId = packageVariantId;
+            bform.updateTeeTimes(packageVariantId);
+            $("#product-select-{{ product.id }}").val(packageVariantId);
+            $('#user_info input[name=variant]').val(packageVariantId);
+        }
+    }
+
+    $(document).ready(function() {
+        document.querySelector('.swatch-element.available input').click();
+
+        loadPackageTimes();
+
+        $('.product_form input[type=radio]').click(function() {
+            loadPackageTimes();
+        })
+    })
+</script>
+
+{% include 'ez-links-cloneanchor' %}
+
+<script type="text/javascript" src="{{ 'product.ezlinks.js' | asset_url }}"></script>

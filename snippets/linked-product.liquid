@@ -1,0 +1,23 @@
+{% if product.handle contains 'private' %}
+	{% capture linked_product_url %}{{ product.handle | replace: '-private', '-shared' }}{% endcapture %}
+	{% capture linked_product_type %}Shared{% endcapture %}
+{% else %}
+	{% capture linked_product_url %}{{ product.handle | replace: '-shared', '-private' }}{% endcapture %}
+	{% capture linked_product_type %}Private{% endcapture %}
+{% endif %}
+
+<a id="linked-product-a" href="{{ "" | within: collection}}/products/{{ linked_product_url }}" style="display:none"><span class="linked-product">For {{ linked_product_type }} Charter Rates Click Here</span></a>
+
+<script>
+  $.ajax({
+    url: '{{ "" | within: collection}}/products/{{ linked_product_url }}',
+    type: 'HEAD',
+    dataType: 'json',
+    success: function(data){ 
+      $('#linked-product-a').show();
+    },
+    error: function(data) {
+      // ignore
+    }
+  });  
+</script>

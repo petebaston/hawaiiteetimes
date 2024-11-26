@@ -1,0 +1,49 @@
+<script>
+  $(function () {
+    // clone the swatch section and append it to the Morning / Twilight course detail div
+    $('.swatch').clone()
+        .appendTo('.course-detail:first-of-type')
+        .addClass('cloned-swatches');
+
+    $('.cloned-swatches').find('input, span.checkbox').remove();
+
+    // swap the pricing order on the cloned swatches so it looks nice
+    $('.cloned-swatches .product-compare-price').each(function() {
+      $(this).insertAfter($(this).next('.price'));
+    });
+
+    // click the cloned div and get scrolled to the correct page position
+    $('.cloned-swatches .swatch-element').on('click', function () {
+      $('html, body').animate({
+        scrollTop: $(".product_form").offset().top
+      }, 1000);
+    });
+
+    removeDataAttributes('.cloned-swatches');
+
+    // removes all data attributes from a target element
+    // example:  removeDataAttributes('#user-list');
+    function removeDataAttributes(target) {
+
+      var i,
+          $target = $(target),
+          attrName,
+          dataAttrsToDelete = [],
+          dataAttrs = $target.get(0).attributes,
+          dataAttrsLen = dataAttrs.length;
+
+      // loop through attributes and make a list of those
+      // that begin with 'data-'
+      for (i=0; i<dataAttrsLen; i++) {
+        if ( 'data-' === dataAttrs[i].name.substring(0,5) ) {
+          dataAttrsToDelete.push(dataAttrs[i].name);
+        }
+      }
+      // delete each of the attributes we found above
+      // i.e. those that start with "data-"
+      $.each( dataAttrsToDelete, function( index, attrName ) {
+        $target.removeAttr( attrName );
+      })
+    };
+  });
+</script>

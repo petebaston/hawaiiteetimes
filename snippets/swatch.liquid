@@ -1,0 +1,110 @@
+{% comment %}
+  Set the extension of your color files below. Use 'png', 'jpeg', 'jpg' or 'gif'.
+{% endcomment %}
+
+{% assign file_extension = 'png' %}
+
+{% if swatch == blank %}
+<div class="swatch error">
+  <p>You must include the snippet swatch.liquid with the name of a product option.</p>
+  <p>Use: <code>{% raw %}{% include 'swatch' with 'name of your product option here' %}{% endraw %}</code></p>
+  <p>Example: <code>{% raw %}{% include 'swatch' with 'Color' %}{% endraw %}</code></p>
+</div>
+{% else %}
+
+{% assign found_option = false %}
+{% assign is_color = false %}
+{% assign option_index = 0 %}
+
+{% for option in product.options %}
+  {% if option == swatch %}
+    {% assign found_option = true %}
+    {% assign option_index = forloop.index0 %}
+    <style>
+      label[for="product-select-option-{{ option_index }}"] { display: none; }
+      #product-select-option-{{ option_index }} { display: none; }
+      #product-select-option-{{ option_index }} + .custom-style-select-box { display: none !important; }
+    </style>
+    <script>$(window).load(function() { $('.selector-wrapper:eq({{ option_index }})').hide(); });</script>
+    {% assign downcased_option = swatch | downcase %}
+    {% if downcased_option contains 'color' or downcased_option contains 'colour' %}
+      {% assign is_color = true %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+{% unless found_option %}
+<div class="swatch error">
+  <p>You included the snippet swatch.liquid with the name of a product option — <code>'{{ swatch }}'</code> — that does not belong to your product.</p>
+  <p>Use <code>{% raw %}{% include 'swatch' with 'name of your product option here' %}{% endraw %}</code></p>
+  <p>Example: <code>{% raw %}{% include 'swatch' with 'Color' %}{% endraw %}</code></p>
+  <p><strong>This is case-sensitive!</strong> Do not put in <code>'color'</code> if your product option name is <code>'Color'</code>.</p>
+</div>
+{% else %}
+<div class="swatch clearfix" data-option-index="{{ option_index }}">
+  <!--<div class="header">{{ swatch }}</div>-->
+  {% assign values = '' %}
+  {% assign flagfirsttime = true %}
+  {% for variant in product.variants %}
+    {% assign firstvisible = false %}
+    {% assign value = variant.options[option_index] %}
+    {% unless values contains value %}
+      {% assign values = values | join: ',' %}
+      {% assign values = values | append: ',' | append: value %}
+      {% assign values = values | split: ',' %}
+      {% assign configs = variant.metafields.bookthatapp.config | split: '&' %}
+
+
+<!-----Bulk variants editor---------->
+ {% if variant.metafields.sh_sbve.invisible  == '1' %}
+
+     {% assign visibleclass = 'style="display:none;"'%}
+  {% else %}
+     {% assign visibleclass = 'style=""'%}
+  	 {% if flagfirsttime  == true %}
+         {% assign firstvisible = true %}
+         {% assign flagfirsttime = false %}
+     {% endif %}
+   {% endif %}
+<!-----Bulk variants editor---------->
+  	  {% if variant.metafields.shoppad.priority == null %}
+      <div data-value="{{ value | escape }}" {{ visibleclass }} class="swatch-element {% if is_color %}color {% endif %}{{ value | handle }} {% if variant.available %}available{% else %}soldout{% endif %}">
+        <input id="swatch-{{ option_index }}-{{ value | handle }}" data-variantId="{{variant.id}}"  type="radio" name="option-{{ option_index }}" value="{{ value | escape }}"{% if firstvisible %} checked{% endif %} {% unless variant.available %}disabled{% endunless %} />
+        {% if is_color %}
+        <label for="swatch-{{ option_index }}-{{ value | handle }}" style="background-color: {{ value | split: ' ' | last | handle }}; background-image: url({{ value | handle | append: '.' | append: file_extension | asset_url }})">
+          <img class="crossed-out" src="{{ 'soldout.png' | asset_url }}" />
+        </label>
+        {% else %}
+        <label for="swatch-{{ option_index }}-{{ value | handle }}">
+          <span class="checkbox" ></span>
+          {% if variant.compare_at_price > variant.price %}
+                  {% if variant.available %}
+                    <span class="course-name">{{ value }}</span> 
+          <span class="product-compare-price">{{ variant.compare_at_price | money }}</span>
+          <span class="price product-price on-sale" itemprop="price">{{ variant.price | money }}</span>
+          
+          			{% endif %}
+                {% else %}
+                  {% if variant.available %}
+          			 <span class="course-name">{{value}}</span> 
+          <span class="price">{{ variant.price | money }}</span>
+                  {% endif %}
+                {% endif %}
+          <img class="crossed-out" src="{{ 'soldout.png' | asset_url }}" />
+        </label>
+        {% endif %}
+      </div>
+      {% endif %}
+  
+    {% endunless %}
+    {% if variant.available %}
+    <script>
+      jQuery('.swatch[data-option-index="{{ option_index }}"] .{{ value | handle }}').removeClass('soldout').addClass('available').find(':radio').removeAttr('disabled');
+    </script>
+    {% endif %}
+  {% endfor %}
+</div>
+
+{% endunless %}
+
+{% endif %}

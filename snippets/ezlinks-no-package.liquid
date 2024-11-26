@@ -1,0 +1,18 @@
+<script type="text/javascript">
+    var getDatesArray = [];
+    var testObject = {};
+    var ezlinksVariants = {{ product.variants | json }};
+    var ezlinksTags = {{ product.tags | json }};
+    var ezlinksMetafields = {
+    {% for variant in product.variants %}
+    {{ variant.id }}: {{ variant.metafields.shoppad | json }}{% if forloop.last != true %},{% endif %}
+    {% endfor %}
+    }
+    ;
+</script>
+
+{% comment %}
+    {% include 'ez-links-cloneanchor' %}
+{% endcomment %}
+
+<script type="text/javascript" src="{{ 'product.ezlinks.js' | asset_url }}"></script>

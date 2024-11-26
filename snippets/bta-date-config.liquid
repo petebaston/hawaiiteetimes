@@ -1,0 +1,6 @@
+{% for config in configs %}
+  {% assign kvp = config | split: '=' %}
+  {% if kvp.first == bta-date-config %}
+	<span class="bta_config_time" data-time="{{ kvp.last }}"></span>
+  {% endif %}
+{% endfor %}

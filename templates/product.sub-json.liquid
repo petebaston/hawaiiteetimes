@@ -1,0 +1,44 @@
+{% layout none %}{% capture output %}
+
+{% liquid
+    assign defaulVariant = 0
+    assign defaultCompare = -1
+    assign customDefaultVariant = product.metafields.spurit.default_variant.value
+%}
+
+{% if customDefaultVariant %}
+    {% assign defaultVariant = customDefaultVariant.id %}
+{% elsif product.variants.size > 1 %}
+    {% for variant in product.variants %}
+        {% if variant.metafields.shoppad.priority < 2 %}
+            {% if variant.metafields.sh_sbve.invisible  != '1' %}
+                {% if defaultVariant != 0 and (defaultCompare == -1 or defaultCompare > variant.price) %}
+                    {% assign defaultVariant = variant.id %}
+                    {% assign defaultCompare = variant.price %}
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+{
+"id":{{product.id}},
+"handle":"{{product.handle}}",
+"key":"{{product.key}}",
+"title":{{product.title | json}},
+"images":[{{product.images[0].src | json}}],
+"defaultVariant": "{{ defaultVariant }}",
+"variants":[
+    {% for variant in product.variants %}
+        {
+            "id":{{variant.id}},
+            "title":{{variant.title | json}},
+            "inventory_quantity":{{variant.inventory_quantity}},
+            "available":{{variant.available}},
+            "price":{{variant.price}},
+            "compare_at_price": {% if variant.compare_at_price %}{{ variant.compare_at_price }}{% else %}{{ variant.price }}{% endif %}
+        }
+        {% unless forloop.last %},{% endunless %}
+    {% endfor %}
+]
+}{% endcapture %}{{ output | strip_newlines }}

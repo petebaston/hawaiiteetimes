@@ -1,0 +1,54 @@
+{% if settings.banner_1_enabled or settings.banner_2_enabled or settings.banner_3_enabled or settings.banner_4_enabled or settings.banner_5_enabled %}
+
+<div id="sidebar_slider">
+  
+  <ul class="slides">
+
+    <!-- Banner 1 -->
+    {% if settings.banner_1_enabled %}
+    <li class="slide">
+      <a href="{{ settings.banner_1_url }}" class="fancybox" rel="group" title="{{settings.banner_1_alt}}" target="_blank">
+        <img src="{{ 'banner_1.jpg' | asset_url }}" alt="{{settings.banner_1_alt}}"  itemprop="image" />
+      </a>
+    </li>
+    {% endif %}
+
+    <!-- Banner 2 -->
+    {% if settings.banner_2_enabled %}
+    <li class="slide">
+      <a href="{{ settings.banner_2_url }}" class="fancybox" rel="group" title="{{settings.banner_2_alt}}" target="_blank">
+        <img src="{{ 'banner_2.jpg' | asset_url }}" alt="{{settings.banner_2_alt}}"  itemprop="image" />
+      </a>
+    </li>
+    {% endif %}
+
+    <!-- Banner 3 -->
+    {% if settings.banner_3_enabled %}
+    <li class="slide">
+      <a href="{{ settings.banner_3_url }}" class="fancybox" rel="group" title="{{settings.banner_3_alt}}" target="_blank">
+        <img src="{{ 'banner_3.jpg' | asset_url }}" alt="{{settings.banner_3_alt}}"  itemprop="image" />
+      </a>
+    </li>
+    {% endif %}
+
+    <!-- Banner 4 -->
+    {% if settings.banner_4_enabled %}
+    <li class="slide">
+      <a href="{{ settings.banner_4_url }}" class="fancybox" rel="group" title="{{settings.banner_4_alt}}" target="_blank">
+        <img src="{{ 'banner_4.jpg' | asset_url }}" alt="{{settings.banner_4_alt}}"  itemprop="image" />
+      </a>
+    </li>
+    {% endif %}
+
+    <!-- Banner 5 -->
+    {% if settings.banner_5_enabled %}
+    <li class="slide">
+      <a href="{{ settings.banner_5_url }}" class="fancybox" rel="group" title="{{settings.banner_5_alt}}" target="_blank">
+        <img src="{{ 'banner_5.jpg' | asset_url }}" alt="{{settings.banner_5_alt}}"  itemprop="image" />
+      </a>
+    </li>
+    {% endif %}
+
+  </ul>
+</div>
+{% endif %}

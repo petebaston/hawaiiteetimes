@@ -1,0 +1,143 @@
+{% paginate collection.products by settings.pagination_limit %}
+  {% assign tag_count = collection.all_tags | size %}
+  {% assign tag_threshold = settings.tag_threshold | minus: 0 %}
+
+  {% assign multi_day = false %}
+  {% if collection.handle == 'hawaii-golf-multi-day-golf' %}
+    {% assign multi_day  = true %}
+  {% endif %}
+
+  {% if settings.collection_sidebar %}
+    
+    <div class="thirteen columns">
+  {% else %}
+    <div class="sixteen columns">
+  {% endif %}
+
+      {% if collection.image %}
+      <div class="collection_image">		
+		<img src="{{ collection.image.src | collection_img_url: 'original' }}" alt="{{collection.image.alt}}" usemap="#{{collection.handle}}">
+      </div>  
+      {% endif %}
+      
+      <div class="clearfix collection_nav">
+
+        <h1 class="collection_title{% if collection.image %} has_image{% endif %} {% if settings.collection_tags and tag_count < tag_threshold %}collection_title_tags{% endif %}">
+          {{ collection.title }}
+        </h1>
+        {% if settings.collection_tags %}
+        {% if tag_count < tag_threshold %}
+        <ul class="collection_menu">
+          <li>
+            <a href="{% if collection.handle == "all" %}/collections/all{% elsif collection.handle %}{{ collection.url }}{% elsif collection.all_products_count > 0 and collection.products.first.type == collection.title %}{{ collection.title | url_for_type }}{% elsif collection.all_products_count > 0 and collection.products.first.vendor == collection.title %}{{ collection.title | url_for_vendor }}{% endif %}">{% if current_tags %}{{ 'collections.general.view_all' | t }}{% else %}<span class="active">{{ 'collections.general.view_all' | t }}</span>{% endif %}</a>
+          </li>
+          {% for tag in collection.all_tags %}
+          {% unless tag contains 'meta-related-collection-' %}
+          <li>
+            {{ tag | highlight_active_tag | link_to_tag: tag }}
+          </li>
+          {% endunless %}
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% endif %}
+
+        {% if collection.handle != blank and collection.products_count > 0 %}
+          {% if settings.collection_tags %}
+            <div class="three columns section_select tag_filter {% unless settings.collection_sort %}offset-by-three omega{% endunless %}" {% if tag_count >= tag_threshold %}style="display:block"{% endif %}>
+              <select name="tag_filter" id="tag_filter">
+                <option {% unless current_tags %}selected="selected"{% endunless %} value="{% if collection.handle == "all" %}/collections/all{% elsif collection.handle %}{{ collection.url }}{% elsif collection.all_products_count > 0 and collection.products.first.type == collection.title %}{{ collection.title | url_for_type }}{% elsif collection.all_products_count > 0 and collection.products.first.vendor == collection.title %}{{ collection.title | url_for_vendor }}{% endif %}">{{ 'collections.general.view_all' | t }}</option>
+                {% for tag in collection.all_tags %}
+                  {% unless tag contains 'meta-related-collection-' %}
+                    <option {% if current_tags contains tag %}selected="selected"{% endif %} value="/collections/{% if collection.handle != blank %}{{ collection.handle }}{% else %}all{% endif %}/{{ tag | handleize }}">{{ tag }}</option>
+                  {% endunless %}
+                {% endfor %}
+              </select>
+            </div>
+          {% endif %}
+
+          {% if settings.collection_sort %}
+            <div class="three columns section_select omega {% unless settings.collection_tags %}offset-by-three{% endunless %}">
+              <select id="sort-by">
+                <option value="manual">{{ 'collections.sorting.featured' | t }}</option>
+                <option value="best-selling">{{ 'collections.sorting.best_selling' | t }}</option>
+                <option value="title-ascending">{{ 'collections.sorting.az' | t }}</option>
+                <option value="title-descending">{{ 'collections.sorting.za' | t }}</option>
+                <option value="price-ascending">{{ 'collections.sorting.price_ascending' | t }}</option>
+                <option value="price-descending">{{ 'collections.sorting.price_descending' | t }}</option>
+                <option value="created-descending">{{ 'collections.sorting.date_descending' | t }}</option>
+                <option value="created-ascending">{{ 'collections.sorting.date_ascending' | t }}</option>
+              </select>
+              <script type="text/javascript">
+                // <![CDATA[  
+                  $('#sort-by')
+                    .val('{{ collection.sort_by | default: collection.default_sort_by | escape }}')
+                    .bind('change', function() {
+                      Shopify.queryParams.sort_by = $(this).val();
+                      location.search = $.param(Shopify.queryParams).replace(/\+/g, '%20');
+                  });
+                // ]]>
+              </script>
+            </div>
+          {% endif %}
+        {% endif %}
+
+      </div>
+       
+
+      
+  <div class="clearfix">
+    {% if collection.products.size == 0 %}
+    {% unless multi_day %}
+      <div class="center">
+        <div class="section clearfix">     
+          <p class="quote">{{ 'collections.general.no_matches' | t }}</p>
+        </div>
+      </div>
+    {% endunless %}
+    {% else %}
+      {% assign products = collection.products %}
+      {% assign products_per_row = settings.products_per_row %}
+      {% include 'product-loop' with settings.collection_sidebar %}
+    {% endif %}
+    </div>
+      
+        
+            {% if collection.description != blank %}
+      <div class="collection_description description section clearfix{% unless multi_day %} large-black{% endunless %}">
+        {% if collection.handle == 'lanai-golf-courses' or collection.handle == 'kauai-golf-courses' or collection.handle == 'maui-golf-courses' or collection.handle == 'oahu-golf-courses' %}
+        <!-- <img class="icon" src="{{ 'collection-description-icon.png' | asset_url }}" aria-hidden="true"> -->
+        {% endif %}
+        {{ collection.description }}
+        {% if multi_day %}
+        <div class="clearfix-shield">
+          <div class="thumbnail four columns alpha even ">
+            <a href="http://hawaiiteetimes.com/collections/multi-day-golf-maui" title="Maui Golf Specials">
+              <img src="//cdn.shopify.com/s/files/1/0191/3924/files/maui_a7229731-d524-4a48-b3ce-e13a2ef1773a.jpg?10526" />
+            </a>
+          </div>
+          <div class="thumbnail four columns odd">
+            <a href="http://hawaiiteetimes.com/collections/multi-day-golf-oahu" title="Oahu Golf Specials">
+              <img src="//cdn.shopify.com/s/files/1/0191/3924/files/oahu_1b427771-e549-42ce-9d20-48c9b42df174.jpg?10526" />
+            </a>
+          </div>
+          <div class="thumbnail four columns even">
+            <a href="http://hawaiiteetimes.com/collections/multi-day-golf-big-island" title="Big Island Golf Specials">
+              <img src="//cdn.shopify.com/s/files/1/0191/3924/files/bigisland_dd7ed96a-f904-4411-ba21-4e198b2cdb81.jpg?10526" />
+            </a>
+          </div>
+          <div class="thumbnail four columns omega odd">
+            <a href="http://hawaiiteetimes.com/collections/multi-day-golf-kauai" title="Kauai Golf Specials">
+              <img src="//cdn.shopify.com/s/files/1/0191/3924/files/kauai_afff5458-0458-4638-b008-c78f8de00343.jpg?10526" />
+            </a>
+          </div>          
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}   
+  </div>
+      
+
+
+  {% include 'pagination' with settings.collection_sidebar %}
+{% endpaginate %}

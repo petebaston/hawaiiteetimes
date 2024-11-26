@@ -1,0 +1,203 @@
+
+<!-- sh_sub-added -->
+{% render 'sh_sub-product-snippet' %}
+<!-- /sh_sub-added -->
+<main class="product_single clearfix" style="overflow: hidden;">
+  <div class="sixteen columns">
+
+    <h1 class="product_name top" itemprop="name">{{ product.title }}</h1>
+
+    <div itemscope itemtype="http://data-vocabulary.org/Product" id="product-{{ product.id }}">
+      {% include 'sp-slider' %}
+
+{% comment %}
+      <section class="course-detail">
+        <h1 class="section-title">Rates for {{ product.title }}</h1>
+        <dl class="rate">
+          <dt>Morning</dt>
+          <dd><strong>$105.00</strong> <span class="compare-price">$140.00</span></dd>
+        </dl>
+        <dl class="rate">
+          <dt>After 12pm</dt>
+          <dd><strong>$75.00</strong> <span class="compare-price">$80.00</span></dd>
+        </dl>
+      </section>
+{% endcomment %}
+      <section class="course-detail">
+        <h1 class="section-title">Rates</h1>
+
+
+		    {% if product.variants.size <= 1 %}
+        {% assign variant = product.selected_or_first_available_variant %}
+        <p class="modal_price" itemprop="offerDetails" itemscope itemtype="http://data-vocabulary.org/Offer">
+           <meta itemprop="currency" content="{{ shop.currency }}" />
+           <meta itemprop="seller" content="{{ shop.name | escape }}" />
+           <meta itemprop="availability" content="{% if product.available %}in_stock{% else %}out_of_stock{% endif %}" />
+
+           <span class="sold_out">{% if variant.available == false %}{{ 'products.product.sold_out' | t }}{% endif %}</span>
+           <span itemprop="price" content="{{ variant.price | money_without_currency }}" class="{% if variant.compare_at_price > variant.price %}sale{% endif %}">
+              <span class="current_price">
+                {% if variant.available %}
+                {{variant.title}} - <span class="red-price">{{ variant.price | money }}</span>
+                {% endif %}
+              </span>
+           </span>
+           <span class="was_price">
+            {% if variant.price < variant.compare_at_price and variant.available %}
+              {{ variant.compare_at_price | money }}
+            {% endif %}
+           </span>
+        </p>
+        {% endif %}
+   
+        {% include 'product-notify-me' %}
+
+        {% include 'product-form' with 'product' %}
+
+        <div id="sub-bs-container" style="display:none"></div>
+
+         <div class="meta">
+           {% if settings.display_collections %}
+             <p>
+               <span class="label">{{ 'products.product.collections' | t }}:</span>
+               <span>
+                {% for col in product.collections %}
+                  <a href="{{ col.url }}" title="{{ col.title }}">{{ col.title }}</a>{% unless forloop.last %},{% endunless %}
+                {% endfor %}
+              </span>
+            </p>
+           {% endif %}
+
+           {% if settings.display_tags %}
+              <p>
+                {% for tag in product.tags %}
+                  {% if forloop.first %}
+                    <span class="label">{{ 'products.product.tags' | t }}:</span>
+                  {% endif %}
+
+                  {% unless tag contains 'meta-related-collection-' %}
+                    <span>
+                      <a href="/collections/{% if collection %}{{ collection.handle }}{% else %}all{% endif %}/{{ tag | handle }}" title="{{ 'products.product.products_tagged' | t: tag: tag }}">{{ tag }}</a>{% unless forloop.last %},{% endunless %}
+                    </span>
+                  {% endunless %}
+                {% endfor %}
+              </p>
+           {% endif %}
+
+          {% if settings.display_type %}
+             <p>
+               <span class="label">{{ 'products.product.product_types' | t }}:</span> <span itemprop="category">{{ product.type | link_to_type }}</span>
+             </p>
+          {% endif %}
+
+          {% if settings.display_vendor %}
+             <p>
+               <span class="label">{{ 'products.product.vendor' | t }}:</span> <span itemprop="brand">{{ product.vendor | link_to_vendor }}</span>
+             </p>
+          {% endif %}
+         </div>
+       </section>
+
+      </div>
+
+    </div>
+
+
+    {% if product.description != blank %}
+    <div class="description clearfix" itemprop="description">
+      {{ product.description | split: '<!-- split -->' | first }}
+    </div>
+    {% endif %}
+
+
+  {% if settings.display_related_products %}
+    {% capture limit %}{{ settings.products_per_row | plus: 1 }}{% endcapture %}
+
+    {% assign found_a_collection = false %}
+    {% for c in product.collections %}
+      {% if found_a_collection == false and c.handle != 'frontpage' and c.handle != 'all' and c.all_products_count > 1 %}
+        {% assign found_a_collection = true %}
+        {% assign col = c.handle %}
+      {% endif %}
+    {% endfor %}
+
+    {% for tag in product.tags %}
+      {% if tag contains 'meta-related-collection-' %}
+        {% assign col = tag | remove: 'meta-related-collection-' %}
+        {% assign collection = collections[col] %}
+        {% capture limit %}{{ collection.products_count | plus: 1 }}{% endcapture %}
+      {% endif %}
+    {% endfor %}
+
+    {% if col and collections[col].all_products_count > 0 %}
+
+      <h2>{{ 'products.product.related_items' | t }}</h2>
+
+
+      {% assign skip_product = product %}
+      {% assign products = collections[col].products %}
+      {% assign products_per_row = settings.products_per_row %}
+      <div class="clearfix">
+        <div class="products-desktop">
+        {% include 'product-loop' %}
+        </div>
+      </div>
+    {% endif %}
+
+  {% endif %}
+
+
+    <div class="products-mobile">
+      {% include 'product-loop-mobile' %}
+    </div>
+
+  </div>
+</main>
+
+</div>
+
+<div class="modal-mask" id="modal-teetime">
+  <div class="modal-container">
+    <a href="#" class="close"></a>
+    <h1 class="product_name" itemprop="name">{{ product.title }}</h1>
+    <ul>
+      <li>18 Hole Course</li>
+      <li>Cart Included</li>
+    </ul>
+    <p>Tue. Jun. 6, 2017 at 11:45 AM</p>
+    <form>
+      <div class="row player-cost">
+        <select>
+          <option value="1">1 Player</option>
+          <option value="2">2 Players</option>
+          <option value="3">3 Players</option>
+          <option value="4">4 Players</option>
+        </select>
+        <strong>$105.00</strong>
+        <span class="compare-at-price">$140.00</span>
+        <span>per player</span>
+      </div>
+      <div class="row">
+        <input type="text" placeholder="First Name" />
+      </div>
+      <div class="row">
+        <input type="text" placeholder="Last Name" />
+      </div>
+      <div class="row">
+        <input type="text" placeholder="Hotel" />
+      </div>
+      <div class="form-actions">
+        <a href="#" class="button close">Cancel</a>
+        <button type="submit">Add to Cart</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+$(function() {
+
+  //$(".datepicker").datepicker();
+
+});
+</script>

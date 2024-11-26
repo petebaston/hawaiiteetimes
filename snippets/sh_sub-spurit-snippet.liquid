@@ -1,0 +1,58 @@
+<script>
+    window.upsellBundles = {
+        translation: {
+            add: "{{ 'upsell_bundle.add' | t }}",
+            added: "{{ 'upsell_bundle.added' | t }}",
+            title: "{{ 'upsell_bundle.title' | t }}",
+            regular_price: "{{ 'upsell_bundle.regular_price' | t }}",
+            package_price: "{{ 'upsell_bundle.package_price' | t }}",
+            terms: "{{ 'cart.general.terms' | t }}"
+        },
+        addedItems: {}
+    }
+
+    {% if template contains 'cart' %}
+        {% liquid
+            assign lastItem = cart.items | first
+        %}
+        SUBParams.product = {{ lastItem.product | json }}
+    {% endif %}
+</script>
+
+<script src="{{ 'sub-common.js' | asset_url }}"></script>
+{% if template contains 'cart' %}
+<script>
+    window.Spurit.globalOnLoad = function(){
+        console.log('globalOnLoad', window.Spurit, Spurit.global);
+        window.Spurit.redirectToCheckout = window.Spurit.redirectToCheckout ?? true;
+        window.Spurit.global.onReady(
+            ['checkout', 'cart' /* any modules you want */],
+            function(){
+                console.log('checkout ready');
+                const cartAdapter = Spurit.global.cartPool.getAdapter();
+                window.Spurit.global.checkout.onCheckout(function(next){
+                    console.log('abort redirect to checkout');
+                    document.dispatchEvent(new CustomEvent('modal:open', { bubbles: true}));
+                    next(window.Spurit.redirectToCheckout);
+                });
+
+                //add listener custom event from upsell-pop-up
+                document.addEventListener('modal:go-to-checkout',function () {
+                    window.Spurit.redirectToCheckout = true;
+                    window.Spurit.global.checkout.forceCheckout();
+                })
+
+                //add listener custom event from upsell-pop-up
+                document.addEventListener('modal:added',function (event) {
+                    cartAdapter.addItems(
+                        event.detail.data,
+                        function(addedItems){
+                            event.detail.callback(addedItems)
+                        }
+                    );
+                })
+            }
+        );
+    };
+</script>
+{% endif %}

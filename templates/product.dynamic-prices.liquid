@@ -1,0 +1,290 @@
+
+<style>
+  #course > div > span {
+    display: none; 
+  }
+</style>
+
+<main class="product_single clearfix" style="overflow-y: hidden;">
+  <div class="sixteen columns">
+    <h1 class="product_name top" itemprop="name">{{ product.title }}</h1>
+    <div itemscope itemtype="http://data-vocabulary.org/Product" id="product-{{ product.id }}">
+      <div class="section product_section clearfix">
+        {% include 'sp-slider' %}
+        {% render 'dynamic-prices' with product %}
+
+        <section class="course-detail available-tee-times loading" style="display:none">
+          <h1 class="section-title">
+            <a name="teetimes"></a>
+            <strong>Available Tee Times</strong>
+          </h1>
+          <div class="additional-metafield" style="margin-bottom:30px;">
+            {{ product.metafields.sh_sbve.additional_text_metafield }}
+          </div>
+          <form id="avail-tee-times">
+            <div class="search-teetimes">
+              <div class="third">
+                <label>Date of Play</label>
+                <input type="text" class="datepicker sp-datepicker" name="date" readonly="readonly">
+              </div>
+              <div class="spacer">
+                <span>at</span>
+              </div>
+              <div class="third">
+                <label>Tee Time</label>
+                <div id="htt-times"></div>
+              </div>
+              <div class="spacer">
+                <div>
+                  <span>for</span>
+                </div>
+              </div>
+              <div class="third">
+                <label># Players</label>
+                <div id="htt-players">
+                  <select id="tee-players" name="tee-players">
+                    <option value="all">All</option>
+                    <option value="1">1 Player</option>
+                    <option value="2">2 Players</option>
+                    <option value="3">3 Players</option>
+                    <option value="4">4 Players</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            {% comment %}
+              <button type="submit">View Times</button>
+            {% endcomment %}
+          </form>
+
+          <div class="search-results">
+            <img class="spinner" src="{{ 'spinner.svg' | asset_url }}" alt="loading">
+            <div class="result-window">
+              <ul id="available-teetimes"></ul>
+              <button data-class="load-more">Load More Times</button>
+              <div id="response-none">
+                <h4 style="color: red; text-align: center; font-weight: bold;">
+                  There are currently no tee times available, please select another date.
+                </h4>
+                {% assign reservation_url = product.metafields.shoppad.request_reservation_url %}
+                {% assign button_text = product.metafields.shoppad.request_reservation_text %}
+                {% if reservation_url %}
+                  <a href="{{ reservation_url }}">
+                    {% if button_text != blank %}
+                      {{ button_text }}
+                    {% else %}
+                      Request Priority Reservation
+                    {% endif %}
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="course-detail dynamic-prices">
+          {% if product.variants.size <= 1 %}
+            {% assign variant = product.selected_or_first_available_variant %}
+
+            <p class="modal_price" itemprop="offerDetails" itemscope itemtype="http://data-vocabulary.org/Offer">
+              <meta itemprop="currency" content="{{ shop.currency }}">
+
+              <meta itemprop="seller" content="{{ shop.name | escape }}">
+
+              <meta
+                itemprop="availability"
+                content="{% if product.available %}in_stock{% else %}out_of_stock{% endif %}"
+              >
+
+              <span class="sold_out">
+                {%- if variant.available == false %}{{ 'products.product.sold_out' | t }}{% endif -%}
+              </span>
+
+              <span
+                itemprop="price"
+                content="{{ variant.price | money_without_currency }}"
+                class="{% if variant.compare_at_price > variant.price %}sale{% endif %}"
+              >
+                <span class="current_price">
+                  {% if variant.available %}
+                    {{ variant.title }} - <span class="red-price">{{ variant.price | money }}</span>
+                  {% endif %}
+                </span>
+              </span>
+
+              <span class="was_price">
+                {% if variant.price < variant.compare_at_price and variant.available %}
+                  {{ variant.compare_at_price | money }}
+                {% endif %}
+              </span>
+            </p>
+          {% endif %}
+
+          {% include 'product-notify-me' %}
+
+          <div id="sub-bs-container" style="display:none"></div>
+
+          {% comment %}{% include 'product-multi-package' %}{% endcomment %}
+
+          <div class="meta">
+            {% if settings.display_collections %}
+              <p>
+                <span class="label">{{ 'products.product.collections' | t }}:</span>
+                <span>
+                  {% for col in product.collections %}
+                    <a
+                      href="{{ col.url }}"
+                      title="{{ col.title }}"
+                    >
+                      {{- col.title -}}
+                    </a>
+                    {%- unless forloop.last %},{% endunless %}
+                  {% endfor %}
+                </span>
+              </p>
+            {% endif %}
+
+            {% if settings.display_tags %}
+              <p>
+                {% for tag in product.tags %}
+                  {% if forloop.first %}
+                    <span class="label">{{ 'products.product.tags' | t }}:</span>
+                  {% endif %}
+                  {% unless tag contains 'meta-related-collection-' %}
+                    <span>
+                      <a
+                        href="/collections/{% if collection %}{{ collection.handle }}{% else %}all{% endif %}/{{ tag | handle }}"
+                        title="{{ 'products.product.products_tagged' | t: tag: tag }}"
+                      >
+                        {{ tag }}
+                      </a>
+                      {% unless forloop.last %},{% endunless %}
+                    </span>
+                  {% endunless %}
+                {% endfor %}
+              </p>
+            {% endif %}
+
+            {% if settings.display_type %}
+              <p>
+                <span class="label">{{ 'products.product.product_types' | t }}:</span>
+                <span itemprop="category">{{ product.type | link_to_type }}</span>
+              </p>
+            {% endif %}
+
+            {% if settings.display_vendor %}
+              <p>
+                <span class="label">{{ 'products.product.vendor' | t }}:</span>
+                <span itemprop="brand">{{ product.vendor | link_to_vendor }}</span>
+              </p>
+            {% endif %}
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div id="sub-bs-container" style="display:none"></div>
+
+    {% if product.description != blank %}
+      <div class="description clearfix" itemprop="description">
+        {{ product.description | split: '<!-- split -->' | first }}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="thirteen columns">
+    {% if settings.display_related_products %}
+      {% capture limit %}{{ settings.products_per_row | plus: 1 }}{% endcapture %}
+
+      {% assign found_a_collection = false %}
+      {% for c in product.collections %}
+        {% if found_a_collection == false
+          and c.handle != 'frontpage'
+          and c.handle != 'all'
+          and c.all_products_count > 1
+        %}
+          {% assign found_a_collection = true %}
+          {% assign col = c.handle %}
+        {% endif %}
+      {% endfor %}
+
+      {% for tag in product.tags %}
+        {% if tag contains 'meta-related-collection-' %}
+          {% assign col = tag | remove: 'meta-related-collection-' %}
+          {% assign collection = collections[col] %}
+          {% capture limit %}{{ collection.products_count | plus: 1 }}{% endcapture %}
+        {% endif %}
+      {% endfor %}
+
+      {% if col and collections[col].all_products_count > 0 %}
+        <h2>{{ 'products.product.related_items' | t }}</h2>
+
+        {% assign skip_product = product %}
+        {% assign products = collections[col].products %}
+        {% assign products_per_row = settings.products_per_row %}
+
+        <div class="clearfix">
+          <div class="products-desktop">
+            {% include 'product-loop' %}
+          </div>
+        </div>
+      {% endif %}
+    {% endif %}
+
+    <div class="products-mobile">
+      {% include 'product-loop-mobile' %}
+    </div>
+  </div>
+</main>
+
+<div class="modal-mask" id="modal-teetime">
+  <div class="modal-container modal-ezlinks">
+    <a href="javascript:void(0)" class="close"></a>
+    <h1 class="product_name" itemprop="name">{{ product.title }}</h1>
+    <ul>
+      {% assign number_holes = product.metafields.ezlinks.number_holes %}
+      {% if number_holes %}
+        <li>{{ number_holes }} Hole Course</li>
+      {% endif %}
+      {% assign cart_included = product.metafields.ezlinks.cart_included %}
+      {% if cart_included %}
+        <li>Cart Included</li>
+      {% endif %}
+    </ul>
+    <p data-class="datetime"></p>
+    <form id="user_info">
+      <input type="hidden" name="variant">
+      <input type="hidden" name="date">
+      <input type="hidden" name="time">
+      <input type="hidden" name="players">
+      <input type="hidden" name="rate_id">
+      <strong>
+        <div class="row" data-class="notes" style="display:none;"></div>
+      </strong>
+      <div class="row player-cost">
+        <span># Players</span>
+        <span data-class="players"></span>
+        <strong data-class="price"></strong>
+        <span>per player</span>
+      </div>
+      <div class="row">
+        <div class="column four">
+          <label>Full Name</label>
+          <input type="text" name="full_name" placeholder="Joe Doe">
+        </div>
+      </div>
+      <div class="row">
+        <div class="column four">
+          <label>Hotel (Optional)</label>
+          <input type="text" name="hotel" placeholder="Hotel Name">
+        </div>
+      </div>
+      <div class="form-actions">
+        <a href="javascript:void(0)" class="button close">Cancel</a>
+        <button type="submit">Add to Cart</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% include 'ezlinks-no-package' %}

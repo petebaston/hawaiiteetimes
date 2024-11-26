@@ -1,0 +1,392 @@
+{% if product.metafields.bookthatapp.config %}
+{{ 'jquery.validate.js' | asset_url | script_tag }}
+
+{% comment %}
+HTML form markup
+{% endcomment %}
+
+<noscript>Please note: this site requires Javascript to be enabled</noscript>
+
+<p id="loading" class="loading" style="display:none">Loading additional course information. Please wait...</p>
+
+<div id="bform" style="display:none" class="booking-form">
+    <div class="selector-wrapper">
+        {% capture attribute %}booking-start{% endcapture %}
+        <label for="booking-start">Date of {% if product.tags contains 'Arrival' %}Arrival{% else %}Play{% endif %}:</label>
+        <input id="{{ attribute }}" type="text" name="properties[{{ attribute }}]" class="datepicker bta required"
+               data-handle="{{ product.handle }}"
+               data-variant="{{ product.variants.first.id}}"
+               data-time=""
+               data-bta-product-config="{{ product.metafields.bookthatapp.config }}"
+               data-bta-change-year="disable"
+               data-bta-change-month="disable"
+               required="required"
+               data-bta-product-config="{{ product.metafields.bookthatapp.config }}"
+               data-bta-variant-config="{% for variant in product.variants %}{{ variant.id }}:{{ variant.metafields.bookthatapp.config }}{% unless forloop.last %},{% endunless %}{% endfor %}"
+        />
+    </div>
+    
+    <div class="selector-wrapper">
+        <label for="booking-time">{% if product.tags contains 'Check' %}Check in {% else %}{% endif %}Time:</label>
+        {% capture attribute %}booking-time{% endcapture %}
+        <select id="{{ attribute }}" name="properties[{{ attribute }}]" class="bta-load-enable tee-time bta-time" data-datepicker="booking-start">
+        </select>
+    </div>
+    
+    <div class="selector-wrapper">
+        <label for="quantity">{% if product.tags contains 'groupon' %}Quantity{% else %}Number of Players{% endif %}:</label>
+        <select id="quantity" name="quantity" class="bta-load-enable">{% assign min_players = 1 %}
+            {% for tag in product.tags %}
+                {% if tag contains 'validate_min_players' %}{% capture min %}{{ tag | split: '_' | last }}{% endcapture %}
+                    {% assign min_players = min %}
+                {% endif %}
+            {% endfor %}
+            
+            {% for i in (min_players..24) %}
+            <option value="{{ i }}">{{ i }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    
+    <div id="booking-names">
+        <div class="selector-wrapper booking-name">
+            {% capture attribute %}booking-name{% endcapture %}
+            <label for="{{ attribute }}">Name:</label>
+            <input id="{{ attribute }}" type="text" name="properties[{{ attribute }}]" class="bta-load-enable required"  required="required" />
+        </div>
+    </div>
+    
+    <div class="selector-wrapper">
+        {% capture attribute %}booking-hotel{% endcapture %}
+        <label for="{{ attribute }}">Hotel:</label>
+        <input id="{{ attribute }}" type="text" name="properties[{{ attribute }}]" class="bta-load-enable" />
+    </div>
+
+    <div id="package" style="display:none">
+        <div class="selector-wrapper package product-2">
+            {% capture attribute %}booking-product-2{% endcapture %}
+            <h1 id="product-title-2" class="product_name"></h1>
+            <input type="hidden" id="{{ attribute }}" name="properties[{{ attribute }}]">
+        </div>
+        
+        <div class="selector-wrapper package product-2">
+            {% capture attribute %}booking-start-2{% endcapture %}
+            <label for="{{ attribute }}">Date of Play:</label>
+            <input id="{{ attribute }}" type="text" name="properties[{{ attribute }}]" class="datepicker bta"
+                   autocomplete="off" size="10"
+                   data-handle="{{ product.handle }}"
+                   data-variant="{{ product.variants.first.id}}"
+                   data-time=""
+                   data-bta-change-year="disable"
+                   data-bta-change-month="disable" />
+        </div>
+
+        <div class="selector-wrapper package product-2">
+            {% capture attribute %}booking-time-2{% endcapture %}
+            <label for="{{ attribute }}">Tee Time:</label>
+            <select id="{{ attribute }}" name="properties[{{ attribute }}]" class="bta-load-enable  tee-time" data-datepicker="booking-start-2">
+            </select>
+        </div>
+        
+        <div class="selector-wrapper package product-3">
+            {% capture attribute %}booking-product-3{% endcapture %}
+            <h1 id="product-title-3" class="product_name"></h1>
+            <input type="hidden" id="{{ attribute }}" name="properties[{{ attribute }}]">
+        </div>
+        
+        <div class="selector-wrapper package product-3">
+            {% capture attribute %}booking-start-3{% endcapture %}
+            <label for="{{ attribute }}">Date of Play:</label>
+            <input id="{{ attribute }}" type="text" name="properties[{{ attribute }}]" class="datepicker bta"
+                   autocomplete="off" size="10"
+                   data-handle="{{ product.handle }}"
+                   data-variant="{{ product.variants.first.id}}"
+                   data-time=""
+                   data-bta-change-year="disable"
+                   data-bta-change-month="disable" />
+        </div>
+      
+        <div class="selector-wrapper package product-3">
+            {% capture attribute %}booking-time-3{% endcapture %}
+            <label for="{{ attribute }}">Tee Time:</label>
+            <select id="{{ attribute }}" name="properties[{{ attribute }}]" class="bta-load-enable tee-time" data-datepicker="booking-start-3">
+            </select>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+$('#loading').show();
+
+var BTAConfig = function(config) {
+  this.config = config;
+}
+ 
+BTAConfig.prototype = {
+  value: function(name) {
+    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"), results = regex.exec(this.config);
+    return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+  }
+}
+
+bta = {
+  product_id: {{ product.id }},
+  product: function() {    
+    var productConfig = JSON.parse('{"' + decodeURI('{{ product.metafields.bookthatapp.config }}').replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');  
+        variants = JSON.parse(unescape(productConfig.variants));
+
+    for (i = 0; i < variants.length; i++) {
+      variants[i].start = new Date(variants[i].start.getTime() + variants[i].start.getTimezoneOffset() * 60000)
+      variants[i].finish = new Date(variants[i].finish.getTime() + variants[i].finish.getTimezoneOffset() * 60000)
+      variants[i].startTime = [variants[i].start.getHours(), variants[i].start.getMinutes()]
+      variants[i].finishTime = [variants[i].finish.getHours(), variants[i].finish.getMinutes()]
+    }
+  
+    return {
+      variants: variants,
+      bookings: []
+    };
+  },
+  callbacks: {
+    available: function() {
+      initBookingForm();
+    }
+  }
+};
+
+$('form[action="/cart/add"]').submit(function() {
+    // prevents clicking Add to Cart before BTA has finished loading
+    if ($('input.add_to_cart').hasClass('bta-load-enable')) {
+      return false;
+    }
+  
+    var variant = bform.selectedVariant();
+    if (/challenge/.test(variant.title)) {
+        // keep package fields
+    } else if (/2 day/.test(variant.title)) {
+        $('#package .product-3').remove();
+    } else {
+        $('#package').remove();
+    }    
+});
+
+validator = $('form[action="/cart/add"]').validate();
+
+{% if product.tags contains 'passenger_names' %}
+$(document).ready(function() {
+   $('select[name="quantity"]').change(function() {
+     var qty = $(this).val(),
+         dolly = $('.booking-name:first');
+     
+     validator.resetForm();
+     $('.booking-name:gt(0)').remove();
+     
+     for (i = 1; i < qty; i++) {
+       var sheep = dolly.clone(),
+           id = 'booking-name-' + (i + 1);
+       
+       sheep.find('label').attr('for', id).text('Name ' + (i + 1) + ':');
+       sheep.find('input').attr('id', id).attr('name', 'properties[' + id + ']');
+       sheep.appendTo($('#booking-names'));
+     }
+   })
+})
+{% endif %}
+  
+var bform = {
+    teed: false,
+    teeTimes: {},
+    defaultTeeTimes: [],
+    challenge: [{}, {}],
+    day: {},
+    populateTeeTimes: function() {
+      if (bform.teed) return;
+      
+      var btaForm = $('form[action="/cart/add"]').data('bta.bookingForm'),
+          product = btaForm.currentProduct();
+                                
+      if (!product) {
+        console.log('product not found!');
+        return;
+      }
+
+      bform.loadTimes(bform.defaultTeeTimes, {startTime:[9, 0], finishTime:[17, 0], duration:15});
+
+      for (var i = 0; i < product.variants.length; i++) {
+        var a = [];
+        bform.loadTimes(a, product.variants[i]);
+        bform.teeTimes[product.variants[i].id] = a; 
+      }
+
+      bform.updateBookingForm();
+      
+      $('input.add_to_cart').fadeIn();
+      
+      bform.teed = true;
+    },
+    updateTeeTimes: function(variant) {
+      var options = bform.teeTimes[variant.id] || bform.defaultTeeTimes;
+
+      $('.tee-time').empty().each(function() {
+        for (i = 0; i < options.length; i++) {
+          var split = options[i].split(':'), hh = parseInt(split[0], 10);
+          if (hh > 12) hh -= 12;
+          $(this).append($('<option>').val(options[i]).text(hh + ":" + split[1]));
+        }
+      });
+
+      $('#booking-start').attr('data-time', options[0]);
+    },
+    sneakyProduct: function(goodies) {
+        return [goodies.product.title, '|', goodies.product.id, ':', goodies.variant.id].join('');
+    },
+    selectedVariant: function() { // get attributes of the selected variant - e.g. id:1, title:'morning'
+      var variantId =  bta.findSelectedVariantId($('form[action="/cart/add"]')),
+          //var variantId = $('input[type="radio"]:checked', $('form[action="/cart/add"]')).attr('data-variantId'),
+          selectedRadio = $('input[type="radio"]:checked', $('form[action="/cart/add"]')),
+          title = '';
+      
+      if (selectedRadio.length == 0) { // product has 1 variant only
+        title = $('.product_name .title').text();
+      } else {
+        title = selectedRadio.val();
+      }
+
+      return {
+        id: variantId,
+        title: title.toLowerCase()
+      };
+    },
+    updateBookingForm: function() {
+        var variant = bform.selectedVariant();
+      
+        jQuery('#booking-start').attr('data-variant', variant.id);
+      
+        if (bform.teed) {
+            bform.updateTeeTimes(variant);
+        }
+        
+        $('#package').fadeOut();
+      
+        if (/2 day/.test(variant.title) && bform.day.product) {
+          $('#product-title-2').text(bform.day.product.title.replace(/Golf Tee Times/, '').trim());
+          $('#booking-product-2').val(bform.sneakyProduct(bform.day));
+          $('#booking-start-2').attr('data-handle', bform.day.product.handle);
+          $('#booking-start-2').attr('data-variant', bform.day.variant.id);
+
+          $('#package').fadeIn();
+          $('#package .product-2').show();
+          $('#package .product-3').hide();
+        } else if (/challenge/.test(variant.title) && bform.challenge[0].product) {
+          var challengeProduct1 = bform.challenge[0].product,
+              challengeProduct2 = bform.challenge[1].product;
+          
+          $('#product-title-2').text(challengeProduct1.title.replace(/Golf Tee Times/, '').trim());
+          $('#booking-product-2').val(bform.sneakyProduct(bform.challenge[0]));
+          $('#booking-start-2').attr('data-handle', challengeProduct1.handle);
+          $('#booking-start-2').attr('data-variant', bform.challenge[0].variant.id);
+
+          $('#product-title-3').text(challengeProduct2.title.replace(/Golf Tee Times/, '').trim());
+          $('#booking-product-3').val(bform.sneakyProduct(bform.challenge[1]));
+          $('#booking-start-3').attr('data-handle', challengeProduct2.handle);
+          $('#booking-start-3').attr('data-variant', bform.challenge[1].variant.id);
+
+          $('#package').fadeIn();
+          $('#package .product-2').show();
+          $('#package .product-3').show();
+        }
+    },
+    loadTimes: function(a, variant) {
+      var start = new Date(), end = new Date(),
+          duration = variant.duration;
+      
+      if (duration == "") {
+        duration = 15;
+      }
+
+      start.setHours(variant.startTime[0]); start.setMinutes(variant.startTime[1]);
+      end.setHours(variant.finishTime[0]); end.setMinutes(variant.finishTime[1]);
+
+      while (start <= end) {
+        a.push([("0" + start.getHours()).slice (-2), ("0" + start.getMinutes()).slice (-2)].join(':'));
+        start = new Date(start.getTime() + duration * 60000);
+      }
+    } 
+}
+
+  {% capture challenge_handle %}{{ product.handle }}-challenge{% endcapture %}
+  {% capture day_handle %}{{ product.handle }}-2day{% endcapture %}
+  {% assign challenge_required = 'false' %}
+  {% assign day_required = 'false' %}
+  
+  {% for c in collections %}
+    {% if c.handle == challenge_handle %}
+        {% assign challenge_collection = c %}
+        {% assign product1 = c.products.first %}
+        bform.challenge[0].product = {{ product1 | json }}
+        {% for v in product1.variants %}{% capture compare_title %}{{ v.title | downcase }}{% endcapture %}
+            {% if compare_title contains 'challenge' %}
+              {% assign challenge_required = 'true' %}
+              bform.challenge[0].variant = {{ v | json }}
+            {% endif %}
+        {% endfor %}
+        {% assign product2 = c.products.last %}
+        bform.challenge[1].product = {{ product2 | json }}
+        {% for v in product2.variants %}{% capture compare_title %}{{ v.title | downcase }}{% endcapture %}
+            {% if compare_title contains 'challenge' %}
+                bform.challenge[1].variant = {{ v | json }}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+          
+    {% if c.handle == day_handle %}
+        {% assign day_collection = c %}
+        {% assign product1 = c.products.first %}
+        bform.day.product = {{ product1 | json }}
+        {% for v in product1.variants %}{% capture compare_title %}{{ v.title | downcase }}{% endcapture %}
+            {% if compare_title contains '2 day' %}
+              {% assign day_required = 'true' %}
+              bform.day.variant = {{ v | json }}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+  {% endfor %}
+
+  bform.errors = [];
+  
+  {% unless challenge_collection %}{% if challenge_required == 'true' %}bform.errors.push("The Challenge collection does not exist. Please create a collection with the handle '{{ challenge_handle }}' and add the 2 products that make up the challenge bundle");{% endif %}{% endunless %}
+  {% if challenge_required == 'true' and challenge_collection.products.size == 0 %}bform.errors.push("There are no products in the {{ challenge_handle }} collection");{% endif %}
+                                                     
+  {% if challenge_collection.products.size > 0 %}
+  if (typeof(bform.challenge[0].variant) == "undefined") bform.errors.push(bform.challenge[0].product.handle + " does not have a variant with the word 'Challenge' in the title");
+  if (typeof(bform.challenge[1].variant) == "undefined") bform.errors.push(bform.challenge[1].product.handle + " does not have a variant with the word 'Challenge' in the title");
+  {% endif %}
+  
+  {% unless day_collection %}{% if day_required == 'true' %}bform.errors.push("The 2 Day collection does not exist. Please create a collection with the handle '{{ day_handle }}' and add the product that makes up the 2 day bundle");{% endif %}{% endunless %}
+  {% if day_required == 'true' and day_collection.products.size == 0 %}bform.errors.push("There are no products in the {{ day_handle }} collection");{% endif %}
+                                                     
+  {% if day_collection.products.size > 0 %}
+  if (typeof(bform.day.variant) == "undefined") bform.errors.push(bform.day.product.handle + " does not have a variant with the words '2 Day' in the title");
+  {% endif %}
+
+  if (bform.errors.length > 0) {
+    $.each(bform.errors, function(ndx, error) {
+      console.log("[Product Setup Error] " + error);
+    });
+  }
+
+  function initBookingForm() {
+    bform.populateTeeTimes();
+
+    var variant = bform.selectedVariant();
+    bform.updateTeeTimes(variant);
+
+    $('#loading').fadeOut(function() {
+      $('#bform').fadeIn();
+    });
+  } 
+</script>
+
+{% endif %}

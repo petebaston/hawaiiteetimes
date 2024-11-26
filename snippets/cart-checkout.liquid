@@ -1,0 +1,329 @@
+<style >
+  .modal-element {
+    padding: 20px 20px 94px !important;
+    max-width: min(100vw - 80px, 1024px) !important;
+  }
+
+  .modal-title {
+    font-size: 24px !important;
+    margin: 0 40px 0 0 !important;
+    text-transform: initial !important;
+  }
+
+  #golf-club-list {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+  }
+
+  #golf-club-list > div {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #00000033;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 350px;
+    gap: 10px;
+  }
+
+  #golf-club-list h3 {
+    margin: 0;
+    text-transform: initial;
+    font-size: 15px;
+    font-weight: 700;
+    margin-top: 20px;
+    line-height: 1;
+    text-align: center;
+  }
+
+  .golf-club-price {
+    display: flex;
+    align-items: flex-end;
+    font-size: 18px;
+    color: #ef0e05;
+    font-weight: 700;
+    gap: 8px;
+    line-height: 1;
+  }
+
+  .golf-club-price > :first-child:not(:last-child) {
+    opacity: .35;
+    text-decoration: line-through;
+    font-size: 16px;
+    font-weight: 400;
+    color: #404040;
+  }
+
+  #golf-club-list label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    width: 100%;
+  }
+  
+  #golf-club-list span {
+    font-size: 14px;
+  }
+
+  #golf-club-list input {
+    flex: 1;
+    margin: 0;
+    text-align: left;
+  }
+
+  #golf-club-list input::-webkit-inner-spin-button, #golf-club-list input::-webkit-outer-spin-button {
+    opacity: 1;
+  }
+
+  #golf-club-buttons {
+    display: flex;
+    border-top: 1px solid #E9ECEF;
+    padding: 20px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    justify-content: flex-end;
+  }
+
+  #golf-club-buttons > button, #new-checkout {
+    font-weight: 700;
+    text-shadow: 0 1px #0000001A;
+    margin-bottom: 0;
+  }
+
+  #golf-club-buttons > :first-child {
+    background-color: transparent;
+    color: #70bc42;
+  }
+
+  #golf-club-buttons > :first-child:hover {
+    color: #000;
+  }
+
+  #golf-club-buttons > :last-child, #new-checkout {
+    background-color: #70bc42;
+  }
+
+  #golf-club-buttons > :last-child:hover, #new-checkout:hover {
+    background-color: #ACD265;
+  }
+
+  .spacer {
+    flex: 1;
+    margin-top: -10px;
+  }
+
+  @media (width < 750px) {
+    #golf-club-list > div {
+      min-width: 256px;
+    }
+
+    #golf-club-list img {
+      width: 160px;
+    }
+  }
+</style>
+<button id="new-checkout">Checkout</button>
+<script>
+  const golfClubProducts = [
+    {% for item in cart.items %}
+      {% assign related_product = item.variant.metafields.upsell-pop-up.related_product.value | default: item.product.metafields.upsell-pop-up.related_product.value %}
+      {% if related_product %}
+        {% assign is_in_cart = false %}
+        {% for cart_item in cart.items %}
+          {% if cart_item.product.id == related_product.id %}
+            {% assign is_in_cart = true %}
+            {% break %}
+          {% endif %}
+        {% endfor %}
+        {% unless is_in_cart %}
+          {
+            id: "{{ related_product.id }}",
+            title: "{{ related_product.title }}",
+            price: "{{ related_product.price | money_without_currency }}",
+            compareAtPrice: "{{ related_product.compare_at_price | money_without_currency }}",
+            image: "{{ related_product.images.first | image_url: width: 300 }}",
+            variantId: "{{ related_product.variants.first.id }}",
+            sku: "{{ related_product.variants.first.sku }}"
+          },
+        {% endunless %}
+      {% endif %}
+    {% endfor %}
+  ]
+
+  const agree = document.getElementById("agree-terms")
+  
+  document.getElementById("new-checkout").addEventListener("click", async e => {
+    e.preventDefault()
+
+    if (!agree.checked) {
+      await new Promise(fulfil => showModal("Terms and Conditions", `
+        <p style="margin: 15px 0 0 0; font-size: 16px;">Please agree to the <a href="https://hawaiiteetimes.com/pages/terms-conditions">Terms and Conditions</a></p>
+        <div id="golf-club-buttons">
+          <button id="tac-disagree">Disagree</button>
+          <button id="tac-agree">Agree</button>
+        </div>
+      `, modal => {
+        modal.querySelector("#tac-disagree").addEventListener("click", e => modal.close())
+        modal.querySelector("#tac-agree").addEventListener("click", e => {
+          agree.checked = true
+          modal.close()
+          fulfil()
+        })
+      }))
+    }
+    
+    if (!golfClubProducts.length) {
+         {% if dynamic_prices %}
+            
+        await draftOrder()
+        {% else %}
+            location = "/checkout"
+           {% endif %}
+      return
+    }
+
+    async function addNote() {
+      const note = document.getElementById("note").value.trim()
+      if (note) {
+        await fetch("/cart/update.js", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ note })
+        })
+      }
+    }
+
+    async function draftOrder(extraItems = []) {
+      const response = await fetch("https://hawaiiteetimes.replit.app/api/order/draft_order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          domain: "aloha-golf.myshopify.com",
+          line_items: [
+            {% for item in cart.items %}
+              {
+                id: "{{ item.variant_id }}",
+                quantity: {{ item.quantity }},
+                properties: Object.fromEntries({{ item.properties | json }}),
+                original_price: {{ item.price | divided_by: 100 }}
+              },
+            {% endfor %}
+          ].concat(extraItems).map(item => {
+            let applied_discount
+            if (item.properties?._price) {
+              applied_discount = {
+                title: "Discount",
+                description: "Tee Time Price",
+                value: item.original_price - parseFloat(item.properties._price),
+                value_type: "fixed_amount"
+              }
+              console.log(item.original_price, parseFloat(item.properties._price), item.original_price - parseFloat(item.properties._price))
+            }
+      
+            return {
+              variant_id: item.id,
+              quantity: item.quantity,
+              applied_discount,
+              properties: item.properties ? Object.entries(item.properties).map(e => ({
+                name: e[0],
+                value: e[1]
+              })) : []
+            }
+          }),
+          note: document.getElementById("note").value
+        })
+      }).then(e => e.json())
+      location = response.draft_order.invoice_url
+    }
+    
+    showModal("Need Golf Clubs?", `
+      <div id="golf-club-modal">
+        <p>Add golf club rentals to your order and pick them up right at the golf course.</p>
+        <div id="golf-club-list">
+          ${golfClubProducts.map(product => `
+            <div>
+              <img src="${product.image}" alt="${product.title}">
+              <h3>${product.title}</h3>
+              <div class="golf-club-price">
+                ${product.compareAtPrice ? `<span>$${product.compareAtPrice}</span>` : ''}
+                <span>$${product.price}</span>
+              </div>
+              <div class="spacer"></div>
+              <label>
+                <span>Quantity:</span>
+                <input type="number" value="1" min="0">
+              </label>
+            </div>
+          `).join('')}
+        </div>
+        <div id="golf-club-buttons">
+          <button id="no-thanks">No thanks</button>
+          <button id="continue">Continue</button>
+        </div>
+      </div>
+    `, modal => {
+      const noThanksButton = modal.querySelector('#no-thanks')
+      const continueButton = modal.querySelector('#continue')
+
+      noThanksButton.addEventListener("click", async () => {
+        modal.querySelector("#golf-club-modal").textContent = "Loading checkout..."
+        {% if dynamic_prices %}
+          draftOrder()
+        {% else %}
+          await addNote()
+       
+            location = "/checkout"  
+      
+        {% endif %}
+      })
+
+      continueButton.addEventListener("click", async () => {
+        const quantities = Array.from(modal.querySelectorAll('input[type="number"]')).map((input, index) => ({
+          id: golfClubProducts[index].variantId,
+          quantity: parseInt(input.value)
+        })).filter(item => item.quantity > 0)
+        modal.querySelector("#golf-club-modal").textContent = "Loading checkout..."
+        {% if dynamic_prices %}
+          draftOrder(quantities)
+        {% else %}
+        // Create an array of promises from all fetch operations
+        const addToCartPromises = quantities.map(item => 
+          fetch("/cart/add.js", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              id: item.id,
+              quantity: item.quantity
+            })
+          })
+        );
+        
+        // Wait for ALL fetch operations to complete
+        await Promise.all(addToCartPromises);
+        
+        // Then proceed with the rest
+        await addNote();
+
+          {% if dynamic_prices %}
+            
+        await draftOrder(quantities)
+        {% else %}
+       
+          location = "/checkout";
+            {% endif %}
+
+        {% endif %}
+      })
+    })
+  })
+</script>

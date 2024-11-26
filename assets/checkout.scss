@@ -1,0 +1,177 @@
+@font-face {
+  font-family: 'Museo';
+  src: url(24C950_0_0.eot);
+  src: url(24C950_0_0.eot?#iefix);
+  src: url(24C950_0_0.eot?#iefix) format('embedded-opentype'), url(24C950_0_0.woff) format('woff'),url(24C950_0_0.ttf) format('truetype');
+}
+
+* {font-family: Verdana,Geneva,Arial,Helvetica,sans-serif;}
+
+h1, h2, h3, h4, h5, h6, .payment-due__price, .product__info__name strong {
+  font-family: 'Museo'; 
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+a {
+  color: #64B443;
+}
+
+a:hover, a:focus {
+  color: #05A33E;
+}
+
+.header {
+  background: url("head_border.png") repeat-x scroll center bottom #ffffff;
+  height: 110px;
+  color: #ffffff;
+  padding: 0 !important;
+}
+
+.shop {
+  top: 15px;
+  a {
+    display: block;
+    width: 292px;
+    height: 70px;
+    background: url(teelogo.png) no-repeat center center;
+    margin: 0 auto; 
+  }
+}
+
+h1.shop__name {
+  display: none; 
+}
+
+.section__header {
+  margin-bottom: .5em;
+}
+
+.fieldset, .fieldset > field:first-child {
+  border-radius: 0; 
+}
+
+.field label {
+  font-weight: bold; 
+  color: #333333;
+}
+
+.boxshadow .field.field--focus {
+  box-shadow: 0 0 0 2px #05A33E;
+  border-radius: 0px !important;
+}
+
+.total-line__name {
+  font-weight: bold;
+  color: #333333;
+}
+
+.field__inner--horizontal-padding, 
+.field label, 
+.field input[type="text"], 
+.field input[type="tel"], 
+.field input[type="email"], 
+.field input[type="password"], 
+.field select {
+  padding-top: .5em;
+  padding-bottom: .5em;
+}
+
+.field--required label:after {
+  content: ' *';
+  color: #F00;
+  font-size: 90%;
+}
+
+.field__error-message {
+  color: #F00;
+}
+
+.field--error {
+  background: none;
+  &:after {
+  	color: #F00;
+  }
+}
+
+.boxshadow .field--error {
+  box-shadow: 0px 0px 0px 1px #F00;
+}
+
+.product__image {
+  box-shadow: 0px 1px 8px -2px #000;
+  background: #ffffff;
+  padding: 3px;
+  border-radius: 0px;
+}
+
+.call-to-action label {
+  border-radius: 0px; 
+}
+
+.payment-due__label {
+  color: #05A33E;
+  font-weight: bold;
+}
+
+.payment-due__price {
+  color: #05A33E;
+  font-style: italic;
+}
+
+.product__info__description {
+  font-size: 90%; 
+}
+
+.total-line--shipping {
+  display: none; 
+}
+
+.order-summary {
+  border-radius: 0px; 
+}
+
+.field--has-inset-btn, #checkout_payment_gateway + label {
+  padding-top: 1.25em;
+  padding-bottom: 1.25em;
+}
+
+.btn {background-color: #70BC42; border: 1px solid #68AC3E; font-weight: bold; -webkit-border-radius: 4px; border-radius: 4px;}
+.btn:hover, .btn:focus {background-color: #64B443;}
+.call-to-action input.btn, .btn.btn--primary, #additional-mobile-cta {color:#fff;background-color: #70BC42; font-size: 1.5em; padding: .5em;}
+.call-to-action input.btn:hover, .call-to-action input.btn:focus, .btn.btn--primary:hover, .btn.btn--primary:focus, .boxshadow .call-to-action input.btn:focus:hover, #additional-mobile-cta:focus, #additional-mobile-cta:hover, #additional-mobile-cta:focus:hover {background-color: #64B443;color:#fff;}
+.boxshadow .btn:focus {background-color: #64B443;}
+.boxshadow .btn:focus:hover {background-color: #64B443;}
+.boxshadow .btn.btn--primary:focus, .boxshadow .btn.btn--primary:focus:hover {background-color: #64B443;}
+.section--thank-you a.btn {background-color: #70BC42; }
+.section--thank-you a.btn:hover, .section--thank-you a.btn:focus, .section--thank-you a.btn:hover:focus {background-color: #64B443;}
+
+
+.field--has-radio-button input[type="radio"] {
+  top: 8px; 
+}
+
+.rgba .footer {
+  background: url(bg-body.jpg) repeat-y center center #29771B;
+  
+  a {
+    color: #e0e0e0;  
+    &:hover {
+      color: #ffffff;    
+    }
+  }
+  
+}
+
+.footer__copyright {
+  color: #e0e0e0;
+}
+
+@media all and (max-width: 599px) {
+  .shop {
+    left: 15px; 
+  }
+  .call-to-action label input[type="checkbox"] {
+    top: 1.5em;
+  }
+}

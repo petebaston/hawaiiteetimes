@@ -1,0 +1,19 @@
+<div id="breadcrumb">
+  <a href="/" class="homepage-link" title="Back to the frontpage">Home</a>
+  
+  <span class="separator">&raquo;</span> 
+  {% if collection %}
+	{{ collection.title | link_to: collection.url }}
+  {% else %}
+  {% for c in product.collections %}
+  	
+    {% if c.handle contains 'oahu' or c.handle contains 'maui' or c.handle contains 'kauai' or c.handle contains 'big-island' or c.handle contains 'lanai' %}
+      {{ c.title | link_to: c.url }}
+    {% endif %}
+  {% endfor %}
+  	
+  {% endif %}
+			
+  <span class="separator">&raquo;</span>
+  <span class="page-title">{{ page_title }}</span>
+</div>

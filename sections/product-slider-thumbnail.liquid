@@ -1,0 +1,93 @@
+ <div id="product_slider">
+            <img class="loader" src="{{ 'bx_loader.gif' | asset_url }}" width="32" height="32" alt="loading..." />
+            <ul class="slides">
+              {% for image in product.images %}
+                <li class="slide">
+                  {% if image.alt contains 'youtube' or image.alt contains 'vimeo' %}
+                    {% assign src = image.alt | split: 'src="' %}
+                    {% assign src = src[1] | split: '"' | first %}
+
+                    {% if src contains '?' %}
+                      {% assign src = src | append: '&amp;autoplay=1' %}
+                    {% else %}
+                      {% assign src = src | append: '?autoplay=1' %}
+                    {% endif %}
+
+                    <div class="video-container">
+                      <a href="{{ src }}" class="fancybox fancybox.iframe" rel="group" title="{{ product.title | escape }}">
+                        {{ image.alt }}
+                      </a>
+                    </div>
+                  {% else %}
+                    <a href="{{ image | product_img_url: 'master' }}" class="fancybox" rel="group" title="{{ image.alt | escape }}">
+                      <img src="{{ image | product_img_url: 'master' }}" alt="{{ image.alt | escape }}" {% if featured_image.id == image.id %}id="featured_image"{% endif %} data-index="{{ forloop.index0 }}" data-image-id="{{ image.id }}" itemprop="image" data-cloudzoom="zoomImage: '{{ image | product_img_url: 'master' }}', tintColor: '{{ settings.shop_bg_color }}', hoverIntentDelay: 100, autoInside: 767, touchStartDelay: 250" class="cloudzoom" />
+                    </a>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+
+    <div class="thumbs-wrapper" >
+        <ul id="bxslider-pager">
+            {% for image in product.images %}
+                <li class="thumb shita" data-slide-index="{{ forloop.index0 }}">
+                  <img src="{{ image | product_img_url: 'compact' }}" alt="{{ image.alt | escape }}"/>
+                </li>
+              {% endfor %}
+        </ul>  
+    </div>
+
+
+<script>
+
+            var realThumbSlider = $("ul#bxslider-pager").bxSlider({
+                mode: 'vertical',
+                minSlides: 5,
+                maxSlides: 5,
+                slideWidth: 100,
+                slideMargin: 12,
+                moveSlides: 4,
+                pager: false,
+                speed: 1000,
+                infiniteLoop: true,
+                hideControlOnEnd: true,
+                nextText: '<span></span>',
+                prevText: '<span></span>',
+                onSlideBefore: function ($slideElement, oldIndex, newIndex) {
+                    /*$j("#sliderThumbReal ul .active").removeClass("active");
+                    $slideElement.addClass("active"); */
+
+                }
+            });
+
+            linkRealSliders(realSlider, realThumbSlider);
+
+            if ($j("#bxslider-pager li").length < 5) {
+                $j("#bxslider-pager .bx-next").hide();
+            }
+
+
+            // sincronizza sliders realizzazioni
+            function linkRealSliders(bigS, thumbS) {
+
+                $("ul#bxslider-pager").on("click", "ul", function (event) {
+                    event.preventDefault();
+                    var newIndex = $(this).parent().attr("data-slideIndex");
+                    bigS.goToSlide(newIndex);
+                });
+            }
+
+            //slider!=$thumbSlider. slider is the realslider
+            function changeRealThumb(slider, newIndex) {
+
+                var $thumbS = $("ul#bxslider-pager");
+                $thumbS.find('.thumbs-wrapper').removeClass("active");
+                $thumbS.find('li[data-slideIndex="' + newIndex + '"]').addClass("thumb");
+
+                if (slider.getSlideCount() - newIndex >= 4) slider.goToSlide(newIndex);
+                else slider.goToSlide(slider.getSlideCount() - 4);
+
+            }
+ 
+</script>
