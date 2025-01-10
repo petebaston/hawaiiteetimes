@@ -310,13 +310,18 @@
 
   let start;
   let shown;
-  let allTimes;
   async function getTeeTimes() {
     const run = Date.now();
     start = run;
     shown = 6;
     list.innerHTML = "Loading tee times...";
-      
+
+    const getHawaiiTimeInUTC = () => {
+      const now = new Date();
+      const offset = 0;
+      return new Date(now.getTime() + offset * 60 * 60 * 1000);
+    };
+
     const d = new Date(parseUTCDate(dateInput.datepicker("getDate").getTime() + 3600000));
     const dString = `${d.getUTCMonth() + 1}-${d.getUTCDate()}-${d.getUTCFullYear()}`;
     if (blackoutDates.includes(dString)) {
@@ -326,10 +331,10 @@
 
     const times = await fetch(`https://hawaiiteetimes.cliencyapps.co.uk/api/courses/{{product.id}}/times?date=${parseUTCDate(dateInput.datepicker("getDate").getTime() + 3600000)}`)
       .then(e => e.json());
-    
-    const nowUTC = new Date()
-    const hawaiiOffset = -10 // Hawaii Standard Time (UTC-10)
-    const currentHawaiiTime = new Date(nowUTC.setHours(nowUTC.getUTCHours() + hawaiiOffset))
+
+const nowUTC = new Date()
+const hawaiiOffset = -10 // Hawaii Standard Time (UTC-10)
+const currentHawaiiTime = new Date(nowUTC.setHours(nowUTC.getUTCHours() + hawaiiOffset))
 
     const cutoffTime = new Date(currentHawaiiTime.getTime() + 45 * 60000);
 
@@ -340,7 +345,7 @@
 
     const sortedTimes = filteredTimes.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-     const highlightTimes = sortedTimes.reduce((acc, time) => {
+    const highlightTimes = sortedTimes.reduce((acc, time) => {
       const existing = acc.find(t => t.date === time.date);
       if (!existing || time.players.length > existing.players.length) {
         acc = acc.filter(t => t.date !== time.date);
@@ -349,173 +354,142 @@
       return acc;
     }, []);
 
-
-    allTimes = highlightTimes.length ? highlightTimes : sortedTimes;
+    let timesToUse = highlightTimes.length ? highlightTimes : times;
 
     if (run !== start) return;
     list.innerHTML = "";
-    filter();
-  }
-
-  const timeSelect = document.getElementById("time-select");
-  const playersSelect = document.getElementById("players-select");
-  function filter(reset = true) {
-      
-    if (reset) {
-      shown = 6;
-        list.innerHTML = "";
-    }
-    const timeSelectValue = parseInt(document.getElementById("time-select").value)
-      
-    const startOfTimeRange = new Date().setUTCHours(Math.floor(timeSelectValue / 100), timeSelectValue % 100, 0, 0)
-    
-    const startOfTimeRangeDate = new Date(startOfTimeRange)
-    const startOfTimeRangeMs = (startOfTimeRangeDate.getUTCHours() * 60 * 60 * 1000) + 
-                               (startOfTimeRangeDate.getUTCMinutes() * 60 * 1000) +
-                               (startOfTimeRangeDate.getUTCSeconds() * 1000)
-    
-      
-    let currentlyShown = 0;
-    for (const time of allTimes) {
+    for (const time of timesToUse) {
       const date = new Date(time.date);
-      const timeOnlyMs = (date.getUTCHours() * 60 * 60 * 1000) + 
-                         (date.getUTCMinutes() * 60 * 1000) +
-                         (date.getUTCSeconds() * 1000)
-        
-      if(currentlyShown < shown && timeOnlyMs >= startOfTimeRangeMs && (playersSelect.value === "all" || time.players.includes(parseInt(playersSelect.value)))) {
-           const timenum = parseInt(`${date.getUTCHours().toString()}${date.getUTCMinutes().toString().padStart(2, 0)}`);
+      const timenum = parseInt(`${date.getUTCHours().toString()}${date.getUTCMinutes().toString().padStart(2, 0)}`);
 
-            const matchingVariants = variants.filter(e => e.timeRange[0] <= timenum && e.timeRange[1] >= timenum);
-            const dateFilteredVariants = matchingVariants.filter(e => checkVariantDate(e, date) && checkVariantDay(e, date));
-            const sortedVariants = dateFilteredVariants.sort((a, b) => b.priority - a.priority || a.priceNum - b.priceNum);
+      const matchingVariants = variants.filter(e => e.timeRange[0] <= timenum && e.timeRange[1] >= timenum);
+      const dateFilteredVariants = matchingVariants.filter(e => checkVariantDate(e, date) && checkVariantDay(e, date));
+      const sortedVariants = dateFilteredVariants.sort((a, b) => b.priority - a.priority || a.priceNum - b.priceNum);
 
-            const variant = sortedVariants.length ? sortedVariants[0] : null;
+      const variant = sortedVariants.length ? sortedVariants[0] : null;
 
-            if (!variant) continue;
-          
-          function updatePlayerCount(data, newPlayerCount) {
-              let reserveString = data.reserveString;
-              let parts = reserveString.split(',');
-              parts[2] = newPlayerCount; // Update first player count
-              parts[5] = newPlayerCount; // Update second player count
-              data.reserveString = parts.join(',');
-              return data;
-          }
-        
-          const dynamicPrice = time.price ? time.price : variant.priceNum;
+      if (!variant) continue;
 
-          const timeStamp = date.toLocaleTimeString("en-US", { timeZone: "UTC", hour: "numeric", minute: "numeric", hour12: true });
-          const li = document.createElement("li");
-          li.style.display = "inline-block";
-          li.dataset.time = time.date;
-      
-          {% if product.id == 214658023433 %}
-            time.players = time.players.filter(e => e != 1);
-          {% elsif product.id == 1321387950159 %}
-            if (time.players.includes(4)) {
-              time.players = time.players.filter(e => e != 1);
+      function updatePlayerCount(data, newPlayerCount) {
+    let reserveString = data.reserveString;
+    let parts = reserveString.split(',');
+    parts[2] = newPlayerCount; // Update first player count
+    parts[5] = newPlayerCount; // Update second player count
+    data.reserveString = parts.join(',');
+    return data;
+}
+
+
+      const dynamicPrice = time.price ? time.price : variant.priceNum;
+
+      const timeStamp = date.toLocaleTimeString("en-US", { timeZone: "UTC", hour: "numeric", minute: "numeric", hour12: true });
+      const li = document.createElement("li");
+      li.style.display = "inline-block";
+      li.dataset.time = time.date;
+
+      {% if product.id == 214658023433 %}
+        time.players = time.players.filter(e => e != 1);
+      {% elsif product.id == 1321387950159 %}
+        if (time.players.includes(4)) {
+          time.players = time.players.filter(e => e != 1);
+        }
+      {% endif %}
+
+      li.dataset.players = time.players; 
+    
+      li.innerHTML = `
+        <a ${variant.priority === 1 ? 'class="special"' : ''}>
+          <span class="pricing">
+            <strong>${dynamicPrice.toLocaleString("en-us", { style: "currency", currency: "USD" })}</strong>
+          </span>
+          <span class="details">
+            <span class="date">${date.toLocaleDateString("en-US", { timeZone: "UTC", weekday: "short", month: "short", day: "numeric" })}</span>
+            <time>${timeStamp}</time>
+            <span class="players">
+              ${time.players.length === 1 
+                ? `${time.players[0]} Player` 
+                : `${time.players[0]} - ${time.players[time.players.length - 1]} Players`}
+            </span>
+          </span>
+          <span class="cta">Book Now</span>
+        </a>
+      `;
+      li.addEventListener("click", e => {
+        showModal("{{ product.title }}", `
+          <div class="modal-date">
+            <svg width="24" height="24" viewBox="148 712 22 22"><path fill="#00a333" d="M20.969,22H1.031A1.013,1.013,0,0,1,0,20.969V3.781A1.013,1.013,0,0,1,1.031,2.75H3.094V3.781a2.406,2.406,0,0,0,4.813,0V2.75h6.188V3.781a2.406,2.406,0,0,0,4.813,0V2.75h2.063A1.013,1.013,0,0,1,22,3.781V20.969A1.013,1.013,0,0,1,20.969,22ZM19.938,8.25H2.063V19.938H19.938ZM7.563,13.063a.936.936,0,0,1,.722.309l1.684,1.684,4.091-4.091a1.072,1.072,0,0,1,.722-.309,1.013,1.013,0,0,1,1.031,1.031.936.936,0,0,1-.309.722l-4.812,4.813a1,1,0,0,1-1.444,0L6.841,14.816a.936.936,0,0,1-.309-.722A1.013,1.013,0,0,1,7.563,13.063ZM16.5,4.813a1.013,1.013,0,0,1-1.031-1.031V1.031a1.031,1.031,0,0,1,2.063,0v2.75A1.013,1.013,0,0,1,16.5,4.813Zm-11,0A1.013,1.013,0,0,1,4.469,3.781V1.031a1.031,1.031,0,0,1,2.063,0v2.75A1.013,1.013,0,0,1,5.5,4.813Z" transform="translate(148 712)"/></svg>
+            <div>${date.toLocaleDateString("en-US", { timeZone: "UTC", weekday: "short", month: "short", day: "numeric", year: "numeric" })} at ${timeStamp}</div>
+          </div>
+          <hr>
+          <div class="modal-info">${variant.notes}</div>
+          <div class="player-row">
+            <span># Players</span>
+            <select name="player-count" id="player-count">      
+              ${time.players.map(e => `<option value="${e}">${e}</option>`).join("")}
+            </select>
+
+            <span style="font-weight: 700; color: red;">${dynamicPrice.toLocaleString("en-us", { style: "currency", currency: "USD" })}</span>
+            <span>per player</span>
+          </div>
+          <label for="full-name">Full Name</label>
+          <input type="text" placeholder="John Doe" name="full-name" id="full-name">
+          <label for="hotel-name">Hotel (Optional)</label>
+          <input type="text" placeholder="Hotel Name" name="hotel-name" id="hotel-name">
+          <div class="modal-buttons">
+            <button>Cancel</button>
+            <button class="modal-button-primary">Add to Cart</button>
+          </div>
+        `, modal => {
+          const playerCountElement = modal.querySelector("#player-count");
+          const fullNameElement = modal.querySelector("#full-name");
+          const hotelNameElement = modal.querySelector("#hotel-name");
+          modal.querySelector(".modal-buttons > :first-child").addEventListener("click", e => modal.close());
+          modal.querySelector(".modal-buttons > :last-child").addEventListener("click", async e => {
+            let updatedData = time.data;
+            if(time.data.reserveString) {
+              updatedData = updatePlayerCount(time.data, parseInt(playerCountElement.value));
             }
-          {% endif %}
-        
-          li.dataset.players = time.players;
-
-          li.innerHTML = `
-            <a ${variant.priority === 1 ? 'class="special"' : ''}>
-            <span class="pricing">
-                <strong>${dynamicPrice.toLocaleString("en-us", { style: "currency", currency: "USD" })}</strong>
-            </span>
-            <span class="details">
-                <span class="date">${date.toLocaleDateString("en-US", { timeZone: "UTC", weekday: "short", month: "short", day: "numeric" })}</span>
-                <time>${timeStamp}</time>
-                <span class="players">
-                ${time.players.length === 1
-                    ? `${time.players[0]} Player`
-                    : `${time.players[0]} - ${time.players[time.players.length - 1]} Players`}
-                </span>
-            </span>
-            <span class="cta">Book Now</span>
-            </a>
-          `;
-          li.addEventListener("click", e => {
-            showModal("{{ product.title }}", `
-              <div class="modal-date">
-                <svg width="24" height="24" viewBox="148 712 22 22"><path fill="#00a333" d="M20.969,22H1.031A1.013,1.013,0,0,1,0,20.969V3.781A1.013,1.013,0,0,1,1.031,2.75H3.094V3.781a2.406,2.406,0,0,0,4.813,0V2.75h6.188V3.781a2.406,2.406,0,0,0,4.813,0V2.75h2.063A1.013,1.013,0,0,1,22,3.781V20.969A1.013,1.013,0,0,1,20.969,22ZM19.938,8.25H2.063V19.938H19.938ZM7.563,13.063a.936.936,0,0,1,.722.309l1.684,1.684,4.091-4.091a1.072,1.072,0,0,1,.722-.309,1.013,1.013,0,0,1,1.031,1.031.936.936,0,0,1-.309.722l-4.812,4.813a1,1,0,0,1-1.444,0L6.841,14.816a.936.936,0,0,1-.309-.722A1.013,1.013,0,0,1,7.563,13.063ZM16.5,4.813a1.013,1.013,0,0,1-1.031-1.031V1.031a1.031,1.031,0,0,1,2.063,0v2.75A1.013,1.013,0,0,1,16.5,4.813Zm-11,0A1.013,1.013,0,0,1,4.469,3.781V1.031a1.031,1.031,0,0,1,2.063,0v2.75A1.013,1.013,0,0,1,5.5,4.813Z" transform="translate(148 712)"/></svg>
-                <div>${date.toLocaleDateString("en-US", { timeZone: "UTC", weekday: "short", month: "short", day: "numeric", year: "numeric" })} at ${timeStamp}</div>
-              </div>
-              <hr>
-              <div class="modal-info">${variant.notes}</div>
-              <div class="player-row">
-                <span># Players</span>
-                <select name="player-count" id="player-count">
-                ${time.players.map(e => `<option value="${e}">${e}</option>`).join("")}
-                </select>
-
-                <span style="font-weight: 700; color: red;">${dynamicPrice.toLocaleString("en-us", { style: "currency", currency: "USD" })}</span>
-                <span>per player</span>
-              </div>
-              <label for="full-name">Full Name</label>
-              <input type="text" placeholder="John Doe" name="full-name" id="full-name">
-              <label for="hotel-name">Hotel (Optional)</label>
-              <input type="text" placeholder="Hotel Name" name="hotel-name" id="hotel-name">
-              <div class="modal-buttons">
-                <button>Cancel</button>
-                <button class="modal-button-primary">Add to Cart</button>
-              </div>
-            `, modal => {
-              const playerCountElement = modal.querySelector("#player-count");
-              const fullNameElement = modal.querySelector("#full-name");
-              const hotelNameElement = modal.querySelector("#hotel-name");
-              modal.querySelector(".modal-buttons > :first-child").addEventListener("click", e => modal.close());
-              modal.querySelector(".modal-buttons > :last-child").addEventListener("click", async e => {
-                let updatedData = time.data;
-                if(time.data.reserveString) {
-                  updatedData = updatePlayerCount(time.data, parseInt(playerCountElement.value));
-                }
-
-                const fullName = fullNameElement.value.trim();
-                const hotelName = hotelNameElement.value.trim();
-                if (!fullName || fullName.split(" ").length < 2 || !nameRegex.test(fullName)) {
-                  alert('Please enter your full name, e.g. Joe Smith')
-                  return shakeError(fullNameElement);
-                }
-                const strBuffer = new TextEncoder().encode(JSON.stringify(updatedData));
-                const hashBuffer = await crypto.subtle.digest('SHA-256', strBuffer);
-                const hashArray = Array.from(new Uint8Array(hashBuffer));
-                const hashHex = hashArray.map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 8);
-                await fetch(`https://hawaiiteetimes.cliencyapps.co.uk/api/times/reserve`, {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json"
-                  },
-                  body: JSON.stringify({
-                    id: hashHex,
-                    data: time.data
-                  })
-                });
-                
-                const properties = {
-                  "Full Name": fullName,
-                  "booking-name": fullName,
-                  "Hotel Name": hotelName ? hotelName : undefined,
-                  Date: `${(date.getUTCMonth() + 1).toString().padStart(2, '0')}/${date.getUTCDate().toString().padStart(2, '0')}/${date.getUTCFullYear()}`,
-                  Time: timeStamp,
-                  "_reserveid": hashHex,
-                  _courseid: courseId,
-                  _price: dynamicPrice,
-                   "_updatedString": updatedData
-                };
-                CartJS.addItem(variant.id, parseInt(playerCountElement.value), properties, {
-                  success: () => location = "/cart"
-                });
-              });
+            
+            const fullName = fullNameElement.value.trim();
+            const hotelName = hotelNameElement.value.trim();
+            if (!fullName || fullName.split(" ").length < 2 || !nameRegex.test(fullName)) {
+              alert('Please enter your full name, e.g. Joe Smith')
+              return shakeError(fullNameElement);
+            } 
+            const strBuffer = new TextEncoder().encode(JSON.stringify(updatedData));
+            const hashBuffer = await crypto.subtle.digest('SHA-256', strBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 8);
+            await fetch(`https://hawaiiteetimes.cliencyapps.co.uk/api/times/reserve`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                id: hashHex,
+                data: time.data
+              })
+            });
+            
+            const properties = {
+              "Full Name": fullName,
+              "booking-name": fullName, 
+              "Hotel Name": hotelName ? hotelName : undefined,
+              Date: `${(date.getUTCMonth() + 1).toString().padStart(2, '0')}/${date.getUTCDate().toString().padStart(2, '0')}/${date.getUTCFullYear()}`,
+              Time: timeStamp,
+              "_reserveid": hashHex,
+              _courseid: courseId,
+              _price: dynamicPrice, 
+              "_updatedString": updatedData
+            };
+            CartJS.addItem(variant.id, parseInt(playerCountElement.value), properties, {
+               success: () => location = "/cart"
             });
           });
-        list.append(li);
-        currentlyShown++;
-        }
+        });
+      });
+      list.append(li);
     }
-      
-    
     const button = document.createElement("button");
     button.id = "load-more-button";
     button.addEventListener("click", e => {
@@ -523,10 +497,10 @@
       filter(false);
     });
     button.textContent = "Load More Times";
-    
+    list.append(button);
     const div = document.createElement("div");
     div.id = "no-times-message";
-      div.innerHTML = `  <h4 style="color: red; text-align: center; font-weight: bold;">
+    div.innerHTML = `  <h4 style="color: red; text-align: center; font-weight: bold;">
                   There are currently no tee times available, please select another date.
                 </h4>
                 {% assign reservation_url = product.metafields.shoppad['request_reservation_url'] %}
@@ -540,20 +514,56 @@
                     {% endif %}
                   </a>
                 {% endif %}`;
-        
-      if(currentlyShown < allTimes.length) {
-            list.append(button);
-            div.style.display = "none";
-      } else {
-          button.style.display = "none";
-        if(!currentlyShown) {
-              div.style.display = null;
-              list.append(div);
-          } else {
-              div.style.display = "none";
-           }
-      }
+    div.style.display = "none";
+    list.append(div);
+    filter();
+  }
 
+  const timeSelect = document.getElementById("time-select");
+  const playersSelect = document.getElementById("players-select");
+  function filter(reset = true) {
+    if (reset) {
+      shown = 6;
+    }
+    const timeSelectValue = parseInt(document.getElementById("time-select").value)
+    const startOfTimeRange = new Date().setUTCHours(Math.floor(timeSelectValue / 100), timeSelectValue % 100, 0, 0)
+    
+    const startOfTimeRangeDate = new Date(startOfTimeRange)
+    const startOfTimeRangeMs = (startOfTimeRangeDate.getUTCHours() * 60 * 60 * 1000) + 
+                               (startOfTimeRangeDate.getUTCMinutes() * 60 * 1000) +
+                               (startOfTimeRangeDate.getUTCSeconds() * 1000)
+    
+    let currentlyShown = 0
+    for (const time of document.querySelectorAll("#teetimes-list > li")) {
+      const timeInMs = parseInt(time.dataset.time)
+      const timeDate = new Date(timeInMs)
+      
+      const timeOnlyMs = (timeDate.getUTCHours() * 60 * 60 * 1000) + 
+                         (timeDate.getUTCMinutes() * 60 * 1000) +
+                         (timeDate.getUTCSeconds() * 1000)
+                         
+      if (
+        currentlyShown >= shown ||
+        timeOnlyMs < startOfTimeRangeMs ||
+        (!time.dataset.players.includes(playersSelect.value) && playersSelect.value !== "all")
+      ) {
+        time.style.display = "none"
+      } else {
+        time.style.display = "inline-block"
+        currentlyShown++
+      }
+    }
+    if (!document.querySelector("#teetimes-list > li[style='display: inline-block;']") || Array.from(document.querySelectorAll("#teetimes-list > li[style='display: inline-block;']")).at(-1).nextElementSibling.nodeName === "BUTTON") {
+      document.getElementById("load-more-button").style.display = "none";
+      if (!document.querySelector("#teetimes-list > li[style='display: inline-block;']")) {
+        document.getElementById("no-times-message").style.display = null;
+      } else {
+        document.getElementById("no-times-message").style.display = "none";
+      }
+    } else {
+      document.getElementById("load-more-button").style.display = null;
+      document.getElementById("no-times-message").style.display = "none";
+    }
   }
 
 function checkVariantDate(variant, date) {
