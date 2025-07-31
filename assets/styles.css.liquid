@@ -4723,13 +4723,91 @@ ul#available-teetimes li a[data-price=''] {
 }
 
 @media (max-width: 767px) {
-    /* Prevent horizontal scrolling */
+    /* Prevent horizontal scrolling - clean reset */
     html, body {
         overflow-x: hidden;
+        margin: 0;
+        padding: 0;
     }
     
-    * {
+    /* Modern typography system inspired by reference sites */
+    body {
+        font-family: 'Montserrat', 'Open Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.6;
+        color: #333333;
+        font-weight: 400;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    
+    /* Clean heading hierarchy */
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        line-height: 1.3;
+        margin: 0 0 16px 0;
+        color: #025105;
+        letter-spacing: -0.5px;
+    }
+    
+    h1 { font-size: 32px; font-weight: 700; }
+    h2 { font-size: 28px; font-weight: 600; }
+    h3 { font-size: 24px; font-weight: 600; }
+    h4 { font-size: 20px; font-weight: 500; }
+    h5 { font-size: 18px; font-weight: 500; }
+    h6 { font-size: 16px; font-weight: 500; }
+    
+    /* Clean text elements */
+    p {
+        margin: 0 0 16px 0;
+        font-size: 16px;
+        line-height: 1.6;
+        color: #555555;
+    }
+    
+    a {
+        color: #025105;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+    
+    a:hover {
+        color: #70bc42;
+    }
+    
+    /* Modern form elements */
+    input, button, select, textarea {
+        font-family: inherit;
+        font-size: 16px;
+        min-height: 48px;
+        padding: 12px 16px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
         box-sizing: border-box;
+        transition: all 0.2s ease;
+    }
+    
+    input:focus, select:focus, textarea:focus {
+        outline: none;
+        border-color: #025105;
+        box-shadow: 0 0 0 3px rgba(2, 81, 5, 0.1);
+    }
+    
+    button {
+        background: #025105;
+        color: white;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    button:hover {
+        background: #70bc42;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
     
     .spacer {
@@ -4745,55 +4823,157 @@ ul#available-teetimes li a[data-price=''] {
         margin: 5px 0;
     }
     
-    /* Mobile header fixes */
-    .mobile-header {
-        padding: 10px 0;
+    /* Professional header styling inspired by Wailea Golf */
+    #head.header {
+        background: white;
+        padding: 16px 0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        position: relative;
+        z-index: 100;
     }
     
-    .mobile-header .mobile-container {
+    .header .container {
+        max-width: 100%;
         padding: 0 20px;
-        max-width: 100vw;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
     
-    .mobile-header .logo {
-        width: 40% !important;
-        float: left;
-    }
-    
-    .mobile-header .logo img {
-        max-height: 40px;
-        width: auto;
-    }
-    
-    .mobile-header .nav {
-        width: 60% !important;
-        float: right;
-        text-align: right;
-    }
-    
-    .mobile-header .call h4 {
-        font-size: 12px;
+    .header .sixteen.columns {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
         margin: 0;
     }
     
-    .mobile-header .call h2 {
-        font-size: 14px;
-        margin: 5px 0;
+    /* Logo styling */
+    .header .logo {
+        flex: 0 0 auto;
     }
     
-    .mobile-header .desktop-phone {
+    .header .logo img {
+        max-height: 60px;
+        width: auto;
+        display: block;
+    }
+    
+    /* Call section styling */
+    .header .call {
+        flex: 1;
+        text-align: center;
+        margin: 0 20px;
+    }
+    
+    .header .call h4 {
+        font-size: 14px;
+        font-weight: 500;
+        margin: 0 0 4px 0;
+        color: #555555;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .header .call h2 {
+        font-size: 20px;
+        font-weight: 700;
+        margin: 0;
+        color: #025105;
+    }
+    
+    .desktop-phone {
         display: none;
     }
     
-    .mobile-header .mobile-phone {
-        display: inline;
+    .mobile-phone {
+        color: #025105;
+        text-decoration: none;
+        font-weight: 700;
     }
     
-    /* Homepage mobile fixes - FULL WIDTH cards */
+    .mobile-phone:hover {
+        color: #70bc42;
+    }
+    
+    /* Modern navigation buttons */
+    .nav_buttons {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .nav_buttons li {
+        display: block;
+    }
+    
+    .nav_buttons a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 16px;
+        background: #025105;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        min-height: 48px;
+        min-width: 48px;
+        font-weight: 600;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.2s ease;
+        box-sizing: border-box;
+    }
+    
+    .nav_buttons a:hover {
+        background: #70bc42;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .nav_buttons .navicon {
+        background: #025105;
+        position: relative;
+    }
+    
+    .nav_buttons .cart {
+        background: #70bc42;
+        position: relative;
+    }
+    
+    .cart_count {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: #fff;
+        color: #025105;
+        border-radius: 50%;
+        padding: 4px 8px;
+        font-size: 12px;
+        font-weight: 700;
+        min-width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #70bc42;
+    }
+    
+    .nav-label {
+        margin-left: 8px;
+        font-size: 12px;
+    }
+    
+    /* Full-width homepage cards inspired by HotelTonight */
     .container.content {
-        padding-left: 0;
-        padding-right: 0;
+        padding: 0;
         max-width: 100vw;
+        width: 100vw;
+        margin: 0;
         overflow-x: hidden;
     }
     
@@ -4802,16 +4982,26 @@ ul#available-teetimes li a[data-price=''] {
         margin: 0;
         padding: 0;
         display: block;
-        overflow-x: hidden;
+        background: #f8f9fa;
     }
     
     .home-collections .thumbnail {
-        width: 100% !important;
-        margin: 0 !important;
+        width: 100%;
+        margin: 0;
         padding: 0;
         display: block;
-        float: none !important;
-        border-bottom: 1px solid #eee;
+        float: none;
+        background: white;
+        border-radius: 0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        margin-bottom: 2px;
+    }
+    
+    .home-collections .thumbnail:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
     }
     
     .home-collections .thumbnail img {
@@ -4881,6 +5071,304 @@ ul#available-teetimes li a[data-price=''] {
         content: "";
         display: table;
         clear: both;
+    }
+    
+    /* Modern footer styling */
+    .footer {
+        background: #025105;
+        color: white;
+        padding: 40px 0 20px 0;
+        margin-top: 40px;
+    }
+    
+    .footer .container {
+        padding: 0 20px;
+        max-width: 100%;
+    }
+    
+    .footer .columns {
+        width: 100%;
+        margin-bottom: 30px;
+        float: none;
+    }
+    
+    .footer h6 {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0 0 16px 0;
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 2px solid #70bc42;
+        padding-bottom: 8px;
+        display: inline-block;
+    }
+    
+    .footer ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    
+    .footer ul li {
+        margin-bottom: 8px;
+        line-height: 1.6;
+    }
+    
+    .footer ul li a {
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        font-size: 15px;
+        transition: color 0.2s ease;
+    }
+    
+    .footer ul li a:hover {
+        color: #70bc42;
+    }
+    
+    .footer p {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 15px;
+        line-height: 1.6;
+        margin: 0 0 16px 0;
+    }
+    
+    /* Newsletter section styling */
+    .footer .seven.columns h6 {
+        color: white;
+    }
+    
+    /* Social icons styling */
+    .footer .social_icons {
+        display: flex;
+        gap: 12px;
+        margin: 16px 0;
+    }
+    
+    .footer .social_icons li {
+        margin: 0;
+        padding: 0;
+    }
+    
+    .footer .social_icons li a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        transition: all 0.2s ease;
+    }
+    
+    .footer .social_icons li a:hover {
+        background: #70bc42;
+        transform: translateY(-2px);
+    }
+    
+    /* Payment methods styling */
+    .payment_methods {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        justify-content: center;
+        margin: 20px 0;
+        flex-wrap: wrap;
+    }
+    
+    .payment_methods img {
+        height: 32px;
+        width: auto;
+        opacity: 0.8;
+        transition: opacity 0.2s ease;
+    }
+    
+    .payment_methods img:hover {
+        opacity: 1;
+    }
+    
+    /* Collection pages - GolfNow inspired styling */
+    .collection-grid .thumbnail {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+    }
+    
+    .collection-grid .thumbnail:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+    
+    .collection-grid .thumbnail img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+    }
+    
+    .collection-grid .thumbnail .caption {
+        padding: 20px;
+    }
+    
+    .collection-grid .thumbnail h4 {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 20px;
+        font-weight: 600;
+        color: #025105;
+        margin: 0 0 8px 0;
+        line-height: 1.3;
+    }
+    
+    .collection-grid .thumbnail .price {
+        font-size: 18px;
+        font-weight: 700;
+        color: #70bc42;
+        margin: 8px 0;
+    }
+    
+    .collection-grid .thumbnail .compare-at-price {
+        font-size: 16px;
+        color: #999;
+        text-decoration: line-through;
+        margin-left: 8px;
+    }
+    
+    /* Product pages - full-screen mobile design */
+    .product_single {
+        padding: 0;
+        margin: 0;
+    }
+    
+    .product_single .sixteen.columns {
+        width: 100%;
+        margin: 0;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+    
+    .product_name.top {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 28px;
+        font-weight: 700;
+        color: #025105;
+        margin: 0 0 20px 0;
+        text-align: center;
+    }
+    
+    .course-detail {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        margin: 20px 0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+    
+    .section-title {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 24px;
+        font-weight: 600;
+        color: #025105;
+        margin: 0 0 20px 0;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    /* Search form styling */
+    .search-form {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        margin: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    
+    .search-form select {
+        width: 100%;
+        margin-bottom: 16px;
+        font-size: 16px;
+        padding: 12px 16px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        background: white;
+    }
+    
+    .search-form select:focus {
+        border-color: #025105;
+        box-shadow: 0 0 0 3px rgba(2, 81, 5, 0.1);
+    }
+    
+    .search-form button {
+        width: 100%;
+        background: #025105;
+        color: white;
+        border: none;
+        padding: 16px;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .search-form button:hover {
+        background: #70bc42;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Weather widget styling */
+    .weather-widget {
+        background: linear-gradient(135deg, #025105, #70bc42);
+        color: white;
+        border-radius: 12px;
+        padding: 24px;
+        margin: 20px 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    
+    .weather-widget h3 {
+        color: white;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    
+    .weather-forecast {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        overflow-x: auto;
+    }
+    
+    .forecast-day {
+        text-align: center;
+        min-width: 60px;
+        padding: 12px 8px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+    }
+    
+    .forecast-day .day {
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 4px;
+        text-transform: uppercase;
+    }
+    
+    .forecast-day .temp {
+        font-size: 16px;
+        font-weight: 700;
+        margin: 4px 0;
+    }
+    
+    .forecast-day .desc {
+        font-size: 11px;
+        opacity: 0.9;
     }
 }
 
