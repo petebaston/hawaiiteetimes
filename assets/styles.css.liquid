@@ -1,4 +1,138 @@
 /******************************************************************
+Hawaii Tee Times Design System
+Mobile-First Responsive Golf Course Theme
+Author: Hawaii Tee Times Team
+******************************************************************/
+
+/* Design System Variables
+================================================== */
+:root {
+  /* Typography Scale */
+  --font-size-xs: 0.75rem;    /* 12px */
+  --font-size-sm: 0.875rem;   /* 14px */
+  --font-size-base: 1rem;     /* 16px */
+  --font-size-lg: 1.125rem;   /* 18px */
+  --font-size-xl: 1.25rem;    /* 20px */
+  --font-size-2xl: 1.5rem;    /* 24px */
+  --font-size-3xl: 1.875rem;  /* 30px */
+  --font-size-4xl: 2.25rem;   /* 36px */
+  --font-size-5xl: 3rem;      /* 48px */
+  
+  /* Font Families */
+  --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-headings: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", monospace;
+  
+  /* Font Weights */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  
+  /* Line Heights */
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
+  
+  /* Color Palette - Golf & Hawaii Inspired */
+  --color-primary: #2D7D32;       /* Forest Green */
+  --color-primary-light: #4CAF50;  /* Lighter Green */
+  --color-primary-dark: #1B5E20;   /* Darker Green */
+  
+  --color-secondary: #0277BD;      /* Ocean Blue */
+  --color-secondary-light: #03A9F4; /* Light Blue */
+  --color-secondary-dark: #01579B;  /* Dark Blue */
+  
+  --color-accent: #FF8F00;         /* Sunset Orange */
+  --color-accent-light: #FFC107;   /* Golden Yellow */
+  --color-accent-dark: #E65100;    /* Deep Orange */
+  
+  /* Neutral Colors */
+  --color-white: #FFFFFF;
+  --color-gray-50: #FAFAFA;
+  --color-gray-100: #F5F5F5;
+  --color-gray-200: #EEEEEE;
+  --color-gray-300: #E0E0E0;
+  --color-gray-400: #BDBDBD;
+  --color-gray-500: #9E9E9E;
+  --color-gray-600: #757575;
+  --color-gray-700: #616161;
+  --color-gray-800: #424242;
+  --color-gray-900: #212121;
+  --color-black: #000000;
+  
+  /* Semantic Colors */
+  --color-success: #4CAF50;
+  --color-warning: #FF9800;
+  --color-error: #F44336;
+  --color-info: #2196F3;
+  
+  /* Spacing Scale (Tailwind-inspired) */
+  --space-0: 0;
+  --space-1: 0.25rem;    /* 4px */
+  --space-2: 0.5rem;     /* 8px */
+  --space-3: 0.75rem;    /* 12px */
+  --space-4: 1rem;       /* 16px */
+  --space-5: 1.25rem;    /* 20px */
+  --space-6: 1.5rem;     /* 24px */
+  --space-8: 2rem;       /* 32px */
+  --space-10: 2.5rem;    /* 40px */
+  --space-12: 3rem;      /* 48px */
+  --space-16: 4rem;      /* 64px */
+  --space-20: 5rem;      /* 80px */
+  --space-24: 6rem;      /* 96px */
+  --space-32: 8rem;      /* 128px */
+  --space-40: 10rem;     /* 160px */
+  --space-48: 12rem;     /* 192px */
+  --space-56: 14rem;     /* 224px */
+  --space-64: 16rem;     /* 256px */
+  
+  /* Border Radius */
+  --radius-sm: 0.125rem;   /* 2px */
+  --radius-base: 0.25rem;  /* 4px */
+  --radius-md: 0.375rem;   /* 6px */
+  --radius-lg: 0.5rem;     /* 8px */
+  --radius-xl: 0.75rem;    /* 12px */
+  --radius-2xl: 1rem;      /* 16px */
+  --radius-3xl: 1.5rem;    /* 24px */
+  --radius-full: 9999px;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-base: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  
+  /* Transitions */
+  --transition-fast: 150ms ease-in-out;
+  --transition-base: 200ms ease-in-out;
+  --transition-slow: 300ms ease-in-out;
+  
+  /* Breakpoints (Tailwind-inspired) */
+  --breakpoint-sm: 640px;   /* Small devices */
+  --breakpoint-md: 768px;   /* Medium devices */
+  --breakpoint-lg: 1024px;  /* Large devices */ 
+  --breakpoint-xl: 1280px;  /* Extra large devices */
+  --breakpoint-2xl: 1536px; /* 2X Extra large devices */
+  
+  /* Z-Index Scale */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+  --z-toast: 1080;
+}
+
+/******************************************************************
+Original Theme Info
 Theme Name: Mobilia v3.4
 Theme URI: http://themes.shopify.com/themes/mobilia/styles/tokyo?ref=out-of-the-sandbox
 Author: Out of the Sandbox (http://outofthesandbox.com)
@@ -4663,6 +4797,627 @@ input.datepicker {
   font-size: 16px; }
 .ui-icon {
     cursor: pointer; }
+
+/* Hawaii Tee Times Mobile-First Design System Implementation
+================================================== */
+
+/* NEW DESIGN SYSTEM - Prefixed with 'new-' to avoid legacy CSS conflicts
+   All new sections and components MUST use these prefixed classes
+================================================== */
+
+/* Typography System */
+.new-h1, .new-heading-1 {
+  font-family: var(--font-headings);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  color: var(--color-gray-900);
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--space-4);
+}
+
+.new-h2, .new-heading-2 {
+  font-family: var(--font-headings);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+  color: var(--color-gray-800);
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--space-3);
+}
+
+.h3, h3 {
+  font-family: var(--font-headings);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+  color: var(--color-gray-800);
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--space-3);
+}
+
+.h4, h4, .h5, h5, .h6, h6 {
+  font-family: var(--font-headings);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-normal);
+  color: var(--color-gray-700);
+  font-size: var(--font-size-base);
+  margin-bottom: var(--space-2);
+}
+
+/* Body Text */
+body, p, .body-text {
+  font-family: var(--font-primary);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-gray-700);
+  font-size: var(--font-size-base);
+}
+
+/* Responsive Typography - Tablet (768px+) */
+@media (min-width: 768px) {
+  .h1, h1 {
+    font-size: var(--font-size-3xl);
+  }
+  
+  .h2, h2 {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .h3, h3 {
+    font-size: var(--font-size-xl);
+  }
+}
+
+/* Responsive Typography - Desktop (1024px+) */
+@media (min-width: 1024px) {
+  .h1, h1 {
+    font-size: var(--font-size-4xl);
+  }
+  
+  .h2, h2 {
+    font-size: var(--font-size-3xl);
+  }
+  
+  .h3, h3 {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .h4, h4 {
+    font-size: var(--font-size-lg);
+  }
+  
+  body, p, .body-text {
+    font-size: var(--font-size-lg);
+  }
+}
+
+/* Button System */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-primary);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-tight);
+  text-decoration: none;
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  padding: var(--space-3) var(--space-6);
+  min-height: 44px; /* Touch-friendly */
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-dark);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-white);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-secondary-dark);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+}
+
+.btn-outline:hover {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.btn-ghost {
+  background-color: transparent;
+  color: var(--color-gray-700);
+  border: 1px solid var(--color-gray-300);
+}
+
+.btn-ghost:hover {
+  background-color: var(--color-gray-50);
+  border-color: var(--color-gray-400);
+}
+
+/* Button Sizes */
+.btn-sm {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-size-sm);
+  min-height: 36px;
+}
+
+.btn-lg {
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--font-size-lg);
+  min-height: 52px;
+}
+
+.btn-full {
+  width: 100%;
+}
+
+/* Card System */
+.card {
+  background-color: var(--color-white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-base);
+  border: 1px solid var(--color-gray-200);
+  overflow: hidden;
+  transition: all var(--transition-base);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.card-header {
+  padding: var(--space-6);
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.card-body {
+  padding: var(--space-6);
+}
+
+.card-footer {
+  padding: var(--space-6);
+  border-top: 1px solid var(--color-gray-200);
+  background-color: var(--color-gray-50);
+}
+
+/* Spacing Utilities */
+.container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+}
+
+/* Mobile Container */
+@media (max-width: 639px) {
+  .container {
+    max-width: 100%;
+    padding: 0 var(--space-3);
+  }
+}
+
+/* Tablet Container */
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+    padding: 0 var(--space-6);
+  }
+}
+
+/* Desktop Container */
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px;
+  }
+}
+
+/* Grid System */
+.grid {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.grid-cols-1 { grid-template-columns: repeat(1, 1fr); }
+.grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+/* Responsive Grid */
+@media (min-width: 640px) {
+  .sm\:grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .sm\:grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .sm\:grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+}
+
+@media (min-width: 768px) {
+  .md\:grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .md\:grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .md\:grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .lg\:grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .lg\:grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .lg\:grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* Flex Utilities */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.flex-wrap { flex-wrap: wrap; }
+.items-center { align-items: center; }
+.items-start { align-items: flex-start; }
+.items-end { align-items: flex-end; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.justify-around { justify-content: space-around; }
+
+/* Spacing Utilities */
+.p-0 { padding: var(--space-0); }
+.p-1 { padding: var(--space-1); }
+.p-2 { padding: var(--space-2); }
+.p-3 { padding: var(--space-3); }
+.p-4 { padding: var(--space-4); }
+.p-6 { padding: var(--space-6); }
+.p-8 { padding: var(--space-8); }
+
+.m-0 { margin: var(--space-0); }
+.m-1 { margin: var(--space-1); }
+.m-2 { margin: var(--space-2); }
+.m-3 { margin: var(--space-3); }
+.m-4 { margin: var(--space-4); }
+.m-6 { margin: var(--space-6); }
+.m-8 { margin: var(--space-8); }
+
+/* Margin/Padding Directional */
+.mt-4 { margin-top: var(--space-4); }
+.mb-4 { margin-bottom: var(--space-4); }
+.ml-4 { margin-left: var(--space-4); }
+.mr-4 { margin-right: var(--space-4); }
+
+.pt-4 { padding-top: var(--space-4); }
+.pb-4 { padding-bottom: var(--space-4); }
+.pl-4 { padding-left: var(--space-4); }
+.pr-4 { padding-right: var(--space-4); }
+
+/* Text Utilities */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.text-xs { font-size: var(--font-size-xs); }
+.text-sm { font-size: var(--font-size-sm); }
+.text-base { font-size: var(--font-size-base); }
+.text-lg { font-size: var(--font-size-lg); }
+.text-xl { font-size: var(--font-size-xl); }
+.text-2xl { font-size: var(--font-size-2xl); }
+
+.font-normal { font-weight: var(--font-weight-normal); }
+.font-medium { font-weight: var(--font-weight-medium); }
+.font-semibold { font-weight: var(--font-weight-semibold); }
+.font-bold { font-weight: var(--font-weight-bold); }
+
+/* Color Utilities */
+.text-primary { color: var(--color-primary); }
+.text-secondary { color: var(--color-secondary); }
+.text-gray-600 { color: var(--color-gray-600); }
+.text-gray-700 { color: var(--color-gray-700); }
+.text-gray-900 { color: var(--color-gray-900); }
+
+.bg-primary { background-color: var(--color-primary); }
+.bg-secondary { background-color: var(--color-secondary); }
+.bg-white { background-color: var(--color-white); }
+.bg-gray-50 { background-color: var(--color-gray-50); }
+.bg-gray-100 { background-color: var(--color-gray-100); }
+
+/* Border Utilities */
+.border { border: 1px solid var(--color-gray-200); }
+.border-gray-300 { border-color: var(--color-gray-300); }
+.rounded { border-radius: var(--radius-base); }
+.rounded-lg { border-radius: var(--radius-lg); }
+.rounded-xl { border-radius: var(--radius-xl); }
+.rounded-full { border-radius: var(--radius-full); }
+
+/* Shadow Utilities */
+.shadow-sm { box-shadow: var(--shadow-sm); }
+.shadow { box-shadow: var(--shadow-base); }
+.shadow-md { box-shadow: var(--shadow-md); }
+.shadow-lg { box-shadow: var(--shadow-lg); }
+
+/* Mobile-First Hawaii Tee Times Specific Styles
+================================================== */
+
+/* Island Cards - Mobile First */
+.island-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  padding: var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .island-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  .island-cards {
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--space-8) var(--space-4);
+  }
+}
+
+.island-card {
+  background: var(--color-white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-base);
+  overflow: hidden;
+  transition: all var(--transition-base);
+  border: 1px solid var(--color-gray-200);
+}
+
+.island-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+
+.island-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.island-card-content {
+  padding: var(--space-4);
+}
+
+.island-card h3 {
+  font-family: var(--font-headings);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-lg);
+  color: var(--color-gray-900);
+  margin-bottom: var(--space-2);
+}
+
+.island-price {
+  font-family: var(--font-primary);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+  font-size: var(--font-size-base);
+  margin-bottom: var(--space-3);
+}
+
+.book-now-btn {
+  width: 100%;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-full);
+  padding: var(--space-3) var(--space-6);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-base);
+  transition: all var(--transition-base);
+  cursor: pointer;
+}
+
+.book-now-btn:hover {
+  background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Search Component */
+.search-component {
+  background: var(--color-white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-6);
+  margin: var(--space-6) var(--space-4);
+  border: 1px solid var(--color-gray-200);
+}
+
+@media (min-width: 768px) {
+  .search-component {
+    max-width: 600px;
+    margin: var(--space-8) auto;
+  }
+}
+
+.search-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .search-row {
+    flex-direction: row;
+    align-items: end;
+  }
+}
+
+.search-field {
+  flex: 1;
+}
+
+.search-field label {
+  display: block;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-gray-700);
+  margin-bottom: var(--space-2);
+  font-size: var(--font-size-sm);
+}
+
+.search-field select {
+  width: 100%;
+  padding: var(--space-3);
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-base);
+  background-color: var(--color-white);
+  transition: border-color var(--transition-base);
+}
+
+.search-field select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(45, 125, 50, 0.1);
+}
+
+.search-button {
+  background: linear-gradient(135deg, var(--color-secondary), var(--color-secondary-light));
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-full);
+  padding: var(--space-3) var(--space-8);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-base);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  min-height: 48px;
+}
+
+.search-button:hover {
+  background: linear-gradient(135deg, var(--color-secondary-dark), var(--color-secondary));
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Feature Sections */
+.feature-section {
+  padding: var(--space-8) var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .feature-section {
+    padding: var(--space-12) var(--space-6);
+  }
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .feature-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.feature-card {
+  background: var(--color-white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-base);
+  overflow: hidden;
+  transition: all var(--transition-base);
+}
+
+.feature-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.feature-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.feature-card-content {
+  padding: var(--space-4);
+}
+
+.feature-card h3 {
+  font-family: var(--font-headings);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-lg);
+  color: var(--color-gray-900);
+  margin-bottom: var(--space-2);
+}
+
+.feature-card p {
+  font-size: var(--font-size-sm);
+  color: var(--color-gray-600);
+  line-height: var(--line-height-relaxed);
+}
+
+/* Responsive Overrides for Mobile-First Approach */
+@media (max-width: 767px) {
+  /* Ensure full-width mobile experience */
+  .container {
+    padding: 0;
+  }
+  
+  .mobile-full-width {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+  }
+  
+  /* Mobile-specific button sizing */
+  .btn {
+    min-height: 48px;
+    font-size: var(--font-size-base);
+  }
+  
+  /* Mobile typography adjustments */
+  h1, .h1 {
+    font-size: var(--font-size-2xl);
+    line-height: var(--line-height-tight);
+  }
+  
+  h2, .h2 {
+    font-size: var(--font-size-xl);
+  }
+  
+  h3, .h3 {
+    font-size: var(--font-size-lg);
+  }
+}
 .ui-state-disabled {
     opacity: .5; }
 
