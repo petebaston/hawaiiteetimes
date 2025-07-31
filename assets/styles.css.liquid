@@ -5233,15 +5233,9 @@ input.datepicker {
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-lg);
   padding: var(--space-6);
-  margin: var(--space-6) var(--space-4);
   border: 1px solid var(--color-gray-200);
-}
-
-@media (min-width: 768px) {
-  .new-search-component {
-    max-width: 600px;
-    margin: var(--space-8) auto;
-  }
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .new-search-row {
@@ -5304,28 +5298,17 @@ input.datepicker {
   box-shadow: var(--shadow-md);
 }
 
-/* Feature Sections */
-.new-feature-section {
-  padding: var(--space-8) var(--space-4);
-}
-
-@media (min-width: 768px) {
-  .new-feature-section {
-    padding: var(--space-12) var(--space-6);
-  }
-}
-
+/* Feature Grid - Use consistent container system */
 .new-feature-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-6);
-  max-width: 1200px;
-  margin: 0 auto;
 }
 
 @media (min-width: 768px) {
   .new-feature-grid {
     grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-8);
   }
 }
 
@@ -5409,7 +5392,7 @@ input.datepicker {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));
+  background: var(--color-gray-900); /* Neutral fallback, no green tint */
   overflow: hidden;
 }
 
@@ -5435,7 +5418,7 @@ input.datepicker {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(29, 94, 32, 0.7), rgba(45, 125, 50, 0.5));
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.2)); /* Neutral dark overlay for text readability */
   z-index: 2;
 }
 
