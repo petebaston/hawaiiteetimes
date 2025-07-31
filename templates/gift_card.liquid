@@ -4,10 +4,9 @@
 {% assign formatted_initial_value_stripped = formatted_initial_value | strip_html %}
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,106 +15,338 @@
   <title>{{ 'gift_cards.issued.title' | t: value: formatted_initial_value_stripped, shop: shop.name }}</title>
   <meta name="description" content="{{ 'gift_cards.issued.subtext' | t }}">
 
-  {{ 'gift-card.css' | shopify_asset_url | stylesheet_tag }}
-  {{ 'modernizr.gift-card.js' | shopify_asset_url | script_tag }}
-  <link href="//fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
-
-  <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
+  <!-- Modern Hawaii Tee Times Gift Card Design -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    
+    .gift-card-container {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      max-width: 500px;
+      width: 100%;
+      overflow: hidden;
+    }
+    
+    .gift-card-header {
+      padding: 2rem 2rem 1rem;
+      text-align: center;
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    }
+    
+    .gift-card-logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 0.5rem;
+      text-decoration: none;
+    }
+    
+    .gift-card-subtitle {
+      color: #64748b;
+      font-size: 0.875rem;
+    }
+    
+    .gift-card-status {
+      margin-top: 1rem;
+    }
+    
+    .status-tag {
+      display: inline-block;
+      padding: 0.375rem 0.75rem;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .status-disabled {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+    
+    .status-expired {
+      background: #fef3c7;
+      color: #d97706;
+    }
+    
+    .status-active {
+      background: #dcfce7;
+      color: #16a34a;
+    }
+    
+    .gift-card-main {
+      padding: 2rem;
+    }
+    
+    .gift-card-visual {
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+      color: white;
+      text-align: center;
+    }
+    
+    .gift-card-visual::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3CPath d='M30 30c0-16.569 13.431-30 30-30v60c-16.569 0-30-13.431-30-30z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+      opacity: 0.1;
+    }
+    
+    .gift-card-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .gift-card-amount {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .gift-card-balance {
+      font-size: 0.875rem;
+      opacity: 0.8;
+      margin-bottom: 0.5rem;
+    }
+    
+    .gift-card-code-section {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin-top: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .gift-card-code-label {
+      font-size: 0.75rem;
+      opacity: 0.8;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .gift-card-code {
+      font-size: 1.125rem;
+      font-weight: 600;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 0.25rem;
+      background: rgba(255, 255, 255, 0.1);
+      transition: background 0.2s;
+    }
+    
+    .gift-card-code:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .gift-card-instructions {
+      background: #f8fafc;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin-bottom: 2rem;
+      color: #64748b;
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+    
+    .gift-card-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    
+    .btn {
+      flex: 1;
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      text-decoration: none;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    
+    .btn-primary {
+      background: #3b82f6;
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: #2563eb;
+    }
+    
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #475569;
+    }
+    
+    .btn-secondary:hover {
+      background: #cbd5e1;
+    }
+    
+    .gift-card-footer {
+      padding: 1rem 2rem 2rem;
+      text-align: center;
+      color: #64748b;
+      font-size: 0.75rem;
+    }
+    
+    @media (max-width: 640px) {
+      .gift-card-main {
+        padding: 1.5rem;
+      }
+      
+      .gift-card-header {
+        padding: 1.5rem 1.5rem 1rem;
+      }
+      
+      .gift-card-visual {
+        padding: 1.5rem;
+      }
+      
+      .gift-card-amount {
+        font-size: 2rem;
+      }
+      
+      .gift-card-actions {
+        flex-direction: column;
+      }
+    }
+    
+    @media print {
+      body {
+        background: white;
+        min-height: auto;
+      }
+      
+      .gift-card-container {
+        box-shadow: none;
+        max-width: none;
+      }
+      
+      .btn-secondary {
+        display: none;
+      }
+    }
+  </style>
 
   <script type='text/javascript'>
     function selectText(element) {
+      var doc = document;
+      var text = doc.getElementById(element);
 
-        var doc = document;
-        var text = doc.getElementById(element);
-
-        if (doc.body.createTextRange) { // ms
-            var range = doc.body.createTextRange();
-            range.moveToElementText(text);
-            range.select();
-        } else if (window.getSelection) { // moz, opera, webkit
-            var selection = window.getSelection();
-            var range = doc.createRange();
-            range.selectNodeContents(text);
-            selection.removeAllRanges();
-            selection.addRange(range);
-        }
-
+      if (doc.body.createTextRange) { // IE
+        var range = doc.body.createTextRange();
+        range.moveToElementText(text);
+        range.select();
+      } else if (window.getSelection) { // Modern browsers
+        var selection = window.getSelection();
+        var range = doc.createRange();
+        range.selectNodeContents(text);
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
     }
   </script>
-
 </head>
 
 <body>
+  <div class="gift-card-container">
+    
+    <!-- Header -->
+    <div class="gift-card-header">
+      <a href="{{ shop.url }}" class="gift-card-logo">{{ shop.name }}</a>
+      <p class="gift-card-subtitle">{{ 'gift_cards.issued.subtext' | t }}</p>
+      
+      <!-- Status -->
+      <div class="gift-card-status">
+        {% unless gift_card.enabled %}
+          <span class="status-tag status-disabled">{{ 'gift_cards.issued.disabled' | t }}</span>
+        {% endunless %}
+        
+        {% assign gift_card_expiry_date = gift_card.expires_on | date: "%d/%m/%y" %}
+        {% if gift_card.expired and gift_card.enabled %}
+           <span class="status-tag status-expired">{{ 'gift_cards.issued.expired' | t: expiry: gift_card_expiry_date }}</span>
+        {% endif %}
+        
+        {% if gift_card.expired != true and gift_card.expires_on and gift_card.enabled %}
+          <span class="status-tag status-active">{{ 'gift_cards.issued.active' | t: expiry: gift_card_expiry_date }}</span>
+        {% endif %}
+      </div>
+    </div>
 
-  <div class="wrap">
-
-    <header role="banner" id="header">
-      <a href="{{ shop.url }}" class="logo">{{ shop.name }}</a>
-      <a href="{{ shop.url }}" class="shop-url">{{ shop.url | remove: 'http://' }}</a>
-    </header>
-
-      <main role="main">
-
-          <div id="gift-card-outer-container" {% if gift_card.expired or gift_card.enabled != true %}class="disabled"{% endif %}>
-            <div id="gift-card-inner-container">
-
-              <header id="gift-card-header">
-                <h2>{{ 'gift_cards.issued.subtext' | t }}</h2>
-                {% unless gift_card.enabled %}
-                  <span class="tag">{{ 'gift_cards.issued.disabled' | t }}</span>
-                {% endunless %}
-                {% assign gift_card_expiry_date = gift_card.expires_on | date: "%d/%m/%y" %}
-                {% if gift_card.expired and gift_card.enabled %}
-                   <span class="tag">{{ 'gift_cards.issued.expired' | t: expiry: gift_card_expiry_date }}</span>
-                {% endif %}
-                {% if gift_card.expired != true and gift_card.expires_on and gift_card.enabled %}
-                  <span class="tag light">{{ 'gift_cards.issued.active' | t: expiry: gift_card_expiry_date }}</span>
-                {% endif %}
-              </header>
-
-              <div id="gift-card-holder">
-                <div class="corner top-left"></div>
-                <div class="corner bottom-right"></div>
-                <div class="corner top-right"></div>
-                <div class="corner bottom-left"></div>
-                <div id="gift-card">
-                  <img src="{{ 'gift-card/card.jpg' | shopify_asset_url }}" alt="{{ 'gift_cards.issued.subtext' | t }}">
-                  {% assign initial_value_size = formatted_initial_value | size %}
-                  <div id="gift-card-amount" class="{% if initial_value_size > 6 %}medium{% endif %}">
-                    {% if gift_card.balance != gift_card.initial_value %}
-                      <span class="tooltip-container"><span class="tooltip-label">{{ gift_card.balance | money }} <small>left</small></span><span class="tooltip-triangle"></span></span>
-                    {% endif %}
-                    <strong>{{ formatted_initial_value }}</strong>
-                  </div>
-                  {% assign code_size = gift_card.code | format_code | size %}
-                  <div id="gift-card-code-outer" class="{% if code_size <= 25 %}large{% elsif code_size > 25 and code_size <= 30 %}medium{% else %}small{% endif %}" onclick="selectText('gift-card-code-digits');">
-                    <div id="gift-card-code-inner">
-                      <strong id="gift-card-code-digits">{{ gift_card.code | format_code }}</strong>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div id="gift-card-instructions">
-                <p>{{ 'gift_cards.issued.redeem' | t }}</p>
-              </div>
-
-              <div id="gift-card-actions">
-                <a href="{{ shop.url }}" class="btn center" target="_blank">{{ 'gift_cards.issued.shop_link' | t }}</a>
-                <a href="#" class="action-link left" onclick="window.print();"><i class="ico-16 print"></i>{{ 'gift_cards.issued.print' | t }}</a>
-              </div>
-
-            </div>
+    <!-- Main Content -->
+    <div class="gift-card-main">
+      
+      <!-- Gift Card Visual -->
+      <div class="gift-card-visual {% if gift_card.expired or gift_card.enabled != true %}opacity-50{% endif %}">
+        <div class="gift-card-icon">🏌️‍♂️</div>
+        
+        {% if gift_card.balance != gift_card.initial_value %}
+          <div class="gift-card-balance">{{ gift_card.balance | money }} remaining</div>
+        {% endif %}
+        
+        <div class="gift-card-amount">{{ formatted_initial_value }}</div>
+        
+        <div class="gift-card-code-section">
+          <div class="gift-card-code-label">Gift Card Code</div>
+          <div class="gift-card-code" id="gift-card-code" onclick="selectText('gift-card-code');">
+            {{ gift_card.code | format_code }}
           </div>
-      </main> <!-- / Main -->
+        </div>
+      </div>
 
-      <footer role="contentinfo">
-        <img src="{{ 'gift-card/icon-bug.png' | shopify_asset_url }}" class="gift-card-icon" alt="{{ 'gift_cards.issued.subtext' | t }}">
-      </footer>
+      <!-- Instructions -->
+      <div class="gift-card-instructions">
+        <p>{{ 'gift_cards.issued.redeem' | t }}</p>
+      </div>
+
+      <!-- Actions -->
+      <div class="gift-card-actions">
+        <a href="{{ shop.url }}" class="btn btn-primary" target="_blank">
+          {{ 'gift_cards.issued.shop_link' | t }}
+        </a>
+        <a href="#" class="btn btn-secondary" onclick="window.print();">
+          {{ 'gift_cards.issued.print' | t }}
+        </a>
+      </div>
 
     </div>
 
+    <!-- Footer -->
+    <div class="gift-card-footer">
+      <p>Hawaii's premier golf booking platform</p>
+    </div>
+
+  </div>
 </body>
 </html>

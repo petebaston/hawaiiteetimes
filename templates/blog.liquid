@@ -1,86 +1,144 @@
+<!-- NEW DESIGN SYSTEM BLOG PAGE - Mobile-First Golf Blog -->
+
 {% paginate blog.articles by 7 %}
   {% assign tag_count = blog.all_tags | size %}
   {% assign tag_threshold = 8 %}
 
-  <div class="sixteen columns clearfix collection_nav">
-    <h1 class="collection_title {% if settings.blog_tags and tag_count < tag_threshold %}collection_title_tags{% endif %}"><a href="{{ blog.url }}" title="{{ blog.title | escape }}">{{ blog.title }}</a></h1>
+<section class="new-section new-blog-page">
+  <div class="new-container">
+    
+    <!-- Blog Header -->
+    <div class="new-blog-header new-mb-8">
+      <h1 class="new-h1 new-mb-4">
+        <a href="{{ blog.url }}" class="new-link-primary">{{ blog.title }}</a>
+      </h1>
+      <p class="new-section-subtitle">Golf tips, course reviews, and Hawaii golf insights</p>
+    </div>
 
+    <!-- Tag Navigation -->
     {% if settings.blog_tags %}
       {% if tag_count < tag_threshold %}
-        <ul class="collection_menu">
-          <li>
-            <a href="{{ blog.url }}">{% if current_tags %}{{ 'blogs.general.view_all' | t }}{% else %}<span class="active">{{ 'blogs.general.view_all' | t }}</span>{% endif %}</a>
-          </li>
-          {% for tag in blog.all_tags %}
-            <li>
-              {{ tag | highlight_active_tag | link_to_tag: tag }}
-            </li>
-          {% endfor %}
-        </ul>
+        <div class="new-tag-nav new-mb-8">
+          <div class="new-flex new-flex-wrap new-gap-2">
+            <a href="{{ blog.url }}" 
+               class="new-btn {% unless current_tags %}new-btn-primary{% else %}new-btn-outline{% endunless %} new-btn-sm">
+              {{ 'blogs.general.view_all' | t }}
+            </a>
+            {% for tag in blog.all_tags %}
+              {{ tag | highlight_active_tag | link_to_tag: tag | replace: '<a', '<a class="new-btn new-btn-outline new-btn-sm"' }}
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+      
+      {% if tag_count >= tag_threshold %}
+        <div class="new-blog-filter new-mb-8">
+          <div class="new-form-field new-max-w-xs">
+            <label for="tag_filter" class="new-form-label">Filter by Topic</label>
+            <select name="tag_filter" id="tag_filter" class="new-form-select">
+              <option {% unless current_tags %}selected="selected"{% endunless %} value="{{ blog.url }}">
+                {{ 'blogs.general.view_all' | t }}
+              </option>
+              {% for tag in blog.all_tags %}
+                <option {% if current_tags contains tag %}selected="selected"{% endif %} 
+                        value="/blogs/{{ blog.handle }}/tagged/{{ tag | handleize }}">
+                  {{ tag }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
       {% endif %}
     {% endif %}
-    
-    {% if settings.blog_tags %}
-      <select name="tag_filter" id="tag_filter" class="blog_filter" {% if tag_count < tag_threshold %}style="display:none"{% endif %}>
-        <option {% unless current_tags %}selected="selected"{% endunless %} value="{{ blog.url }}">{{ 'blogs.general.view_all' | t }}</option>
-        {% for tag in blog.all_tags %}
-          <option {% if current_tags contains tag %}selected="selected"{% endif %} value="/blogs/{{ blog.handle }}/tagged/{{ tag | handleize }}">{{ tag }}</option>
-        {% endfor %}
-      </select>
-    {% endif %}
-  </div>
 
-  
-  {% for article in blog.articles %}
-    <div class="sixteen columns article">
-      <div class="five columns alpha omega blog_meta">
-        <h6>
-          {{ article.published_at | date: format: "month_day_year" }}
-        </h6>
+    <!-- Articles Grid -->
+    <div class="new-articles-grid new-space-y-8">
+      {% for article in blog.articles %}
+        <article class="new-article-card">
+          <div class="new-card new-p-6">
+            <div class="new-grid new-grid-cols-1 new-lg:grid-cols-4 new-gap-6">
+              
+              <!-- Article Meta Sidebar -->
+              <div class="new-article-meta new-lg:col-span-1">
+                <div class="new-meta-content new-space-y-4">
+                  <div class="new-publish-date">
+                    <span class="new-meta-label">Published</span>
+                    <time class="new-meta-value new-text-sm new-font-medium">
+                      {{ article.published_at | date: format: "month_day_year" }}
+                    </time>
+                  </div>
 
-        {% if article.comments_enabled? %}
-          <p>
-            <a href="{{ article.url }}#comments">{{ 'blogs.counts.comments_with_count' | t: count: article.comments_count }}</a>
-          </p>
-        {% endif %}
+                  {% if article.comments_enabled? %}
+                    <div class="new-comments-count">
+                      <span class="new-meta-label">Comments</span>
+                      <a href="{{ article.url }}#comments" class="new-link new-text-sm">
+                        {{ 'blogs.counts.comments_with_count' | t: count: article.comments_count }}
+                      </a>
+                    </div>
+                  {% endif %}
 
-        {% if settings.blog_tags %}
-          <p class="meta">
-            {% capture tags %}
-            {% for tag in article.tags %}
-              <a href="{{ shop.url}}/blogs/{{ blog.handle }}/tagged/{{ tag | handleize }}" title="{{ blog.title }} {{ 'blogs.general.tagged' | t }} {{ tag | escape }}">{{ tag }}</a>{% unless forloop.last %},{% endunless %}
-            {% endfor %}
-            {% endcapture %}
-            {% if article.tags.size > 0 %}
-            <span class="label">{{ 'blogs.article.posted_in_html' | t: tags: tags }}</span>
-            {% endif %}
-          </p>
-        {% endif %}
+                  {% if settings.blog_tags and article.tags.size > 0 %}
+                    <div class="new-article-tags">
+                      <span class="new-meta-label">Topics</span>
+                      <div class="new-flex new-flex-wrap new-gap-1 new-mt-2">
+                        {% for tag in article.tags %}
+                          <a href="{{ shop.url}}/blogs/{{ blog.handle }}/tagged/{{ tag | handleize }}" 
+                             class="new-tag new-tag-sm"
+                             title="{{ blog.title }} {{ 'blogs.general.tagged' | t }} {{ tag | escape }}">
+                            {{ tag }}
+                          </a>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  {% endif %}
 
-        <hr />
-       
-        {% include "social-buttons" with "article" %}
+                  <div class="new-social-share new-hidden new-lg:block">
+                    {% include "social-buttons" with "article" %}
+                  </div>
+                </div>
+              </div>
 
-      </div>
+              <!-- Article Content -->
+              <div class="new-article-content new-lg:col-span-3">
+                <header class="new-article-header new-mb-4">
+                  <h2 class="new-h2 new-mb-3">
+                    <a href="{{ article.url }}" class="new-link-primary">{{ article.title }}</a>
+                  </h2>
+                </header>
 
-      <div class="ten columns alpha blog_content">
-        <h2><a href="{{ article.url }}" title="{{ article.title | escape }}">{{ article.title }}</a></h2>
-          
-        {% if article.excerpt != blank %}
-          {{ article.excerpt }}
-        
-          <p class="continue_reading">
-            <a href="{{ article.url }}" title="{{ article.title | escape }}" class="action_button">{{ 'blogs.general.continue_reading_html' | t }}</a>
-          </p>
-        {% else %}
-          {{ article.content }} 
-        {% endif %}        
-      </div>
+                <div class="new-article-body new-prose">
+                  {% if article.excerpt != blank %}
+                    {{ article.excerpt }}
+                    
+                    <div class="new-continue-reading new-mt-6">
+                      <a href="{{ article.url }}" 
+                         class="new-btn new-btn-primary"
+                         title="{{ article.title | escape }}">
+                        {{ 'blogs.general.continue_reading_html' | t }}
+                      </a>
+                    </div>
+                  {% else %}
+                    {{ article.content }}
+                  {% endif %}
+                </div>
+
+                <!-- Mobile Social Share -->
+                <div class="new-social-share new-lg:hidden new-mt-6 new-pt-6 new-border-t">
+                  {% include "social-buttons" with "article" %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      {% endfor %}
     </div>
-  {% endfor %}
-  
-  <div class="sixteen columns">
-    {% include 'pagination' %} 
-  </div>   
-  
+
+    <!-- Pagination -->
+    <div class="new-pagination-wrapper new-mt-12">
+      {% include 'pagination' %}
+    </div>
+
+  </div>
+</section>
+
 {% endpaginate %}

@@ -1,130 +1,186 @@
+<!-- NEW DESIGN SYSTEM SEARCH PAGE - Mobile-First Golf Course Search -->
+
 {% assign search_pagination = settings.pagination_limit %}
 {% paginate search.results by search_pagination %}
 
-<header class="search_header">
-  <h1 class="page_title">
-    {{ 'general.search.title' | t }}  
-    {% if search.performed %}
-    <small>{{ 'general.search.results_count' | t: count: search.results_count }} for "{{ search.terms }}" </small>       
-    {% endif %}
-  </h1>
-</header>
-
-{% if search.performed %}
-  
-  {% if search.results == empty %}    
-    <br class="clear" />
-    <br class="clear" />
-    <div class="clearfix">    
-      <p class="quote">{{ 'general.search.no_results_html' | t: terms: search.terms }}</p>   
+<section class="new-section new-search-page">
+  <div class="new-container">
+    
+    <!-- Search Header -->
+    <div class="new-search-header new-mb-8">
+      <h1 class="new-h1">
+        {{ 'general.search.title' | t }}
+      </h1>
+      {% if search.performed %}
+        <p class="new-section-subtitle">
+          {{ 'general.search.results_count' | t: count: search.results_count }} for "{{ search.terms }}"
+        </p>
+      {% endif %}
     </div>
 
-    <br class="clear" />
-    <br class="clear" />
-    <br class="clear" />
-  {% else %}  
-
-
- {% if settings.search_option == 'everything' or search.results.first.price == blank %}
-    {% if settings.collection_sidebar %}
+    {% if search.performed %}
       
-      <div class="thirteen columns">
-    {% else %}
-      <div class="sixteen columns">
-    {% endif %}
-	
-
-    {% for item in search.results %}
-      <div class="product_row">
-        
-        {% if item.featured_image %}
-          <div class="four columns alpha">
-             <a href="{{ item.url }}" title="{{ item.title | escape }}">
-               <img src="{{ item.featured_image | product_img_url: 'large' }}"  alt="{{ item.title | escape }}" />
-             </a>
-          </div> 
-        {% endif %}
-        
-        <div class="{% if settings.collection_sidebar %}{% if item.featured_image %}eight{% else %}twelve{% endif %}{% else %}{% if item.featured_image %}twelve{% else %}sixteen{% endif %}{% endif %} columns omega align_left">        
-
-          <p>
-            <a href="{{item.url }}" title="{{ item.title | escape }}">{{ item.title }}</a>
-          </p> 
-
-          {% if item.price %}
-             <div class="info">                                              
-                <span class="price">
-                  {% if item.compare_at_price_max > item.price %}
-                    <span class="was_price">{{ item.compare_at_price_max | money }}</span>
-                  {% endif %}
-                    
-                  {% if item.available %}
-                    {% if item.price_varies %}
-                      {% if item.compare_at_price_max > item.price %}
-                       
-                  <br />
-                      {% endif %}
-                      <small><em>{{ 'products.general.from' | t }}</em></small>
-                    {% endif %}
-                    {{ item.price_min | money }}
-                  {% else %}
-                    {{ item.price_min | money }} - {{ 'products.product.sold_out' | t }}
-                  {% endif %}
-                  
-                </span>
+      {% if search.results == empty %}
+        <!-- No Results State -->
+        <div class="new-empty-results new-text-center new-py-16">
+          <div class="new-card new-p-8 new-max-w-md new-mx-auto">
+            <div class="new-empty-icon new-mb-6">
+              🔍
             </div>
-          {% endif %}
-          
-          <p>
-            {{ item.content | strip_html | truncatewords: 40 | highlight: search.terms | replace: 'Description', '' | replace: 'Specs', '' | replace: 'Shipping', '' }}
-          </p>         
+            <h2 class="new-h2 new-mb-4">No Results Found</h2>
+            <p class="new-body new-mb-6 new-text-gray-600">
+              {{ 'general.search.no_results_html' | t: terms: search.terms }}
+            </p>
+            <a href="/" class="new-btn new-btn-primary">
+              Browse All Golf Courses
+            </a>
+          </div>
         </div>
-      </div>  
-      <hr />  
-    {% endfor %}  
-  </div>
-
- {% else %}
-      {% if settings.collection_sidebar %}
-        {% include 'sidebar' %}
-        <div class="thirteen columns">
       {% else %}
-        <div class="sixteen columns">
+
+        {% if settings.search_option == 'everything' or search.results.first.price == blank %}
+          <!-- Mixed Content Results (Articles, Pages, Products) -->
+          <div class="new-search-results">
+            {% if settings.collection_sidebar %}
+              <div class="new-grid new-grid-cols-1 new-lg:grid-cols-4 new-gap-8">
+                <div class="new-lg:col-span-3">
+            {% endif %}
+
+            <div class="new-results-list new-space-y-6">
+              {% for item in search.results %}
+                <div class="new-search-result-item">
+                  <div class="new-card new-p-6">
+                    <div class="new-grid new-grid-cols-1 new-md:grid-cols-4 new-gap-6">
+                      
+                      <!-- Result Image -->
+                      {% if item.featured_image %}
+                        <div class="new-result-image">
+                          <a href="{{ item.url }}" title="{{ item.title | escape }}">
+                            <img src="{{ item.featured_image | product_img_url: 'medium' }}" 
+                                 alt="{{ item.title | escape }}" 
+                                 class="new-img-responsive new-rounded-lg" />
+                          </a>
+                        </div>
+                      {% endif %}
+                      
+                      <!-- Result Content -->
+                      <div class="{% if item.featured_image %}new-md:col-span-3{% else %}new-md:col-span-4{% endif %}">
+                        <h3 class="new-h3 new-mb-3">
+                          <a href="{{ item.url }}" class="new-link-primary">{{ item.title }}</a>
+                        </h3>
+
+                        {% if item.price %}
+                          <div class="new-price-info new-mb-4">
+                            {% if item.compare_at_price_max > item.price %}
+                              <span class="new-price-was new-mr-2">{{ item.compare_at_price_max | money }}</span>
+                            {% endif %}
+                            
+                            {% if item.available %}
+                              {% if item.price_varies %}
+                                <span class="new-price-from">{{ 'products.general.from' | t }} </span>
+                              {% endif %}
+                              <span class="new-price-current">{{ item.price_min | money }}</span>
+                            {% else %}
+                              <span class="new-price-current">{{ item.price_min | money }}</span>
+                              <span class="new-sold-out new-ml-2">- {{ 'products.product.sold_out' | t }}</span>
+                            {% endif %}
+                          </div>
+                        {% endif %}
+                        
+                        <div class="new-result-excerpt new-prose">
+                          <p>{{ item.content | strip_html | truncatewords: 40 | highlight: search.terms | replace: 'Description', '' | replace: 'Specs', '' | replace: 'Shipping', '' }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+
+            {% if settings.collection_sidebar %}
+                </div>
+                <!-- Sidebar would go here -->
+                <div class="new-search-sidebar">
+                  <div class="new-card new-p-6">
+                    <h3 class="new-h3 new-mb-4">Refine Search</h3>
+                    <!-- Sidebar filters could go here -->
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+
+        {% else %}
+          <!-- Product-Only Results -->
+          <div class="new-search-products">
+            {% if settings.collection_sidebar %}
+              <div class="new-grid new-grid-cols-1 new-lg:grid-cols-4 new-gap-8">
+                <div class="new-lg:col-span-3">
+            {% endif %}
+
+            {% assign products = search.results %}
+            {% assign products_per_row = settings.products_per_row %}
+            {% include 'product-loop' with settings.collection_sidebar %}
+
+            {% if settings.collection_sidebar %}
+                </div>
+                <div class="new-search-sidebar">
+                  <div class="new-card new-p-6">
+                    <h3 class="new-h3 new-mb-4">Filter Results</h3>
+                    <!-- Sidebar filters could go here -->
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
       {% endif %}
 
-      {% assign products = search.results %}
-      {% assign products_per_row = settings.products_per_row %}
-      {% include 'product-loop' with settings.collection_sidebar %}
+      <!-- Pagination -->
+      {% include 'pagination' %}
 
+    {% else %}
+      <!-- Search Form (No Search Performed) -->
+      <div class="new-search-form new-text-center new-py-16">
+        <div class="new-max-w-2xl new-mx-auto">
+          <div class="new-search-icon new-mb-6">
+            🏌️‍♂️
+          </div>
+          <h2 class="new-h2 new-mb-4">Find Your Perfect Golf Course</h2>
+          <p class="new-body new-mb-8 new-text-gray-600">
+            {{ 'general.search.description' | t }}
+          </p>
+          
+          <form class="new-search-form-input" action="/search">
+            {% if settings.search_option != 'everything' %}
+              <input type="hidden" name="type" value="product" />
+            {% endif %}
+            
+            <div class="new-flex new-flex-col new-sm:flex-row new-gap-4 new-justify-center new-items-center">
+              <div class="new-flex-1 new-max-w-md">
+                <input type="text" 
+                       name="q" 
+                       placeholder="{{ 'general.search.placeholder' | t }}" 
+                       value="{{ search.terms }}" 
+                       class="new-form-input new-form-input-lg new-text-center" 
+                       x-webkit-speech 
+                       autocapitalize="off" 
+                       autocomplete="off" 
+                       autocorrect="off" />
+              </div>
+              <div class="new-flex-shrink-0">
+                <input type="submit" 
+                       name="submit" 
+                       class="new-btn new-btn-primary new-btn-lg" 
+                       value="{{ 'general.search.submit' | t }}" />
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
-
     {% endif %}
-  {% endif %}
 
-  {% include 'pagination' %}    
-
-{% else %}
-  <div class="clearfix search_page">  
-    <br class="clear" />
-    <br class="clear" />   
-    <div class="ten columns offset-by-three columns center">
-      <p class="quote">
-        {{ 'general.search.description' | t }}
-      </p>
-    </div>    
-      <form class="search" action="/search">
-        <div class="four offset-by-five columns center">
-          {% if settings.search_option != 'everything' %}
-            <input type="hidden" name="type" value="product" />
-          {% endif %}
-          <input type="text" name="q" placeholder="{{ 'general.search.placeholder' | t }}" value="{{ search.terms }}" x-webkit-speech autocapitalize="off" autocomplete="off" autocorrect="off" />
-
-      </div>
-      <div class="two columns">
-        <input type="submit" name="submit" class="action_button" value="{{ 'general.search.submit' | t }}" style="margin-top:0" />
-      </div>
-      </form>
-    </div>
   </div>
-{% endif %}
+</section>
+
 {% endpaginate %}

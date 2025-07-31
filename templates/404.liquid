@@ -1,27 +1,79 @@
-<div class="sixteen columns clearfix collection_nav">
-  <h1 class="collection_title">{{ 'general.404.title' | t }}</h1>
-</div>
+<!-- NEW DESIGN SYSTEM 404 PAGE - Mobile-First Error Page -->
 
-<div class="sixteen columns">
-  <div class="section clearfix">
-    <p class="quote">
-        {{ 'general.404.subtext' | t }}
-    </p>
-  </div>
-</div>
+<section class="new-section new-error-page">
+  <div class="new-container">
+    
+    <!-- 404 Content -->
+    <div class="new-error-content new-text-center new-py-16">
+      <div class="new-max-w-2xl new-mx-auto">
+        
+        <!-- 404 Icon -->
+        <div class="new-error-icon new-mb-8">
+          🏌️‍♂️
+        </div>
+        
+        <!-- Error Title -->
+        <h1 class="new-h1 new-mb-6">{{ 'general.404.title' | t }}</h1>
+        
+        <!-- Error Message -->
+        <p class="new-body new-text-lg new-mb-8 new-text-gray-600">
+          {{ 'general.404.subtext' | t }}
+        </p>
+        
+        <!-- Search Form -->
+        <div class="new-error-search new-mb-12">
+          <p class="new-body new-mb-6">
+            {{ 'general.404.continue_shopping_html' | t }}
+          </p>
+          
+          <form class="new-search-form" action="/search">
+            <div class="new-flex new-flex-col new-sm:flex-row new-gap-4 new-justify-center new-items-center new-max-w-md new-mx-auto">
+              <div class="new-flex-1 new-w-full">
+                <input type="text" 
+                       name="q" 
+                       placeholder="{{ 'general.search.placeholder' | t }}" 
+                       value="{{ search.terms }}" 
+                       class="new-form-input new-form-input-lg new-text-center new-w-full" 
+                       autocapitalize="off" 
+                       autocomplete="off" 
+                       autocorrect="off" />
+              </div>
+              <div class="new-flex-shrink-0">
+                <button type="submit" class="new-btn new-btn-primary new-btn-lg">
+                  Search
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+        
+        <!-- Popular Links -->
+        <div class="new-popular-links">
+          <h3 class="new-h3 new-mb-6">Popular Golf Destinations</h3>
+          <div class="new-grid new-grid-cols-2 new-sm:grid-cols-4 new-gap-4">
+            <a href="/collections/oahu-golf-courses" class="new-btn new-btn-outline">
+              Oahu Golf
+            </a>
+            <a href="/collections/maui-golf-courses" class="new-btn new-btn-outline">
+              Maui Golf
+            </a>
+            <a href="/collections/big-island-golf-courses" class="new-btn new-btn-outline">
+              Big Island Golf
+            </a>
+            <a href="/collections/kauai-golf-courses" class="new-btn new-btn-outline">
+              Kauai Golf
+            </a>
+          </div>
+          
+          <div class="new-mt-8">
+            <a href="/" class="new-btn new-btn-primary new-btn-lg">
+              ← Back to Homepage
+            </a>
+          </div>
+        </div>
+        
+      </div>
+    </div>
 
-<div class="section clearfix">  
-  <div class="sixteen columns center">
-    <p class="extra_padding">
-      {{ 'general.404.continue_shopping_html' | t }}
-    </p>
-  </div>    
-  <div class="eight columns offset-by-four">
-    <form class="search" action="/search">
-      <input type="text" name="q" class="search_box" placeholder="{{ 'general.search.placeholder' | t }}" value="{{ search.terms }}" style="width: 100%" />
-    </form>
   </div>
-  <br class="clear" />
-  <br class="clear" />
-  <br class="clear" />
-</div>
+</section>

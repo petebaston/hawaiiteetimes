@@ -1,14 +1,29 @@
-<div class="sixteen columns clearfix">
-  <h1 class="page_title">
-    {{ page.title }}
-  </h1>
-</div>
+<!-- NEW DESIGN SYSTEM PAGE WITH SIDEBAR - Mobile-First Page Layout -->
 
-<div class="clearfix">
-  {% include 'sidebar' %}
-  <div class="thirteen columns page omega">
-    <div class="section clearfix">  
-      {{ page.content }}
+<section class="new-section new-page-sidebar">
+  <div class="new-container">
+    
+    <!-- Page Header -->
+    <div class="new-page-header new-mb-8">
+      <h1 class="new-h1">{{ page.title }}</h1>
     </div>
+
+    <!-- Page Layout with Sidebar -->
+    <div class="new-grid new-grid-cols-1 new-lg:grid-cols-4 new-gap-8">
+      
+      <!-- Main Content -->
+      <div class="new-page-content new-lg:col-span-3">
+        <div class="new-prose new-prose-lg">
+          {{ page.content }}
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="new-page-sidebar new-lg:col-span-1">
+        {% include 'sidebar' %}
+      </div>
+
+    </div>
+
   </div>
-</div>
+</section>
