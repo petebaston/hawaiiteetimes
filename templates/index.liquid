@@ -15,22 +15,11 @@
         {% if settings.image_1_headline != blank %}
           <h1 class="new-h1 new-hero-title">{{ settings.image_1_headline }}</h1>
         {% else %}
-          <h1 class="new-h1 new-hero-title">Book Your Perfect Hawaii Golf Experience</h1>
-        {% endif %}
-        
-        {% if settings.image_1_caption != blank %}
-          <p class="new-hero-subtitle">{{ settings.image_1_caption }}</p>
-        {% else %}
-          <p class="new-hero-subtitle">Discover premier golf courses across all Hawaiian islands with instant booking and best rates guaranteed</p>
+          <h1 class="new-h1 new-hero-title">Find Your Perfect Tee Time</h1>
         {% endif %}
         
         <div class="new-hero-actions">
-          <a href="#island-selection" class="new-btn new-btn-primary new-btn-lg">Find Tee Times</a>
-          {% if settings.image_1_button_text != blank and settings.image_1_link != blank %}
-            <a href="{{ settings.image_1_link }}" class="new-btn new-btn-outline new-btn-lg">{{ settings.image_1_button_text }}</a>
-          {% else %}
-            <a href="/collections/all" class="new-btn new-btn-outline new-btn-lg">Browse All Courses</a>
-          {% endif %}
+          <a href="#island-selection" class="new-btn new-btn-primary new-btn-lg">Book Hawaii Golf</a>
         </div>
       </div>
     </div>
