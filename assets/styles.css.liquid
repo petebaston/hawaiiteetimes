@@ -5355,7 +5355,9 @@ input.datepicker {
 /* Hero Section - Ultra compressed for mobile visibility */
 .new-hero-full {
   position: relative;
-  min-height: 35vh; /* Further compressed - islands visible on mobile */
+  height: 300px; /* Fixed 300px height as requested */
+  min-height: 300px;
+  max-height: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -5367,7 +5369,9 @@ input.datepicker {
 /* Mobile hero ultra compressed so islands are immediately visible */
 @media (max-width: 767px) {
   .new-hero-full {
-    min-height: 25vh; /* Ultra compressed - 25% viewport height */
+    height: 300px; /* Same 300px height on mobile */
+    min-height: 300px;
+    max-height: 300px;
     padding: var(--space-3) 0;
   }
 }
@@ -5410,6 +5414,19 @@ input.datepicker {
   margin: 0 auto;
 }
 
+/* Force all hero text elements to be white with strong shadows */
+.new-hero-text,
+.new-hero-text *,
+.new-hero-text h1,
+.new-hero-text p,
+.new-hero-text ul,
+.new-hero-text ul li,
+.new-hero-text div,
+.new-hero-text span {
+  color: #ffffff !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9) !important;
+}
+
 .new-hero-title {
   color: var(--color-white);
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8); /* Stronger text shadow for better legibility */
@@ -5444,7 +5461,9 @@ input.datepicker {
 
 @media (min-width: 1024px) {
   .new-hero-full {
-    min-height: 40vh; /* Compressed desktop hero too */
+    height: 500px; /* Desktop can be 500px as requested */
+    min-height: 500px;
+    max-height: 500px;
     padding: var(--space-6) 0;
   }
   
