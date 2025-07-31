@@ -5000,51 +5000,34 @@ input.datepicker {
   background-color: var(--color-gray-50);
 }
 
-/* Spacing Utilities */
+/* CONSISTENT CONTAINER SYSTEM - All sections use the same container widths
+================================================== */
 .new-container {
   width: 100%;
   margin: 0 auto;
   padding: 0 var(--space-4);
+  max-width: 1200px; /* Consistent max-width for all sections */
 }
 
 /* Mobile Container */
-@media (max-width: 639px) {
+@media (max-width: 767px) {
   .new-container {
-    max-width: 100%;
-    padding: 0 var(--space-3);
+    padding: 0 var(--space-4); /* 16px on mobile */
   }
 }
 
 /* Tablet Container */
-@media (min-width: 640px) {
-  .new-container {
-    max-width: 640px;
-    padding: 0 var(--space-6);
-  }
-}
-
-/* Desktop Container */
 @media (min-width: 768px) {
   .new-container {
-    max-width: 768px;
+    padding: 0 var(--space-6); /* 24px on tablet+ */
   }
 }
 
+/* Desktop Container - Consistent 1200px max-width */
 @media (min-width: 1024px) {
   .new-container {
-    max-width: 1024px;
-  }
-}
-
-@media (min-width: 1280px) {
-  .new-container {
-    max-width: 1280px;
-  }
-}
-
-@media (min-width: 1536px) {
-  .new-container {
-    max-width: 1536px;
+    max-width: 1200px;
+    padding: 0 var(--space-8); /* 32px on desktop+ */
   }
 }
 
@@ -5164,12 +5147,11 @@ input.datepicker {
 /* Mobile-First Hawaii Tee Times Specific Styles
 ================================================== */
 
-/* Island Cards - Mobile First */
+/* Island Cards - Mobile First - Use consistent container widths */
 .new-island-cards {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-4);
-  padding: var(--space-4);
 }
 
 @media (min-width: 640px) {
@@ -5182,9 +5164,7 @@ input.datepicker {
 @media (min-width: 1024px) {
   .new-island-cards {
     grid-template-columns: repeat(4, 1fr);
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: var(--space-8) var(--space-4);
+    gap: var(--space-8);
   }
 }
 
