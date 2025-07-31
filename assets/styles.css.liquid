@@ -5219,8 +5219,7 @@ input.datepicker {
   box-shadow: var(--shadow-lg);
   padding: var(--space-6);
   border: 1px solid var(--color-gray-200);
-  max-width: 800px; /* Centered within container, but reasonable max-width */
-  margin: 0 auto;
+  /* Removed custom max-width and margin to match container consistency */
 }
 
 .new-search-row {
@@ -5732,6 +5731,20 @@ ul#available-teetimes li {
 }
 ul#available-teetimes li a[data-price=''] {
     display: none;
+}
+
+/* Fix for featured content text color - ensure it's white not gray */
+.featured_content, 
+.featured_content *,
+.flex-caption,
+.flex-caption *,
+.flex-caption ul,
+.flex-caption ul li,
+.flex-caption p,
+.flex-caption span,
+.flex-caption div {
+    color: #ffffff !important; /* Force white text for all featured content */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8) !important; /* Strong shadow for legibility */
 }
 
 #config-errors {
