@@ -239,7 +239,7 @@
         price: "{{ variant.price | money }}",
         priceNum: {{ variant.price }} / 100,
         name: "{{ variant.title }}",
-        timeRange: "{{ variant.metafields.shoppad.time_range }}".split("-").map(e => parseInt(e)),
+        timeRanges: "{{ variant.metafields.shoppad.time_range }}".split(",").map(e => e.split("-").map(e => parseInt(e))),
         priority: parseInt("{{ variant.metafields.shoppad.priority }}"),
         dateRange: "{{ variant.metafields.shoppad.date_range }}",
         dayOfWeek: "{{ variant.metafields.shoppad.day_of_week }}".trim().toUpperCase(),
@@ -248,11 +248,15 @@
     {% endfor %}
   ];
 
+  console.log('allVariants', allVariants)
+
   const variants = allVariants.filter(e => e.price !== "$9,999.00" && e.name !== "Blackout");
+  console.log('variants', variants)
 
   const courseId = {{ product.tags | json }}.find(e => e.startsWith("courseid")).slice(9);
   const list = document.getElementById("teetimes-list");
   const blackoutDates = getBlackoutDate()
+  console.log('blackoutDates', blackoutDates)
   const dateInput = $("#teetime-date").datepicker({
     minDate: 0,
     beforeShowDay: disableBlackOutDates,
@@ -317,6 +321,8 @@
     shown = 6;
     list.innerHTML = "Loading tee times...";
 
+    setParam("date", dateInput.datepicker("getDate").getTime())
+
     const getHawaiiTimeInUTC = () => {
       const now = new Date();
       const offset = 0;
@@ -326,12 +332,14 @@
     const d = new Date(parseUTCDate(dateInput.datepicker("getDate").getTime() + 3600000))
     const dString = `${d.getUTCMonth() + 1}-${d.getUTCDate()}-${d.getUTCFullYear()}`
     if (blackoutDates.includes(dString)) {
+      console.log('black out dates', blackoutDates)
       list.innerHTML = `The date you selected in not available, please use the calendar selector.`
       return
     }
 
-    const times = await fetch(`https://hawaiiteetimes.cliencyapps.co.uk/api/courses/{{product.id}}/times?date=${parseUTCDate(dateInput.datepicker("getDate").getTime() + 3600000)}`)
+    const times = await fetch(`https://hawaii-tee-times-dev.replit.app/api/courses/{{product.id}}/times?date=${parseUTCDate(dateInput.datepicker("getDate").getTime() + 3600000)}`)
       .then(e => e.json());
+    console.log('times', times)
 
 
 const nowUTC = new Date()
@@ -373,20 +381,45 @@ const highlightTimes = sortedTimes.reduce((acc, time) => {
 
     let timesToUse = highlightTimes
     if(filteredTimes.length === 0) {
-      let timesToUse = times
+      let timesToUse = sortedTimes
     }
 
     if (run !== start) return;
     list.innerHTML = "";
     for (const time of timesToUse) {
       const date = new Date(time.date);
-      const timenum = parseInt(`${date.getUTCHours().toString()}${date.getUTCMinutes().toString().padStart(2, 0)}`);
+      
+  const timenum = parseInt(`${date.getUTCHours().toString()}${date.getUTCMinutes().toString().padStart(2, 0)}`);
+  console.log('--- START ---');
+  console.log('Date:', date, 'timenum:', timenum);
 
-      const matchingVariants = variants.filter(e => e.timeRange[0] <= timenum && e.timeRange[1] >= timenum);
-      const dateFilteredVariants = matchingVariants.filter(e => checkVariantDate(e, date) && checkVariantDay(e, date));
-      const sortedVariants = dateFilteredVariants.sort((a, b) => b.priority - a.priority);
-     
-      const variant = sortedVariants.length ? sortedVariants[0] : null;
+  console.log('All Variants:', variants);
+
+
+  const matchingVariants = variants.filter(e => {
+    const matchesTime = e.timeRanges.some(range => range[0] <= timenum && range[1] >= timenum)
+    console.log(`- Variant: ${e.name || "Unnamed"}`)
+    console.log(`  Time Ranges: ${e.timeRanges.map(r => `${r[0]} - ${r[1]}`).join(", ")}, Matches Time: ${matchesTime}`)
+    return matchesTime
+  })
+  console.log('Matching Variants (Time):', matchingVariants);
+
+
+  const dateFilteredVariants = matchingVariants.filter(e => {
+    const matchesDate = checkVariantDate(e, date);
+    const matchesDay = checkVariantDay(e, date);
+    console.log(`- Variant: ${e.name || 'Unnamed'}`);
+    console.log(`  Matches Date: ${matchesDate}, Matches Day: ${matchesDay}`);
+    return matchesDate && matchesDay;
+  });
+  console.log('Date Filtered Variants (Date & Day):', dateFilteredVariants);
+
+  const sortedVariants = dateFilteredVariants.sort((a, b) => b.priority - a.priority);
+  console.log('Sorted Variants (Priority):', sortedVariants);
+
+  const variant = sortedVariants.length ? sortedVariants[0] : null;
+  console.log('Selected Variant:', variant);
+  console.log('--- END ---')
 
 
       if (!variant) continue;
@@ -408,10 +441,11 @@ const highlightTimes = sortedTimes.reduce((acc, time) => {
         }
         console.log('updating true');
       {% endif %}
+      if (!time.players.length) continue
 
       li.dataset.players = time.players; 
     
-      console.log( time.players.join(","))
+      console.log("Debug", time.players.join(","))
       li.innerHTML = `
         <a ${variant.priority === 1 ? 'class="special"' : ''}>
           <span class="pricing">
@@ -478,7 +512,7 @@ const highlightTimes = sortedTimes.reduce((acc, time) => {
             const hashBuffer = await crypto.subtle.digest('SHA-256', strBuffer);
             const hashArray = Array.from(new Uint8Array(hashBuffer));
             const hashHex = hashArray.map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 8);
-            await fetch(`https://hawaiiteetimes.cliencyapps.co.uk/api/times/reserve`, {
+            await fetch(`https://hawaii-tee-times-dev.replit.app/api/times/reserve`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json"
@@ -540,6 +574,9 @@ const highlightTimes = sortedTimes.reduce((acc, time) => {
   const timeSelect = document.getElementById("time-select");
   const playersSelect = document.getElementById("players-select");
   function filter(reset = true) {
+    setParam("time", document.getElementById("time-select").value)
+    setParam("players", playersSelect.value)
+    
     if (reset) {
       shown = 6;
     }
@@ -623,8 +660,6 @@ function checkVariantDate(variant, date) {
     return variantDays.includes(dayOfWeek) || variantDays.includes("ALL");
 }
 
-
-  getTeeTimes();
   dateInput.datepicker({
     onSelect: function() {
       getTeeTimes();
@@ -632,4 +667,104 @@ function checkVariantDate(variant, date) {
   }).on("change", getTeeTimes);
   timeSelect.addEventListener("change", filter);
   playersSelect.addEventListener("change", filter);
+
+  console.log('product.tags', "{{ product.tags }}")
+
+  {% if product.tags contains 'googletracking' %}
+    function trackConversion() {
+       console.log('running track conversion')
+    // Extract query parameters from the URL
+    var query = location.search.substring(1);
+    var params = query.split('&');
+    var rwgToken = undefined;
+
+
+    // Find the 'rwg_token' parameter in the query string
+    for (var i = 0; i < params.length; ++i) {
+        var pair = params[i].split('=');
+        if (pair[0] === 'rwg_token') {
+            rwgToken = decodeURIComponent(pair[1]);
+            break;
+        }
+    }
+
+
+    // Store the rwg_token in a cookie if found
+    if (typeof rwgToken !== 'undefined') {
+        document.cookie =
+            "_rwg_token=" + rwgToken + ";max-age=2592000;path=/;domain=hawaiiteetimes.com";
+    }
+
+
+    // Define your partner ID
+    const partnerId = 20003390;
+
+
+    // Define the endpoint
+    const endpoint = `https://www.google.com/maps/conversion/collect`;
+
+
+    // Retrieve the stored rwg_token cookie
+    const rwgTokenCookie = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('_rwg_token='));
+
+
+    if (typeof rwgTokenCookie !== 'undefined') {
+        const rwgTokenVal = rwgTokenCookie.split('=')[1];
+
+
+        // Send the conversion request
+        fetch(endpoint, {
+            method: "POST",
+            headers: {
+                "Content-Type": "text/plain"
+            },
+            body: JSON.stringify({
+                conversion_partner_id: partnerId,
+                rwg_token: rwgTokenVal,
+                merchant_changed: "2"
+            })
+        }).then(response => {
+            console.log("Conversion tracking response:", response);
+        }).catch(error => {
+            console.error("Error sending conversion tracking request:", error);
+        });
+    }
+}
+      trackConversion()
+    {% endif %}
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    const params = new URLSearchParams(window.location.search)
+  
+    if (params.has("date")) {
+      const timestamp = parseInt(params.get("date"))
+      if (!isNaN(timestamp)) {
+        dateInput.datepicker("setDate", new Date(timestamp))
+      }
+    }
+  
+    if (params.has("time")) {
+      const timeSelect = document.getElementById("time-select")
+      timeSelect.value = params.get("time")
+    }
+  
+    if (params.has("players")) {
+      playersSelect.value = params.get("players")
+    }
+  
+    if (params.has("rwg_token") || params.has("direct")) {
+      document.querySelector("section.course-detail").scrollIntoView({ behavior: "smooth" })
+    }
+
+    await getTeeTimes()
+    filter()
+  })
+
+  function setParam(key, value) {
+    const url = new URL(window.location.href)
+    url.searchParams.set(key, value)
+    window.history.replaceState(null, "", url.toString())
+  }
 </script>

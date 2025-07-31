@@ -239,7 +239,7 @@
         price: "{{ variant.price | money }}",
         priceNum: {{ variant.price }} / 100,
         name: "{{ variant.title }}",
-        timeRange: "{{ variant.metafields.shoppad.time_range }}".split("-").map(e => parseInt(e)),
+        timeRanges: "{{ variant.metafields.shoppad.time_range }}".split(",").map(e => e.split("-").map(e => parseInt(e))),
         priority: parseInt("{{ variant.metafields.shoppad.priority }}"),
         dateRange: "{{ variant.metafields.shoppad.date_range }}",
         dayOfWeek: "{{ variant.metafields.shoppad.day_of_week }}".trim().toUpperCase(),
@@ -329,19 +329,26 @@
       return;
     }
 
-    const times = await fetch(`https://hawaiiteetimes.cliencyapps.co.uk/api/courses/{{product.id}}/times?date=${parseUTCDate(dateInput.datepicker("getDate").getTime() + 3600000)}`)
+    const times = await fetch(`https://hawaii-tee-times-dev.replit.app/api/courses/{{product.id}}/times?date=${parseUTCDate(dateInput.datepicker("getDate").getTime() + 3600000)}`)
       .then(e => e.json());
+    console.log("TIMES", times)
 
-const nowUTC = new Date()
-const hawaiiOffset = -10 // Hawaii Standard Time (UTC-10)
-const currentHawaiiTime = new Date(nowUTC.setHours(nowUTC.getUTCHours() + hawaiiOffset))
+const nowUTC = new Date(); // Current UTC time
+const hawaiiOffset = -10; // Hawaii Standard Time (UTC-10)
+const currentHawaiiTime = new Date(nowUTC.getTime() + hawaiiOffset * 60 * 60 * 1000); // Adjusted Hawaii time
 
-    const cutoffTime = new Date(currentHawaiiTime.getTime() + 45 * 60000);
+const cutoffTime = new Date(currentHawaiiTime.getTime() + 45 * 60000); // Add 45 minutes to Hawaii time
 
-    const filteredTimes = times.filter(time => {
-      const timeDate = new Date(time.date);
-      return timeDate.getTime() > cutoffTime.getTime();
-    });
+const filteredTimes = times.filter(time => {
+    const timeDate = new Date(time.date); // Convert timestamp to date
+    console.log('time:', time, 
+                'timeDate:', timeDate, 
+                'timeDate.getTime():', timeDate.getTime(), 
+                'cutoffTime.getTime():', cutoffTime.getTime(), 
+                'currentHawaiiTime:', currentHawaiiTime);
+    return timeDate.getTime() > cutoffTime.getTime();
+});
+
 
     const sortedTimes = filteredTimes.sort((a, b) => new Date(a.date) - new Date(b.date));
 
@@ -354,6 +361,8 @@ const currentHawaiiTime = new Date(nowUTC.setHours(nowUTC.getUTCHours() + hawaii
       return acc;
     }, []);
 
+  console.log(cutoffTime, 'highlightTimes.length', highlightTimes.length, 'times', times.length, 'filteredTimes', filteredTimes, 'sortedTimes', sortedTimes, 'times', times)
+
     let timesToUse = highlightTimes.length ? highlightTimes : times;
 
     if (run !== start) return;
@@ -362,7 +371,12 @@ const currentHawaiiTime = new Date(nowUTC.setHours(nowUTC.getUTCHours() + hawaii
       const date = new Date(time.date);
       const timenum = parseInt(`${date.getUTCHours().toString()}${date.getUTCMinutes().toString().padStart(2, 0)}`);
 
-      const matchingVariants = variants.filter(e => e.timeRange[0] <= timenum && e.timeRange[1] >= timenum);
+      const matchingVariants = variants.filter(e => {
+        const matchesTime = e.timeRanges.some(range => range[0] <= timenum && range[1] >= timenum)
+        console.log(`- Variant: ${e.name || "Unnamed"}`)
+        console.log(`  Time Ranges: ${e.timeRanges.map(r => `${r[0]} - ${r[1]}`).join(", ")}, Matches Time: ${matchesTime}`)
+        return matchesTime
+      })
       const dateFilteredVariants = matchingVariants.filter(e => checkVariantDate(e, date) && checkVariantDay(e, date));
       const sortedVariants = dateFilteredVariants.sort((a, b) => b.priority - a.priority || a.priceNum - b.priceNum);
 
@@ -379,8 +393,8 @@ const currentHawaiiTime = new Date(nowUTC.setHours(nowUTC.getUTCHours() + hawaii
     return data;
 }
 
-
       const dynamicPrice = time.price ? time.price : variant.priceNum;
+      console.log("DYNAMIC PRICE", dynamicPrice, 'time.price', time.price, 'variant.pice', variant.priceNum)
 
       const timeStamp = date.toLocaleTimeString("en-US", { timeZone: "UTC", hour: "numeric", minute: "numeric", hour12: true });
       const li = document.createElement("li");
@@ -460,7 +474,7 @@ const currentHawaiiTime = new Date(nowUTC.setHours(nowUTC.getUTCHours() + hawaii
             const hashBuffer = await crypto.subtle.digest('SHA-256', strBuffer);
             const hashArray = Array.from(new Uint8Array(hashBuffer));
             const hashHex = hashArray.map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 8);
-            await fetch(`https://hawaiiteetimes.cliencyapps.co.uk/api/times/reserve`, {
+            await fetch(`https://hawaii-tee-times-dev.replit.app/api/times/reserve`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json"
@@ -603,4 +617,66 @@ function checkVariantDay(variant, date) {
   }).on("change", getTeeTimes);
   timeSelect.addEventListener("change", filter);
   playersSelect.addEventListener("change", filter);
+
+    console.log('product.tags', "{{ product.tags }}")
+
+    {% if product.tags contains 'googletracking' %}
+      console.log('yes')
+  function trackConversion() {
+    // Extract query parameters from the URL
+    var query = location.search.substring(1);
+    var params = query.split('&');
+    var rwgToken = undefined;
+
+    // Find the 'rwg_token' parameter in the query string
+    for (var i = 0; i < params.length; ++i) {
+        var pair = params[i].split('=');
+        if (pair[0] === 'rwg_token') {
+            rwgToken = decodeURIComponent(pair[1]);
+            break;
+        }
+    }
+
+    // Store the rwg_token in a cookie if found
+    if (typeof rwgToken !== 'undefined') {
+        document.cookie =
+            "_rwg_token=" + rwgToken + ";max-age=2592000;path=/;domain=hawaiiteetimes.com";
+    }
+
+    // Define your partner ID
+    const partnerId = "20003390";
+
+    // Define the endpoint
+    const endpoint = `https://www.google.com/maps/conversion/collect`;
+
+    // Retrieve the stored rwg_token cookie
+    const rwgTokenCookie = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('_rwg_token='));
+
+    if (typeof rwgTokenCookie !== 'undefined') {
+        const rwgTokenVal = rwgTokenCookie.split('=')[1];
+
+        // Send the conversion request
+        fetch(endpoint, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                conversion_partner_id: partnerId,
+                rwg_token: rwgTokenVal,
+                merchant_changed: "2"
+            })
+        }).then(response => {
+            console.log("Conversion tracking response:", response);
+        }).catch(error => {
+            console.error("Error sending conversion tracking request:", error);
+        });
+    }
+}
+      trackConversion()
+      {% else %}
+      console.log('no google tag found')
+    {% endif %}
 </script>

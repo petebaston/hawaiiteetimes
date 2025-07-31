@@ -228,7 +228,7 @@ input[type="text"],
     -ms-appearance: none; 
     appearance: none;}
 select {  
-    background: #f9f9f9 url(//hawaiiteetimes.com/cdn/shop/t/79/assets/select.png?v=10556546249772374051728570549) no-repeat right center;
+    background: #f9f9f9 url(//hawaiiteetimes.com/cdn/shop/t/84/assets/select.png?v=10556546249772374051739802396) no-repeat right center;
     cursor: pointer;
     -webkit-padding-end: 30px; 
 }
@@ -314,7 +314,7 @@ span.sign-in-message {
 
 
   #tagline {display:none;}
-  #logo {display:block; background:url('//hawaiiteetimes.com/cdn/shop/t/79/assets/logo.png?v=166885401116028712991728570549') no-repeat center center; width: 100%; height: 125px;margin: 10px 0; background-size: contain;}
+  #logo {display:block; background:url('//hawaiiteetimes.com/cdn/shop/t/84/assets/logo.png?v=166885401116028712991739802396') no-repeat center center; width: 100%; height: 125px;margin: 10px 0; background-size: contain;}
 
 
 #container.slim #header, #container.slim #main {
