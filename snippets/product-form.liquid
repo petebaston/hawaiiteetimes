@@ -2,11 +2,11 @@
   {{product.metafields.sh_sbve.additional_text_metafield}}
 </div>
 {% if product.available %}
-  <form action="/cart/add" method="post" class="clearfix product_form" data-money-format="{{ shop.money_format }}" data-shop-currency="{{ shop.currency }}" id="product-form-{{ product.id }}">
+  <form action="/cart/add" method="post" class="clearfix product_form mobile-form mobile-full-width" data-money-format="{{ shop.money_format }}" data-shop-currency="{{ shop.currency }}" id="product-form-{{ product.id }}">
   
     {% if product.options.size > 1 %}
-      <div class="select">
-        <select id="product-select-{{ product.id }}" name='id'>
+      <div class="select mobile-select">
+        <select id="product-select-{{ product.id }}" name='id' class="mobile-input">
          {% assign flagfirsttime = true %}
           {% for variant in product.variants %}
           {% assign firstvisible = false %}
@@ -23,9 +23,9 @@
       </div>
       
     {% elsif product.options.size == 1 and (product.variants.size > 1 or product.options[0] != "Title") %}
-      <div class="select">
+      <div class="select mobile-select">
         
-        <select id="product-select-{{ product.id }}" name='id'>
+        <select id="product-select-{{ product.id }}" name='id' class="mobile-input">
           {% assign flagfirsttime = true %}
           {% for variant in product.variants %}
           {% assign firstvisible = false %}
@@ -56,7 +56,7 @@
     {% if settings.display_product_quantity %}
       <div class="left">
        <label for="quantity">{{ 'products.product.quantity' | t }}:</label>
-       <input type="number" min="1" size="2" class="quantity" name="quantity" id="quantity" value="1" />
+       <input type="number" min="1" size="2" class="quantity mobile-input" name="quantity" id="quantity" value="1" />
       </div>
     {% endif %}
     <div class="purchase clearfix {% if settings.display_product_quantity %}inline_purchase{% endif %}">
@@ -64,9 +64,9 @@
         <input type="hidden" name="return_to" value="back" />
       {% endif %}
       {% if product.metafields.bookthatapp.config %}
-        <input type="submit" name="add" value="{{ 'products.product.add_to_cart' | t }}" class="action_button add_to_cart bta-load-enable" disabled="disabled" style="display:none"/>
+        <input type="submit" name="add" value="{{ 'products.product.add_to_cart' | t }}" class="action_button add_to_cart bta-load-enable mobile-button" disabled="disabled" style="display:none"/>
       {% else %}
-        <input type="submit" name="add" value="{{ 'products.product.add_to_cart' | t }}" class="action_button add_to_cart" />
+        <input type="submit" name="add" value="{{ 'products.product.add_to_cart' | t }}" class="action_button add_to_cart mobile-button" />
       {% endif %}
     </div>  
 

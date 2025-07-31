@@ -9,7 +9,7 @@ HTML form markup
 
 <p id="loading" class="loading" style="display:none">Loading additional course information. Please wait...</p>
 
-<div id="bform" style="display:none" class="booking-form">
+<div id="bform" style="display:none" class="booking-form mobile-full-width">
     <div class="selector-wrapper">
         {% capture attribute %}booking-start{% endcapture %}
         <label for="booking-start">Date of {% if product.tags contains 'Arrival' %}Arrival{% else %}Play{% endif %}:</label>

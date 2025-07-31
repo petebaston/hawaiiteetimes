@@ -116,13 +116,38 @@
     margin-top: -10px;
   }
 
-  @media (width < 750px) {
+  @media (max-width: 767px) {
+    .modal-element {
+      padding: 15px !important;
+      max-width: calc(100vw - 40px) !important;
+    }
+    
+    #golf-club-list {
+      flex-direction: column;
+      gap: 15px;
+    }
+    
     #golf-club-list > div {
-      min-width: 256px;
+      min-width: 100%;
+      max-width: 100%;
     }
 
     #golf-club-list img {
       width: 160px;
+      max-width: 100%;
+    }
+    
+    #golf-club-buttons {
+      padding: 15px;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    #golf-club-buttons > button,
+    #new-checkout {
+      width: 100%;
+      min-height: 44px;
+      font-size: 16px;
     }
   }
 </style>

@@ -14,11 +14,35 @@
 {% endcomment %}
 
 {% if paginate.pages > 1 %}  
-  <div class="{% if pagination %}twelve{% else %}sixteen{% endif %} columns">
+  <div class="{% if pagination %}twelve{% else %}sixteen{% endif %} columns mobile-pagination">
     <div class="section clearfix">    
-      <div class="paginate">
+      <div class="paginate mobile-paginate">
         {{ paginate | default_pagination }}
       </div>  
     </div>
   </div>
 {% endif %}
+
+<style>
+@media (max-width: 767px) {
+  .mobile-pagination {
+    width: 100% !important;
+    margin-left: -20px;
+    margin-right: -20px;
+    width: calc(100% + 40px);
+    padding: 0 20px;
+  }
+  
+  .mobile-paginate {
+    text-align: center;
+  }
+  
+  .mobile-paginate a,
+  .mobile-paginate span {
+    min-height: 44px;
+    line-height: 44px;
+    padding: 0 15px;
+    font-size: 16px;
+  }
+}
+</style>

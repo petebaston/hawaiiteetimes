@@ -9,14 +9,14 @@
 
   {% if settings.collection_sidebar %}
     
-    <div class="thirteen columns">
+    <div class="thirteen columns collection-page">
   {% else %}
-    <div class="sixteen columns">
+    <div class="sixteen columns collection-page">
   {% endif %}
 
       {% if collection.image %}
-      <div class="collection_image">		
-		<img src="{{ collection.image.src | collection_img_url: 'original' }}" alt="{{collection.image.alt}}" usemap="#{{collection.handle}}">
+      <div class="collection_image mobile-full-width">		
+		<img src="{{ collection.image.src | collection_img_url: 'original' }}" alt="{{collection.image.alt}}" usemap="#{{collection.handle}}" class="responsive-image">
       </div>  
       {% endif %}
       

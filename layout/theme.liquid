@@ -96,8 +96,8 @@
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));</script>
 
-    <div id="head" class="header">
-      <div class="container content">
+    <div id="head" class="header mobile-header">
+      <div class="container content mobile-container">
         <div class="sixteen columns ">
         <div class="one-third column logo alpha">
           <a href="{{ shop.url }}" title="{{ shop.name }}">
@@ -292,7 +292,7 @@
       <div class="fixed_header"></div>
 
       {% unless template contains "index" and settings.slideshow_enabled %}
-        <div class="container main content">
+        <div class="container main content mobile-main">
       {% endunless %}
 
       {% if template contains 'list-collections' %}

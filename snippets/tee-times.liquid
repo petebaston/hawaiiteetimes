@@ -21,14 +21,42 @@
     width: auto;
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 767px) {
+    .mobile-full-width {
+      margin-left: -20px;
+      margin-right: -20px;
+      width: calc(100% + 40px);
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
     #tee-time-filters {
-        flex-direction: column;
-        gap: 0 !important;
+      flex-direction: column;
+      gap: 0 !important;
     }
 
     #tee-time-filters span {
       display: none !important;
+    }
+
+    #teetimes-list li {
+      margin: 10px 0;
+    }
+
+    #teetimes-list a {
+      padding: 15px;
+      border-radius: 8px;
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      display: block;
+      min-height: 44px;
+    }
+
+    .search-results {
+      margin-left: -20px;
+      margin-right: -20px;
+      width: calc(100% + 40px);
+      padding: 0 20px;
     }
   }
 
@@ -127,7 +155,7 @@
     color: red;
   }
 </style>
-<section class="course-detail available-tee-times loading">
+<section class="course-detail available-tee-times loading mobile-full-width">
   <h1 class="section-title">
     <a name="teetimes"></a>
     <strong>Available Tee Times</strong>

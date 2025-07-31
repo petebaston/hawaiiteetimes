@@ -59,6 +59,44 @@ $(document).ready(function(){
   $('#booking-start-3').prop('readonly', true);
   $('#booking-start-4').prop('readonly', true);
   
+  /* Mobile touch enhancements */
+  if ('ontouchstart' in window) {
+    // Enable touch swiping for sliders on mobile
+    $('.sp-slider').on('touchstart touchmove touchend', function(e) {
+      e.stopPropagation();
+    });
+    
+    // Improve mobile tap responsiveness
+    $('.thumbnail, .home-cta, .search-button').on('touchend', function(e) {
+      e.preventDefault();
+      $(this).trigger('click');
+    });
+    
+    // Prevent zoom on input focus (mobile)
+    $('input[type="text"], input[type="email"], input[type="tel"], select, textarea').attr('data-mobile-keyboard', 'true');
+  }
+  
+  /* Mobile viewport fixes */
+  function updateViewport() {
+    if (window.innerWidth <= 767) {
+      // Force mobile styles
+      $('body').addClass('mobile-device');
+      
+      // Ensure full-width elements on mobile
+      $('.mobile-full-width').css({
+        'margin-left': '-20px',
+        'margin-right': '-20px',
+        'width': 'calc(100% + 40px)'
+      });
+    } else {
+      $('body').removeClass('mobile-device');
+    }
+  }
+  
+  // Run on load and resize
+  updateViewport();
+  $(window).resize(updateViewport);
+  
 });
 
 

@@ -19,11 +19,11 @@
     {% break %}
   {% endif %}
 {% endfor %}
-<div class="sixteen columns clearfix">
+<div class="sixteen columns clearfix mobile-full-width">
   <h1 class="cart_title">{{ 'cart.general.title' | t }}</h1>
 </div>
 {% if cart.item_count == 0 %}
-  <div class="sixteen columns">
+  <div class="sixteen columns mobile-content">
     <div class="section clearfix">
       <p class="quote">{{ 'cart.general.continue_browsing_html' | t }}</p>
       <br class="clear" />

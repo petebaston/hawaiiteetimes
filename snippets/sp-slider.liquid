@@ -1,7 +1,7 @@
 <!-- ShopPad Product Slider -->
 {% assign featured_image = product.selected_or_first_available_variant.featured_image | default: product.featured_image %}
-<div class="row">
-  <div class="sp-slider">
+<div class="row mobile-full-width">
+  <div class="sp-slider mobile-slider">
     {% for image in product.images %}
       {% if image.alt contains 'youtube' or image.alt contains 'vimeo' %}
         {% assign src = image.alt | split: 'src="' %}

@@ -9,12 +9,17 @@
     #load-more-button {
       margin: auto !Important; 
     }
+    .product_single {
+      margin-left: -20px;
+      margin-right: -20px;
+      width: calc(100% + 40px);
+    }
   }
 </style>
 
 
-<main class="product_single clearfix" style="overflow-y: hidden;">
-  <div class="sixteen columns">
+<main class="product_single clearfix mobile-full-width" style="overflow-y: hidden;">
+  <div class="sixteen columns product-page">
     <h1 class="product_name top" itemprop="name">{{ product.title }}</h1>
     <div itemscope itemtype="http://data-vocabulary.org/Product" id="product-{{ product.id }}">
       <div class="section product_section clearfix">

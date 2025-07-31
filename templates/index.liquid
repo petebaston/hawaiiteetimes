@@ -223,6 +223,100 @@
     <h2>{{ collections[settings.frontpage_collection].title }}</h2>
   </div>
 
+  <!-- Optional Search Functionality -->
+  <div class="search-tee-times mobile-search">
+    <form class="tee-time-search" action="/search" method="get">
+      <div class="search-row">
+        <div class="search-field">
+          <label for="island-select">Island</label>
+          <select id="island-select" name="island">
+            <option value="">Select Island</option>
+            <option value="oahu">Oahu</option>
+            <option value="maui">Maui</option>
+            <option value="kauai">Kauai</option>
+            <option value="big-island">Big Island</option>
+          </select>
+        </div>
+        <div class="search-field">
+          <label for="course-select">Course</label>
+          <select id="course-select" name="course">
+            <option value="">Select Course</option>
+          </select>
+        </div>
+        <button type="submit" class="search-button">Search Tee Times</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+  $(document).ready(function() {
+    // Course data by island
+    const coursesByIsland = {
+      'oahu': [
+        { value: 'ala-wai-golf-course', text: 'Ala Wai Golf Course' },
+        { value: 'hawaii-kai-golf-course', text: 'Hawaii Kai Golf Course' },
+        { value: 'koolau-golf-club', text: 'Koolau Golf Club' },
+        { value: 'turtle-bay-resort', text: 'Turtle Bay Resort' }
+      ],
+      'maui': [
+        { value: 'wailea-golf-club', text: 'Wailea Golf Club' },
+        { value: 'grand-wailea-golf-course', text: 'Grand Wailea Golf Course' },
+        { value: 'kapalua-golf', text: 'Kapalua Golf' },
+        { value: 'maui-nui-golf-club', text: 'Maui Nui Golf Club' }
+      ],
+      'kauai': [
+        { value: 'princeville-golf-club', text: 'Princeville Golf Club' },
+        { value: 'poipu-bay-golf-course', text: 'Poipu Bay Golf Course' },
+        { value: 'kauai-lagoons-golf-club', text: 'Kauai Lagoons Golf Club' }
+      ],
+      'big-island': [
+        { value: 'mauna-kea-golf-course', text: 'Mauna Kea Golf Course' },
+        { value: 'hapuna-golf-course', text: 'Hapuna Golf Course' },
+        { value: 'mauna-lani-resort', text: 'Mauna Lani Resort' },
+        { value: 'waikoloa-beach-resort', text: 'Waikoloa Beach Resort' }
+      ]
+    };
+
+    // Handle island selection change
+    $('#island-select').change(function() {
+      const selectedIsland = $(this).val();
+      const courseSelect = $('#course-select');
+      
+      // Clear current options
+      courseSelect.empty().append('<option value="">Select Course</option>');
+      
+      // Add courses for selected island
+      if (selectedIsland && coursesByIsland[selectedIsland]) {
+        coursesByIsland[selectedIsland].forEach(function(course) {
+          courseSelect.append('<option value="' + course.value + '">' + course.text + '</option>');
+        });
+      }
+    });
+
+    // Handle form submission
+    $('.tee-time-search').submit(function(e) {
+      e.preventDefault();
+      const island = $('#island-select').val();
+      const course = $('#course-select').val();
+      
+      if (island) {
+        // Redirect to island collection page
+        let url = '/collections/';
+        if (island === 'big-island') {
+          url += 'big-island-golf-courses';
+        } else {
+          url += island + '-golf-courses';
+        }
+        
+        // If specific course selected, could add filtering
+        window.location.href = url;
+      } else {
+        alert('Please select an island first.');
+      }
+    });
+  });
+  </script>
+
     <!-- CTAs -->
     <div class="featured-container clearfix">
 

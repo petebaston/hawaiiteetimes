@@ -109,6 +109,9 @@
     </div>
     {% endif %}
 
+    <!-- Weather Widget -->
+    {% include 'weather-widget' %}
+
 
   {% if settings.display_related_products %}
     {% capture limit %}{{ settings.products_per_row | plus: 1 }}{% endcapture %}
@@ -129,10 +132,19 @@
       {% endif %}
     {% endfor %}
 
-    {% if col and collections[col].all_products_count > 0 %}
+    <!-- Cross-promote other courses in same island -->
+    {% unless col %}
+      {% for collection in product.collections %}
+        {% if collection.handle contains '-golf-courses' %}
+          {% assign col = collection.handle %}
+          {% break %}
+        {% endif %}
+      {% endfor %}
+    {% endunless %}
 
-      <h2>{{ 'products.product.related_items' | t }}</h2>
+    {% if col and collections[col].all_products_count > 1 %}
 
+      <h2>More Golf Courses on {{ collections[col].title | remove: ' Golf Courses' }}</h2>
 
       {% assign skip_product = product %}
       {% assign products = collections[col].products %}

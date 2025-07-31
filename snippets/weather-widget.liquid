@@ -1,0 +1,173 @@
+<!-- 5-Day Weather Forecast Widget -->
+<div class="weather-widget">
+  <h3>5-Day Weather Forecast</h3>
+  <div id="weather-forecast" class="weather-forecast">
+    <div class="weather-loading">Loading weather data...</div>
+  </div>
+</div>
+
+<script>
+$(document).ready(function() {
+  // Simple weather widget using OpenWeatherMap API
+  // Note: You'll need to add your API key in theme settings
+  const apiKey = '{{ settings.weather_api_key }}'; // Add this to theme settings
+  const location = '{{ product.metafields.custom.location | default: "Honolulu,HI" }}'; // Default to Honolulu
+  
+  if (apiKey) {
+    fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${location}&appid=${apiKey}&units=imperial`)
+      .then(response => response.json())
+      .then(data => {
+        displayForecast(data);
+      })
+      .catch(error => {
+        console.error('Weather data error:', error);
+        $('#weather-forecast').html('<div class="weather-error">Weather data temporarily unavailable</div>');
+      });
+  } else {
+    // Fallback weather display without API
+    displayFallbackWeather();
+  }
+  
+  function displayForecast(data) {
+    const forecast = data.list.filter((item, index) => index % 8 === 0).slice(0, 5); // Every 24 hours, 5 days
+    let html = '<div class="forecast-container">';
+    
+    forecast.forEach((day, index) => {
+      const date = new Date(day.dt * 1000);
+      const dayName = index === 0 ? 'Today' : date.toLocaleDateString('en-US', { weekday: 'short' });
+      const temp = Math.round(day.main.temp);
+      const description = day.weather[0].description;
+      const icon = getWeatherIcon(day.weather[0].main);
+      
+      html += `
+        <div class="forecast-day">
+          <div class="day-name">${dayName}</div>
+          <div class="weather-icon">${icon}</div>
+          <div class="temperature">${temp}°F</div>
+          <div class="description">${description}</div>
+        </div>
+      `;
+    });
+    
+    html += '</div>';
+    $('#weather-forecast').html(html);
+  }
+  
+  function displayFallbackWeather() {
+    // Simple fallback weather display
+    const fallbackData = [
+      { day: 'Today', icon: '☀️', temp: '82°F', desc: 'Sunny' },
+      { day: 'Tue', icon: '⛅', temp: '80°F', desc: 'Partly Cloudy' },
+      { day: 'Wed', icon: '☀️', temp: '84°F', desc: 'Sunny' },
+      { day: 'Thu', icon: '🌧️', temp: '78°F', desc: 'Light Rain' },
+      { day: 'Fri', icon: '⛅', temp: '81°F', desc: 'Partly Cloudy' }
+    ];
+    
+    let html = '<div class="forecast-container">';
+    fallbackData.forEach(day => {
+      html += `
+        <div class="forecast-day">
+          <div class="day-name">${day.day}</div>
+          <div class="weather-icon">${day.icon}</div>
+          <div class="temperature">${day.temp}</div>
+          <div class="description">${day.desc}</div>
+        </div>
+      `;
+    });
+    html += '</div>';
+    $('#weather-forecast').html(html);
+  }
+  
+  function getWeatherIcon(condition) {
+    const icons = {
+      'Clear': '☀️',
+      'Clouds': '⛅',
+      'Rain': '🌧️',
+      'Drizzle': '🌦️',
+      'Thunderstorm': '⛈️',
+      'Snow': '❄️',
+      'Mist': '🌫️',
+      'Fog': '🌫️'
+    };
+    return icons[condition] || '⛅';
+  }
+});
+</script>
+
+<style>
+.weather-widget {
+  margin: 20px 0;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.weather-widget h3 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 18px;
+  text-align: center;
+}
+
+.forecast-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.forecast-day {
+  flex: 1;
+  min-width: 60px;
+  text-align: center;
+  padding: 10px 5px;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.day-name {
+  font-weight: bold;
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.weather-icon {
+  font-size: 24px;
+  margin: 5px 0;
+}
+
+.temperature {
+  font-weight: bold;
+  font-size: 16px;
+  color: #333;
+  margin: 5px 0;
+}
+
+.description {
+  font-size: 11px;
+  color: #666;
+  text-transform: capitalize;
+}
+
+.weather-loading, .weather-error {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
+@media only screen and (max-width: 767px) {
+  .forecast-container {
+    flex-direction: row;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .forecast-day {
+    flex-shrink: 0;
+    min-width: 70px;
+  }
+}
+</style>
