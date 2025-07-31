@@ -111,6 +111,9 @@
 
     <!-- Weather Widget -->
     {% include 'weather-widget' %}
+    
+    <!-- Tee Times -->
+    {% render "tee-times" with product %}
 
 
   {% if settings.display_related_products %}
@@ -165,8 +168,6 @@
 
   </div>
 </main>
-
-</div>
 
 <div class="modal-mask" id="modal-teetime">
   <div class="modal-container">

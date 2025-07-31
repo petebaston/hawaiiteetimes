@@ -103,6 +103,8 @@
     </div>
     {% endif %}
 
+    <!-- Tee Times -->
+    {% render "tee-times" with product %}
 
   {% if settings.display_related_products %}
     {% capture limit %}{{ settings.products_per_row | plus: 1 }}{% endcapture %}
@@ -147,8 +149,6 @@
 
   </div>
 </main>
-
-</div>
 
 <div class="modal-mask" id="modal-teetime">
   <div class="modal-container">

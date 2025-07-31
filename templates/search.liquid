@@ -45,11 +45,7 @@
           </div> 
         {% endif %}
         
-        {% if settings.collection_sidebar %}
-          <div class="{% if item.featured_image %}eight{% else %}twelve{% endif %} columns omega align_left">
-        {% else %}
-          <div class="{% if item.featured_image %}twelve{% else %}sixteen{% endif %} columns omega align_left">
-        {% endif %}        
+        <div class="{% if settings.collection_sidebar %}{% if item.featured_image %}eight{% else %}twelve{% endif %}{% else %}{% if item.featured_image %}twelve{% else %}sixteen{% endif %}{% endif %} columns omega align_left">        
 
           <p>
             <a href="{{item.url }}" title="{{ item.title | escape }}">{{ item.title }}</a>
@@ -84,8 +80,8 @@
           </p>         
         </div>
       </div>  
-    <hr />  
-   {% endfor %}  
+      <hr />  
+    {% endfor %}  
   </div>
 
  {% else %}
