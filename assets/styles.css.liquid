@@ -4805,18 +4805,46 @@ ul#available-teetimes li a[data-price=''] {
 }
 
 @media (max-width: 767px) {
-    /* Mobile - stack vertically with smaller, tidy cards */
+    /* Full-screen mobile banner */
+    #homepage_slider {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        max-width: 100vw;
+        overflow: hidden;
+    }
+    
+    #homepage_slider img {
+        width: 100%;
+        height: 60vh;
+        object-fit: cover;
+    }
+    
+    .flex-caption {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+        color: white;
+        padding: 40px 20px 20px;
+    }
+    
+    /* Mobile - stack vertically with properly sized cards */
     .home-collections {
         display: block;
         padding: 0 15px;
         margin: 20px 0;
+        width: 100%;
+        box-sizing: border-box;
     }
     
     .home-collections .thumbnail {
         width: 100%;
-        height: 200px;
-        margin-bottom: 15px;
+        height: 180px;
+        margin-bottom: 12px;
         border-radius: 8px;
+        box-sizing: border-box;
     }
     
     .home-collections .thumbnail h3 {
@@ -4839,6 +4867,295 @@ ul#available-teetimes li a[data-price=''] {
     .home-collections .thumbnail .book-now-button {
         font-size: 14px;
         padding: 10px 20px;
+    }
+    
+    /* Full-width search section */
+    .search-tee-times {
+        width: 100%;
+        background: #f8f9fa;
+        padding: 30px 15px;
+        margin: 20px 0;
+        box-sizing: border-box;
+    }
+    
+    .search-row {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+    
+    .search-field label {
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #025105;
+        font-size: 14px;
+        text-transform: uppercase;
+    }
+    
+    .search-field select {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        background: white;
+    }
+    
+    .search-button {
+        background: #025105;
+        color: white;
+        border: none;
+        padding: 18px;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: 600;
+        text-transform: uppercase;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+    
+    /* Full-width daily specials and gift cards */
+    .featured-container {
+        width: 100%;
+        background: white;
+        padding: 30px 15px;
+        margin: 20px 0;
+        box-sizing: border-box;
+    }
+    
+    .featured-container .home-cta {
+        width: 100%;
+        margin-bottom: 30px;
+        float: none;
+        text-align: center;
+    }
+    
+    .featured-container .home-cta img {
+        width: 100%;
+        max-width: 300px;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 12px;
+        margin-bottom: 15px;
+    }
+    
+    .featured-container .home-cta h3 {
+        font-size: 22px;
+        font-weight: 600;
+        color: #025105;
+        margin: 15px 0 10px 0;
+    }
+    
+    .featured-container .home-cta p {
+        font-size: 16px;
+        line-height: 1.6;
+        color: #555;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+    
+    /* SEO text section */
+    .our-story {
+        width: 100%;
+        background: #f8f9fa;
+        padding: 30px 15px;
+        margin: 20px 0;
+        box-sizing: border-box;
+    }
+    
+    .our-story .image {
+        width: 100%;
+        margin-bottom: 20px;
+        float: none;
+    }
+    
+    .our-story .image img {
+        width: 100%;
+        max-width: 300px;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 12px;
+        display: block;
+        margin: 0 auto;
+    }
+    
+    .our-story .description {
+        width: 100%;
+        float: none;
+        text-align: center;
+    }
+    
+    .our-story h2 {
+        font-size: 24px;
+        font-weight: 600;
+        color: #025105;
+        margin-bottom: 15px;
+    }
+    
+    .our-story p, .our-story ul {
+        font-size: 16px;
+        line-height: 1.6;
+        color: #555;
+        max-width: 600px;
+        margin: 0 auto 15px auto;
+    }
+    
+    /* Mobile Collection Pages - Full-width courses */
+    .collection_image {
+        width: 100%;
+        margin: 0 0 20px 0;
+    }
+    
+    .collection_image img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+    
+    .collection-page {
+        width: 100%;
+        padding: 0 15px;
+        box-sizing: border-box;
+    }
+    
+    .collection_title {
+        font-size: 24px;
+        font-weight: 600;
+        color: #025105;
+        text-align: center;
+        margin: 20px 0;
+    }
+    
+    /* Product grid for collections */
+    .products {
+        display: block;
+        width: 100%;
+    }
+    
+    .products .thumbnail {
+        width: 100%;
+        margin-bottom: 20px;
+        padding: 0;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+    
+    .products .thumbnail img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+    }
+    
+    .products .thumbnail .caption {
+        padding: 20px;
+    }
+    
+    .products .thumbnail h4 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #025105;
+        margin: 0 0 10px 0;
+    }
+    
+    .products .thumbnail .price-range {
+        font-size: 16px;
+        font-weight: 600;
+        color: #70bc42;
+        margin: 10px 0;
+    }
+    
+    .products .thumbnail .price {
+        font-size: 18px;
+        font-weight: 700;
+        color: #70bc42;
+    }
+    
+    .products .thumbnail .compare-at-price {
+        font-size: 14px;
+        color: #999;
+        text-decoration: line-through;
+        margin-left: 8px;
+    }
+    
+    /* Mobile Product Pages - Full-screen, no borders */
+    .product_single {
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .product_single .sixteen.columns {
+        width: 100%;
+        padding: 0 15px;
+        margin: 0;
+        box-sizing: border-box;
+    }
+    
+    .product_name.top {
+        font-size: 24px;
+        font-weight: 600;
+        color: #025105;
+        text-align: center;
+        margin: 20px 0;
+        padding: 0 15px;
+    }
+    
+    /* Full-screen booking tables */
+    .course-detail {
+        width: 100%;
+        background: white;
+        padding: 20px 15px;
+        margin: 0;
+        box-sizing: border-box;
+    }
+    
+    .section-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #025105;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    
+    /* Tee times section full width */
+    .tee-times-container {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    
+    /* Product images full width */
+    .sp-slider {
+        width: 100%;
+        margin: 0 0 20px 0;
+        padding: 0;
+    }
+    
+    .sp-slider img {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+    }
+    
+    /* Product description full width */
+    .description {
+        width: 100%;
+        padding: 20px 15px;
+        margin: 0;
+        box-sizing: border-box;
+        background: white;
+    }
+    
+    .description p {
+        font-size: 16px;
+        line-height: 1.6;
+        color: #555;
+        margin-bottom: 15px;
     }
     
     /* Basic mobile layout fixes */
