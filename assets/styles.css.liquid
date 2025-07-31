@@ -192,7 +192,7 @@ table {
 /* #Basic Styles
 ================================================== */
 body {
-    background-color: {{ settings.shop_bg_color }};
+    background-color: #ffffff; /* Override any green tinting - force clean white background */
 {% if settings.use_custom_bg_image %}
     background-image: url("{{ 'custom_bg.png' | asset_url }}");
 {% if settings.bg_stretched %}
@@ -5385,14 +5385,14 @@ input.datepicker {
 /* NEW HOMEPAGE COMPONENTS - Mobile-First Design
 ================================================== */
 
-/* Hero Section */
+/* Hero Section - Clean background with no tinting */
 .new-hero-full {
   position: relative;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-gray-900); /* Neutral fallback, no green tint */
+  background: #2a2a2a !important; /* Force neutral dark background, override any theme colors */
   overflow: hidden;
 }
 
