@@ -5129,74 +5129,88 @@ input.datepicker {
 /* Mobile-First Hawaii Tee Times Specific Styles
 ================================================== */
 
-/* Island Cards - Compressed Mobile Layout */
+/* Island Cards - GolfNow Style with Text Overlay */
 .new-island-cards {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-2); /* Much tighter gap on mobile for compressed layout */
+  gap: var(--space-1); /* Ultra tight gap for compressed mobile */
 }
 
 @media (min-width: 640px) {
   .new-island-cards {
     grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-4); /* Slightly compressed on tablet */
+    gap: var(--space-3);
   }
 }
 
 @media (min-width: 1024px) {
   .new-island-cards {
     grid-template-columns: repeat(4, 1fr);
-    gap: var(--space-6); /* Reasonable gap on desktop */
+    gap: var(--space-4);
   }
 }
 
+/* GolfNow-style card with text overlay */
 .new-island-card {
-  background: var(--color-white);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-base);
+  position: relative;
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  transition: all var(--transition-base);
-  border: 1px solid var(--color-gray-200);
+  box-shadow: var(--shadow-base);
+  height: 180px; /* Fixed height for consistency */
 }
 
-.new-island-card:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-4px);
+@media (min-width: 768px) {
+  .new-island-card {
+    height: 220px; /* Slightly taller on desktop */
+  }
 }
 
 .new-island-card img {
   width: 100%;
-  height: 200px;
+  height: 100%;
   object-fit: cover;
 }
 
+/* Text overlay container - positioned over image */
 .new-island-card-content {
-  padding: var(--space-3); /* More compressed padding on mobile */
-}
-
-@media (min-width: 768px) {
-  .new-island-card-content {
-    padding: var(--space-4); /* Normal padding on larger screens */
-  }
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.3));
+  padding: var(--space-3);
+  color: var(--color-white);
 }
 
 .new-island-card h3 {
   font-family: var(--font-headings);
   font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-lg);
-  color: var(--color-gray-900);
-  margin-bottom: var(--space-2);
+  font-size: var(--font-size-xl);
+  color: var(--color-white);
+  margin-bottom: var(--space-1);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 .new-island-price {
   font-family: var(--font-primary);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-primary);
+  color: var(--color-white);
   font-size: var(--font-size-base);
-  margin-bottom: var(--space-3);
+  margin: 0;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
 }
 
-/* Legacy button styles removed - now using consistent .new-btn system */
+.new-price-highlight {
+  color: var(--color-accent-light); /* Bright yellow for price visibility */
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-lg);
+}
+
+/* Hide the description and button on overlay style */
+.new-island-description,
+.new-island-card .new-btn {
+  display: none; /* Remove these elements for cleaner overlay */
+}
 
 /* Search Component - Use full container width like other sections */
 .new-search-component {
@@ -5339,23 +5353,23 @@ input.datepicker {
 /* NEW HOMEPAGE COMPONENTS - Mobile-First Design
 ================================================== */
 
-/* Hero Section - Compressed height for better space utilization */
+/* Hero Section - Ultra compressed for mobile visibility */
 .new-hero-full {
   position: relative;
-  min-height: 50vh; /* Much more compressed - 50% of viewport instead of 100% */
+  min-height: 35vh; /* Further compressed - islands visible on mobile */
   display: flex;
   align-items: center;
   justify-content: center;
   background: #2a2a2a !important; /* Force neutral dark background, override any theme colors */
   overflow: hidden;
-  padding: var(--space-8) 0; /* Add padding instead of relying on full height */
+  padding: var(--space-4) 0;
 }
 
-/* Mobile hero even more compressed */
+/* Mobile hero ultra compressed so islands are immediately visible */
 @media (max-width: 767px) {
   .new-hero-full {
-    min-height: 40vh; /* Even more compressed on mobile */
-    padding: var(--space-6) 0;
+    min-height: 25vh; /* Ultra compressed - 25% viewport height */
+    padding: var(--space-3) 0;
   }
 }
 
@@ -5431,8 +5445,8 @@ input.datepicker {
 
 @media (min-width: 1024px) {
   .new-hero-full {
-    min-height: 55vh; /* Compressed desktop hero */
-    padding: var(--space-10) 0;
+    min-height: 40vh; /* Compressed desktop hero too */
+    padding: var(--space-6) 0;
   }
   
   .new-hero-subtitle {
