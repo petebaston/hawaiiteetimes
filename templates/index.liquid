@@ -1,359 +1,344 @@
-{% if settings.slideshow_enabled %}
-  {% if settings.slideshow_width_narrow %}
-    <div class="container main content clearfix"> 
-      <div class="sixteen columns clearfix">
-  {% else %}
-    </div>
+<!-- NEW DESIGN SYSTEM HOMEPAGE - Following Brand Guidelines -->
+
+<!-- Hero Section - Full Screen with Golf Course Background -->
+<section class="new-hero-full">
+  {% if settings.slideshow_enabled and settings.slideshow_1_enabled %}
+  <div class="new-hero-background">
+    <img src="{{ 'slideshow_1.jpg' | asset_url }}" alt="{{ settings.image_1_alt_text | escape }}" class="new-hero-bg-image" />
+    <div class="new-hero-overlay"></div>
+  </div>
   {% endif %}
   
-  {% capture video_slide %}
-    {% if settings.video_embed != blank %}
-      {% if settings.video_width == 'set' %}
-        <li>
-          <div class="video-wrapper" style="width: {{ settings.video_width_px }}px; margin: 0 auto;">
-            <div class="video-container">
-              {{ settings.video_embed }}
-            </div>
-          </div>
-        </li>
-      {% else %}
-        <li>
-          <div class="video-container">
-            {{ settings.video_embed }}
-          </div>
-        </li>
-      {% endif %}
-    {% endif %}
-  {% endcapture %}
-
-  <div id="homepage_slider" class="flexslider">
-    <ul class="slides">
-      {% if settings.video_position == '1' %}{{ video_slide }}{% endif %}
-      {% if settings.slideshow_1_enabled %}
-	    	<li>
-	    		<a href="{{ settings.image_1_link }}"><img src="{{ 'slideshow_1.jpg' | asset_url }}" alt="{{ settings.image_1_alt_text | escape }}" /></a>
-	    		{% if settings.image_1_headline != blank or settings.image_1_subtitle != blank or settings.image_1_button_text != blank %}
-	    		  <div class="flex-caption">
-              <div class="container">
-                <div class="columns {% if settings.image_1_text_align == 'left' %} align_left sixteen {% elsif settings.image_1_text_align == 'right' %} align_left seven offset-by-nine {% else %} sixteen {% endif %}">
-                  <h1 class="headline" style="color:{{settings.image_1_text_color}}">{{ settings.image_1_headline }}</h1>
-                  <p class="subtitle" style="color:{{settings.image_1_text_color}}">{{ settings.image_1_caption }}</p>
-                  {% if settings.image_1_button_text != blank %}
-                    <a href="{{ settings.image_1_link }}" class="action_button">
-                      {{ settings.image_1_button_text }}
-                    </a>
-                  {% endif %}
-                </div>
-              </div>
-            </div>
-	    		{% endif %}
-	    	</li>
-	    {% endif %}
-      {% if settings.video_position == '2' %}{{ video_slide }}{% endif %}
-      {% if settings.slideshow_2_enabled %}
-      	<li>
-      		<a href="{{ settings.image_2_link }}"><img src="{{ 'slideshow_2.jpg' | asset_url }}" alt="{{ settings.image_2_alt_text | escape }}" /></a>
-          {% if settings.image_2_headline != blank or settings.image_2_subtitle != blank or settings.image_2_button_text != blank %}
-            <div class="flex-caption">
-              <div class="container">
-                <div class="columns {% if settings.image_2_text_align == 'left' %} align_left sixteen {% elsif settings.image_2_text_align == 'right' %} align_left seven offset-by-nine {% else %} sixteen {% endif %}">
-                  <p class="headline" style="color:{{settings.image_2_text_color}}">{{ settings.image_2_headline }}</p>
-                  <p class="subtitle" style="color:{{settings.image_2_text_color}}">{{ settings.image_2_caption }}</p>
-                  {% if settings.image_2_button_text != blank %}
-                    <a href="{{ settings.image_2_link }}" class="action_button">
-                      {{ settings.image_2_button_text }}
-                    </a>
-                  {% endif %}
-                </div>
-              </div>
-            </div>
-          {% endif %}
-        </li>
-      {% endif %}
-      {% if settings.video_position == '3' %}{{ video_slide }}{% endif %}
-      {% if settings.slideshow_3_enabled %}
-      	<li>
-      		<a href="{{ settings.image_3_link }}"><img src="{{ 'slideshow_3.jpg' | asset_url }}" alt="{{ settings.image_3_alt_text | escape }}" /></a>
-          {% if settings.image_3_headline != blank or settings.image_3_subtitle != blank or settings.image_3_button_text != blank %}
-            <div class="flex-caption">
-              <div class="container">
-                <div class="columns {% if settings.image_3_text_align == 'left' %} align_left sixteen {% elsif settings.image_3_text_align == 'right' %} align_left seven offset-by-nine {% else %} sixteen {% endif %}">
-                  <p class="headline" style="color:{{settings.image_3_text_color}}">{{ settings.image_3_headline }}</p>
-                  <p class="subtitle" style="color:{{settings.image_3_text_color}}">{{ settings.image_3_caption }}</p>
-                  {% if settings.image_3_button_text != blank %}
-                    <a href="{{ settings.image_3_link }}" class="action_button">
-                      {{ settings.image_3_button_text }}
-                    </a>
-                  {% endif %}
-                </div>
-              </div>
-            </div>
-          {% endif %}
-        </li>
-      {% endif %}
-      {% if settings.video_position == '4' %}{{ video_slide }}{% endif %}
-      {% if settings.slideshow_4_enabled %}
-      	<li>
-      		<a href="{{ settings.image_4_link }}"><img src="{{ 'slideshow_4.jpg' | asset_url }}" alt="{{ settings.image_4_alt_text | escape }}" /></a>
-          {% if settings.image_4_headline != blank or settings.image_4_subtitle != blank or settings.image_4_button_text != blank %}
-            <div class="flex-caption">
-              <div class="container">
-                <div class="columns {% if settings.image_4_text_align == 'left' %} align_left sixteen {% elsif settings.image_4_text_align == 'right' %} align_left seven offset-by-nine {% else %} sixteen {% endif %}">
-                  <p class="headline" style="color:{{settings.image_4_text_color}}">{{ settings.image_4_headline }}</p>
-                  <p class="subtitle" style="color:{{settings.image_4_text_color}}">{{ settings.image_4_caption }}</p>
-                  {% if settings.image_4_button_text != blank %}
-                    <a href="{{ settings.image_4_link }}" class="action_button">
-                      {{ settings.image_4_button_text }}
-                    </a>
-                  {% endif %}
-                </div>
-              </div>
-            </div>
-          {% endif %}
-        </li>
-      {% endif %}
-      {% if settings.video_position == '5' %}{{ video_slide }}{% endif %}
-      {% if settings.slideshow_5_enabled %}
-      	<li>
-      		<a href="{{ settings.image_5_link }}"><img src="{{ 'slideshow_5.jpg' | asset_url }}" alt="{{ settings.image_5_alt_text | escape }}" /></a>
-          {% if settings.image_5_headline != blank or settings.image_5_subtitle != blank or settings.image_5_button_text != blank %}
-            <div class="flex-caption">
-              <div class="container">
-                <div class="columns {% if settings.image_5_text_align == 'left' %} align_left sixteen {% elsif settings.image_5_text_align == 'right' %} align_left seven offset-by-nine {% else %} sixteen {% endif %}">
-                  <p class="headline" style="color:{{settings.image_5_text_color}}">{{ settings.image_5_headline }}</p>
-                  <p class="subtitle" style="color:{{settings.image_5_text_color}}">{{ settings.image_5_caption }}</p>
-                  {% if settings.image_5_button_text != blank %}
-                    <a href="{{ settings.image_5_link }}" class="action_button">
-                      {{ settings.image_5_button_text }}
-                    </a>
-                  {% endif %}
-                </div>
-              </div>
-            </div>
-          {% endif %}
-        </li>
-      {% endif %}
-      {% if settings.video_position == '6' %}{{ video_slide }}{% endif %}
-      {% if settings.slideshow_6_enabled %}
-      	<li>
-      		<a href="{{ settings.image_6_link }}"><img src="{{ 'slideshow_6.jpg' | asset_url }}" alt="{{ settings.image_6_alt_text | escape }}" /></a>
-          {% if settings.image_6_headline != blank or settings.image_6_subtitle != blank or settings.image_6_button_text != blank %}
-            <div class="flex-caption">
-              <div class="container">
-                <div class="columns {% if settings.image_6_text_align == 'left' %} align_left sixteen {% elsif settings.image_6_text_align == 'right' %} align_left seven offset-by-nine {% else %} sixteen {% endif %}">
-                  <p class="headline" style="color:{{settings.image_6_text_color}}">{{ settings.image_6_headline }}</p>
-                  <p class="subtitle" style="color:{{settings.image_6_text_color}}">{{ settings.image_6_caption }}</p>
-                  {% if settings.image_6_button_text != blank %}
-                    <a href="{{ settings.image_6_link }}" class="action_button">
-                      {{ settings.image_6_button_text }}
-                    </a>
-                  {% endif %}
-                </div>
-              </div>
-            </div>
-          {% endif %}
-        </li>
-      {% endif %}
-    </ul>
-	</div>
-
-  {% if settings.slideshow_width_narrow %}
-    </div>
-    <br class="clear" />
-  {% else %}
-    <div class="container content clearfix">
-  {% endif %}
-{% endif %}
-
-<br class="clear" />
-
-{% comment %}
-{% if settings.frontpage_linklist != blank %}
-{% assign linklist = linklists[settings.frontpage_linklist] %}
-{% assign collections_per_row = settings.frontpage_collections_per_row %}
-{% include 'collection-loop' %}
-{% endif %}
-{% endcomment %}
-      
-<div class="home-collections"> 
-  <div class="thumbnail">    
-    <a href="{{settings.kona-link}}">
-      <h3>Big Island</h3>
-      <img src="{{ 'bigisland-golf-2.jpg' | asset_url }}" alt="Big Island Golf Courses" />
-      <div class="description">
-        Starting At: <span class="money">$55</span>
-        <div class="book-now-button">Book Now</div>
-      </div>
-    </a>
-  </div>
-
-  <div class="thumbnail">     
-	<a href="{{settings.kauai-link}}">
-      <h3>Kauai</h3>
-      <img src="{{ 'kauai-golf.jpg' | asset_url }}" alt="Kauai Golf Courses" />
-      <div class="description">
-        Starting At: <span class="money">$60</span>
-        <div class="book-now-button">Book Now</div>
-      </div>
-    </a>
-  </div>    
-
-  <div class="thumbnail">     
-	<a href="{{settings.maui-link}}">
-      <h3>Maui</h3>
-      <img src="{{ 'maui-golf.jpg' | asset_url }}" alt="Maui Golf Courses" />
-      <div class="description">
-        Starting At: <span class="money">$60</span>
-        <div class="book-now-button">Book Now</div>
-      </div> 
-    </a>
-  </div>    
-
-  <div class="thumbnail">     
-	<a href="{{settings.oahu-link}}">
-      <h3>Oahu</h3>
-      <img src="{{ 'oahu-golf.jpg' | asset_url }}" alt="Oahu Golf Courses" />
-      <div class="description">
-        Starting At: <span class="money">$49</span>
-        <div class="book-now-button">Book Now</div>
-      </div> 
-    </a>
-  </div>    
-</div>  
-      
-      
-
-  <div class="clearfix">
-    <h2>{{ collections[settings.frontpage_collection].title }}</h2>
-  </div>
-
-  <!-- Optional Search Functionality -->
-  <div class="search-tee-times mobile-search">
-    <form class="tee-time-search" action="/search" method="get">
-      <div class="search-row">
-        <div class="search-field">
-          <label for="island-select">Island</label>
-          <select id="island-select" name="island">
-            <option value="">Select Island</option>
-            <option value="oahu">Oahu</option>
-            <option value="maui">Maui</option>
-            <option value="kauai">Kauai</option>
-            <option value="big-island">Big Island</option>
-          </select>
-        </div>
-        <div class="search-field">
-          <label for="course-select">Course</label>
-          <select id="course-select" name="course">
-            <option value="">Select Course</option>
-          </select>
-        </div>
-        <button type="submit" class="search-button">Search Tee Times</button>
-      </div>
-    </form>
-  </div>
-
-  <script>
-  $(document).ready(function() {
-    // Course data by island
-    const coursesByIsland = {
-      'oahu': [
-        { value: 'ala-wai-golf-course', text: 'Ala Wai Golf Course' },
-        { value: 'hawaii-kai-golf-course', text: 'Hawaii Kai Golf Course' },
-        { value: 'koolau-golf-club', text: 'Koolau Golf Club' },
-        { value: 'turtle-bay-resort', text: 'Turtle Bay Resort' }
-      ],
-      'maui': [
-        { value: 'wailea-golf-club', text: 'Wailea Golf Club' },
-        { value: 'grand-wailea-golf-course', text: 'Grand Wailea Golf Course' },
-        { value: 'kapalua-golf', text: 'Kapalua Golf' },
-        { value: 'maui-nui-golf-club', text: 'Maui Nui Golf Club' }
-      ],
-      'kauai': [
-        { value: 'princeville-golf-club', text: 'Princeville Golf Club' },
-        { value: 'poipu-bay-golf-course', text: 'Poipu Bay Golf Course' },
-        { value: 'kauai-lagoons-golf-club', text: 'Kauai Lagoons Golf Club' }
-      ],
-      'big-island': [
-        { value: 'mauna-kea-golf-course', text: 'Mauna Kea Golf Course' },
-        { value: 'hapuna-golf-course', text: 'Hapuna Golf Course' },
-        { value: 'mauna-lani-resort', text: 'Mauna Lani Resort' },
-        { value: 'waikoloa-beach-resort', text: 'Waikoloa Beach Resort' }
-      ]
-    };
-
-    // Handle island selection change
-    $('#island-select').change(function() {
-      const selectedIsland = $(this).val();
-      const courseSelect = $('#course-select');
-      
-      // Clear current options
-      courseSelect.empty().append('<option value="">Select Course</option>');
-      
-      // Add courses for selected island
-      if (selectedIsland && coursesByIsland[selectedIsland]) {
-        coursesByIsland[selectedIsland].forEach(function(course) {
-          courseSelect.append('<option value="' + course.value + '">' + course.text + '</option>');
-        });
-      }
-    });
-
-    // Handle form submission
-    $('.tee-time-search').submit(function(e) {
-      e.preventDefault();
-      const island = $('#island-select').val();
-      const course = $('#course-select').val();
-      
-      if (island) {
-        // Redirect to island collection page
-        let url = '/collections/';
-        if (island === 'big-island') {
-          url += 'big-island-golf-courses';
-        } else {
-          url += island + '-golf-courses';
-        }
+  <div class="new-hero-content">
+    <div class="new-container">
+      <div class="new-hero-text new-text-center">
+        {% if settings.image_1_headline != blank %}
+          <h1 class="new-h1 new-hero-title">{{ settings.image_1_headline }}</h1>
+        {% else %}
+          <h1 class="new-h1 new-hero-title">Book Your Perfect Hawaii Golf Experience</h1>
+        {% endif %}
         
-        // If specific course selected, could add filtering
-        window.location.href = url;
-      } else {
-        alert('Please select an island first.');
-      }
-    });
-  });
-  </script>
-
-    <!-- CTAs -->
-    <div class="featured-container clearfix">
-
-      <div class="home-cta one-third column alpha multiday-golf">
-        <a href="/collections/hawaii-golf-multi-day-golf-1">{{ 'multi-day-golf.jpg' | asset_url | img_tag }}</a>
-        <h3>{{ settings.cta_1_heading | truncate: 30}}</h3> 
-        <p>{{ settings.cta_1_description | truncate: 180}}</p>
-      </div>
-
-      
-      <div class="home-cta one-third column omega">
-        <a href="/collections/hawaii-golf-course-of-the-day">{{ 'daily-golf-hawaii-specials.jpg' | asset_url | img_tag }}</a>
-        <h3>{{ settings.cta_3_heading | truncate: 30}}</h3> 
-        <p>{{ settings.cta_3_description | truncate: 180}}</p>
-      </div>
-      
-      <div class="home-cta one-third column">
-        <a href="https://hawaiiteetimes.com/products/gift-card">{{ 'giftcardhome.jpg' | asset_url | img_tag }}</a>
-        <h3>{{ settings.cta_2_heading | truncate: 30}}</h3> 
-        <p>{{ settings.cta_2_description | truncate: 180}}</p>
-      </div>
-
-    </div>
-
-      
-      
-     <div class="our-story clearfix">   
-        <div class="image four columns">{{ 'koolau.jpg' | asset_url | img_tag | link_to: settings.story_link }}</div>
-        <div class="description twelve columns">
-          <h2>{{ settings.story_title | truncate: 100}}</h2>
-          <p>{{ settings.story_description | truncate: 8000}}</p>
+        {% if settings.image_1_caption != blank %}
+          <p class="new-hero-subtitle">{{ settings.image_1_caption }}</p>
+        {% else %}
+          <p class="new-hero-subtitle">Discover premier golf courses across all Hawaiian islands with instant booking and best rates guaranteed</p>
+        {% endif %}
+        
+        <div class="new-hero-actions">
+          <a href="#island-selection" class="new-btn new-btn-primary new-btn-lg">Find Tee Times</a>
+          {% if settings.image_1_button_text != blank and settings.image_1_link != blank %}
+            <a href="{{ settings.image_1_link }}" class="new-btn new-btn-outline new-btn-lg">{{ settings.image_1_button_text }}</a>
+          {% else %}
+            <a href="/collections/all" class="new-btn new-btn-outline new-btn-lg">Browse All Courses</a>
+          {% endif %}
         </div>
-     </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Island Selection Section - Mobile-First Grid -->
+<section id="island-selection" class="new-section new-island-selection">
+  <div class="new-container">
+    <div class="new-section-header new-text-center">
+      <h2 class="new-h2">Choose Your Island</h2>
+      <p class="new-section-subtitle">Each island offers unique golf experiences and stunning courses</p>
+    </div>
+    
+    <div class="new-island-cards new-grid new-grid-cols-1 new-sm:grid-cols-2 new-lg:grid-cols-4">
+      <!-- Big Island Card -->
+      <div class="new-island-card">
+        <a href="{{settings.kona-link | default: '/collections/big-island-golf-courses'}}" class="new-island-link">
+          <div class="new-island-image">
+            <img src="{{ 'bigisland-golf-2.jpg' | asset_url }}" alt="Big Island Golf Courses" />
+          </div>
+          <div class="new-island-card-content">
+            <h3 class="new-h3">Big Island</h3>
+            <div class="new-island-price">Starting at <span class="new-price-highlight">$55</span></div>
+            <p class="new-island-description">Volcanic landscapes and championship courses</p>
+            <button class="new-book-now-btn">Book Now</button>
+          </div>
+        </a>
+      </div>
+
+      <!-- Kauai Card -->
+      <div class="new-island-card">
+        <a href="{{settings.kauai-link | default: '/collections/kauai-golf-courses'}}" class="new-island-link">
+          <div class="new-island-image">
+            <img src="{{ 'kauai-golf.jpg' | asset_url }}" alt="Kauai Golf Courses" />
+          </div>
+          <div class="new-island-card-content">
+            <h3 class="new-h3">Kauai</h3>
+            <div class="new-island-price">Starting at <span class="new-price-highlight">$60</span></div>
+            <p class="new-island-description">Garden Isle with ocean and mountain views</p>
+            <button class="new-book-now-btn">Book Now</button>
+          </div>
+        </a>
+      </div>
+
+      <!-- Maui Card -->
+      <div class="new-island-card">
+        <a href="{{settings.maui-link | default: '/collections/maui-golf-courses'}}" class="new-island-link">
+          <div class="new-island-image">
+            <img src="{{ 'maui-golf.jpg' | asset_url }}" alt="Maui Golf Courses" />
+          </div>
+          <div class="new-island-card-content">
+            <h3 class="new-h3">Maui</h3>
+            <div class="new-island-price">Starting at <span class="new-price-highlight">$60</span></div>
+            <p class="new-island-description">Valley Isle with world-class resorts</p>
+            <button class="new-book-now-btn">Book Now</button>
+          </div>
+        </a>
+      </div>
+
+      <!-- Oahu Card -->
+      <div class="new-island-card">
+        <a href="{{settings.oahu-link | default: '/collections/oahu-golf-courses'}}" class="new-island-link">
+          <div class="new-island-image">
+            <img src="{{ 'oahu-golf.jpg' | asset_url }}" alt="Oahu Golf Courses" />
+          </div>
+          <div class="new-island-card-content">
+            <h3 class="new-h3">Oahu</h3>
+            <div class="new-island-price">Starting at <span class="new-price-highlight">$49</span></div>
+            <p class="new-island-description">Gathering Place with diverse courses</p>
+            <button class="new-book-now-btn">Book Now</button>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>  
+      
+      
+
+<!-- Search Section - Booking Component -->
+<section class="new-section new-search-section">
+  <div class="new-container">
+    <div class="new-search-component">
+      <h3 class="new-h3 new-text-center">Find Your Perfect Tee Time</h3>
+      <p class="new-text-center new-section-subtitle">Search by island and course for the best available rates</p>
+      
+      <form class="new-tee-time-search" action="/search" method="get">
+        <div class="new-search-row">
+          <div class="new-search-field">
+            <label for="new-island-select" class="new-form-label">Island</label>
+            <select id="new-island-select" name="island" class="new-form-select">
+              <option value="">Select Island</option>
+              <option value="oahu">Oahu</option>
+              <option value="maui">Maui</option>
+              <option value="kauai">Kauai</option>
+              <option value="big-island">Big Island</option>
+            </select>
+          </div>
+          <div class="new-search-field">
+            <label for="new-course-select" class="new-form-label">Course</label>
+            <select id="new-course-select" name="course" class="new-form-select">
+              <option value="">Select Course</option>
+            </select>
+          </div>
+          <button type="submit" class="new-search-button">Search Tee Times</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+$(document).ready(function() {
+  // Course data by island
+  const coursesByIsland = {
+    'oahu': [
+      { value: 'ala-wai-golf-course', text: 'Ala Wai Golf Course' },
+      { value: 'hawaii-kai-golf-course', text: 'Hawaii Kai Golf Course' },
+      { value: 'koolau-golf-club', text: 'Koolau Golf Club' },
+      { value: 'turtle-bay-resort', text: 'Turtle Bay Resort' }
+    ],
+    'maui': [
+      { value: 'wailea-golf-club', text: 'Wailea Golf Club' },
+      { value: 'grand-wailea-golf-course', text: 'Grand Wailea Golf Course' },
+      { value: 'kapalua-golf', text: 'Kapalua Golf' },
+      { value: 'maui-nui-golf-club', text: 'Maui Nui Golf Club' }
+    ],
+    'kauai': [
+      { value: 'princeville-golf-club', text: 'Princeville Golf Club' },
+      { value: 'poipu-bay-golf-course', text: 'Poipu Bay Golf Course' },
+      { value: 'kauai-lagoons-golf-club', text: 'Kauai Lagoons Golf Club' }
+    ],
+    'big-island': [
+      { value: 'mauna-kea-golf-course', text: 'Mauna Kea Golf Course' },
+      { value: 'hapuna-golf-course', text: 'Hapuna Golf Course' },
+      { value: 'mauna-lani-resort', text: 'Mauna Lani Resort' },
+      { value: 'waikoloa-beach-resort', text: 'Waikoloa Beach Resort' }
+    ]
+  };
+
+  // Handle island selection change
+  $('#new-island-select').change(function() {
+    const selectedIsland = $(this).val();
+    const courseSelect = $('#new-course-select');
+    
+    // Clear current options
+    courseSelect.empty().append('<option value="">Select Course</option>');
+    
+    // Add courses for selected island
+    if (selectedIsland && coursesByIsland[selectedIsland]) {
+      coursesByIsland[selectedIsland].forEach(function(course) {
+        courseSelect.append('<option value="' + course.value + '">' + course.text + '</option>');
+      });
+    }
+  });
+
+  // Handle form submission
+  $('.new-tee-time-search').submit(function(e) {
+    e.preventDefault();
+    const island = $('#new-island-select').val();
+    const course = $('#new-course-select').val();
+    
+    if (island) {
+      // Redirect to island collection page
+      let url = '/collections/';
+      if (island === 'big-island') {
+        url += 'big-island-golf-courses';
+      } else {
+        url += island + '-golf-courses';
+      }
+      
+      // If specific course selected, could add filtering
+      window.location.href = url;
+    } else {
+      alert('Please select an island first.');
+    }
+  });
+});
+</script>
+
+<!-- Feature Section - Three Column Features -->
+<section class="new-section new-features">
+  <div class="new-container">
+    <div class="new-section-header new-text-center">
+      <h2 class="new-h2">Why Choose Hawaii Tee Times</h2>
+      <p class="new-section-subtitle">The premier golf booking platform for Hawaii with exclusive benefits</p>
+    </div>
+    
+    <div class="new-feature-grid new-grid new-grid-cols-1 new-md:grid-cols-3">
+      <!-- Multi-Day Golf Feature -->
+      <div class="new-feature-card">
+        <a href="/collections/hawaii-golf-multi-day-golf-1" class="new-feature-link">
+          <div class="new-feature-image">
+            <img src="{{ 'multi-day-golf.jpg' | asset_url }}" alt="Multi-Day Golf Packages" />
+          </div>
+          <div class="new-feature-card-content">
+            <h3 class="new-h3">
+              {% if settings.cta_1_heading != blank %}
+                {{ settings.cta_1_heading | truncate: 30}}
+              {% else %}
+                Multi-Day Golf Packages
+              {% endif %}
+            </h3>
+            <p class="new-feature-description">
+              {% if settings.cta_1_description != blank %}
+                {{ settings.cta_1_description | truncate: 120}}
+              {% else %}
+                Save more with our exclusive multi-day golf packages across multiple courses and islands.
+              {% endif %}
+            </p>
+            <button class="new-btn new-btn-secondary new-btn-sm">Learn More</button>
+          </div>
+        </a>
+      </div>
+
+      <!-- Daily Specials Feature -->
+      <div class="new-feature-card">
+        <a href="/collections/hawaii-golf-course-of-the-day" class="new-feature-link">
+          <div class="new-feature-image">
+            <img src="{{ 'daily-golf-hawaii-specials.jpg' | asset_url }}" alt="Daily Golf Specials" />
+          </div>
+          <div class="new-feature-card-content">
+            <h3 class="new-h3">
+              {% if settings.cta_3_heading != blank %}
+                {{ settings.cta_3_heading | truncate: 30}}
+              {% else %}
+                Daily Golf Specials
+              {% endif %}
+            </h3>
+            <p class="new-feature-description">
+              {% if settings.cta_3_description != blank %}
+                {{ settings.cta_3_description | truncate: 120}}
+              {% else %}
+                Discover amazing daily deals and special rates on featured courses every day.
+              {% endif %}
+            </p>
+            <button class="new-btn new-btn-secondary new-btn-sm">View Deals</button>
+          </div>
+        </a>
+      </div>
+
+      <!-- Gift Cards Feature -->
+      <div class="new-feature-card">
+        <a href="https://hawaiiteetimes.com/products/gift-card" class="new-feature-link">
+          <div class="new-feature-image">
+            <img src="{{ 'giftcardhome.jpg' | asset_url }}" alt="Golf Gift Cards" />
+          </div>
+          <div class="new-feature-card-content">
+            <h3 class="new-h3">
+              {% if settings.cta_2_heading != blank %}
+                {{ settings.cta_2_heading | truncate: 30}}
+              {% else %}
+                Gift Cards
+              {% endif %}
+            </h3>
+            <p class="new-feature-description">
+              {% if settings.cta_2_description != blank %}
+                {{ settings.cta_2_description | truncate: 120}}
+              {% else %}
+                Give the perfect gift of golf in paradise with our flexible gift cards.
+              {% endif %}
+            </p>
+            <button class="new-btn new-btn-secondary new-btn-sm">Buy Now</button>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+      
+      
+<!-- Content Section - About Hawaii Tee Times -->
+<section class="new-section new-content-section">
+  <div class="new-container">
+    <div class="new-content-grid new-grid new-grid-cols-1 new-lg:grid-cols-2 new-items-center">
+      <div class="new-content-image">
+        {% if settings.story_link != blank %}
+          <a href="{{ settings.story_link }}">
+            <img src="{{ 'koolau.jpg' | asset_url }}" alt="Hawaii Golf Story" class="new-rounded-xl" />
+          </a>
+        {% else %}
+          <img src="{{ 'koolau.jpg' | asset_url }}" alt="Hawaii Golf Story" class="new-rounded-xl" />
+        {% endif %}
+      </div>
+      <div class="new-content-text">
+        <h2 class="new-h2">
+          {% if settings.story_title != blank %}
+            {{ settings.story_title | truncate: 100}}
+          {% else %}
+            Experience Golf in Paradise
+          {% endif %}
+        </h2>
+        <p class="new-body">
+          {% if settings.story_description != blank %}
+            {{ settings.story_description | truncate: 400}}
+          {% else %}
+            Discover the magic of Hawaiian golf with breathtaking ocean views, volcanic landscapes, and world-class courses. From championship resorts to hidden gems, we connect you with unforgettable golf experiences across all Hawaiian islands.
+          {% endif %}
+        </p>
+        {% if settings.story_link != blank %}
+          <a href="{{ settings.story_link }}" class="new-btn new-btn-outline">Learn Our Story</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
 
 {% comment %} Removed tee times loading from homepage for speed optimization {% endcomment %}
 
