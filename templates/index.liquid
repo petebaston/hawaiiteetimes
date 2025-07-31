@@ -175,10 +175,11 @@
 {% endif %}
 {% endcomment %}
       
-<div class="home-collections clearfix"> 
-  <div class="thumbnail four columns alpha even">    
+<div class="home-collections"> 
+  <div class="thumbnail">    
     <a href="{{settings.kona-link}}">
-      <img src="{{ 'bigisland-golf-2.jpg' | asset_url }}" width="210" height="132" alt="" />
+      <h3>Big Island</h3>
+      <img src="{{ 'bigisland-golf-2.jpg' | asset_url }}" alt="Big Island Golf Courses" />
       <div class="description">
         Starting At: <span class="money">$55</span>
         <div class="book-now-button">Book Now</div>
@@ -186,9 +187,10 @@
     </a>
   </div>
 
-  <div class="thumbnail four columns odd">     
+  <div class="thumbnail">     
 	<a href="{{settings.kauai-link}}">
-      <img src="{{ 'kauai-golf.jpg' | asset_url }}" width="210" height="132" alt="" />
+      <h3>Kauai</h3>
+      <img src="{{ 'kauai-golf.jpg' | asset_url }}" alt="Kauai Golf Courses" />
       <div class="description">
         Starting At: <span class="money">$60</span>
         <div class="book-now-button">Book Now</div>
@@ -196,9 +198,10 @@
     </a>
   </div>    
 
-  <div class="thumbnail four columns even">     
+  <div class="thumbnail">     
 	<a href="{{settings.maui-link}}">
-      <img src="{{ 'maui-golf.jpg' | asset_url }}" width="210" height="132" alt="" />
+      <h3>Maui</h3>
+      <img src="{{ 'maui-golf.jpg' | asset_url }}" alt="Maui Golf Courses" />
       <div class="description">
         Starting At: <span class="money">$60</span>
         <div class="book-now-button">Book Now</div>
@@ -206,13 +209,14 @@
     </a>
   </div>    
 
-  <div class="thumbnail four columns odd omega">     
+  <div class="thumbnail">     
 	<a href="{{settings.oahu-link}}">
-      <img src="{{ 'oahu-golf.jpg' | asset_url }}" width="210" height="132" alt="" />
-     <div class="description">
-      Starting At: <span class="money">$49</span>
-      <div class="book-now-button">Book Now</div>
-  	</div> 
+      <h3>Oahu</h3>
+      <img src="{{ 'oahu-golf.jpg' | asset_url }}" alt="Oahu Golf Courses" />
+      <div class="description">
+        Starting At: <span class="money">$49</span>
+        <div class="book-now-button">Book Now</div>
+      </div> 
     </a>
   </div>    
 </div>  
