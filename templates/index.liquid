@@ -355,18 +355,7 @@
         </div>
      </div>
 
-{% if settings.frontpage_collection2 != blank %}
-  {% assign collection = '' %}
-  {% assign products = collections[settings.frontpage_collection2].products %}
-  {% assign products_per_row = settings.frontpage_products_per_row %}
-  
-  <div class="clearfix">
-    <h2>{{ collections[settings.frontpage_collection2].title }}</h2>
-  </div>
-  <div class="clearfix">
-    {% include 'product-loop' %}
-  </div>
-{% endif %}
+{% comment %} Removed tee times loading from homepage for speed optimization {% endcomment %}
 
 {% if settings.homepage != blank %}
   </div>  
