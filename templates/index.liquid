@@ -73,20 +73,14 @@
         </div>
       </a>
 
-      <!-- Oahu Card -->
-      <div class="new-island-card">
-        <a href="{{settings.oahu-link | default: '/collections/oahu-golf-courses'}}" class="new-island-link">
-          <div class="new-island-image">
-            <img src="{{ 'oahu-golf.jpg' | asset_url }}" alt="Oahu Golf Courses" />
-          </div>
-          <div class="new-island-card-content">
-            <h3 class="new-h3">Oahu</h3>
-            <div class="new-island-price">Starting at <span class="new-price-highlight">$49</span></div>
-            <p class="new-island-description">Gathering Place with diverse courses</p>
-            <span class="new-btn new-btn-primary new-btn-sm">Book Now</span>
-          </div>
-        </a>
-      </div>
+      <!-- Oahu Card - GolfNow Style -->
+      <a href="{{settings.oahu-link | default: '/collections/oahu-golf-courses'}}" class="new-island-card">
+        <img src="{{ 'oahu-golf.jpg' | asset_url }}" alt="Oahu Golf Courses" />
+        <div class="new-island-card-content">
+          <h3 class="new-h3">Oahu</h3>
+          <div class="new-island-price">Starting at <span class="new-price-highlight">$49</span></div>
+        </div>
+      </a>
     </div>
   </div>
 </section>  
