@@ -1,85 +1,107 @@
-<!-- ShopPad Product Slider -->
+<!-- NEW DESIGN SYSTEM PRODUCT GALLERY - Mobile-First Image Slider -->
 {% assign featured_image = product.selected_or_first_available_variant.featured_image | default: product.featured_image %}
-<div class="row mobile-full-width">
-  <div class="sp-slider mobile-slider">
-    {% for image in product.images %}
-      {% if image.alt contains 'youtube' or image.alt contains 'vimeo' %}
-        {% assign src = image.alt | split: 'src="' %}
-        {% assign src = src[1] | split: '"' | first %}
 
-        {% if src contains '?' %}
-          {% assign src = src | append: '&amp;autoplay=1' %}
+<div class="new-product-gallery">
+  <!-- Main Image Display -->
+  <div class="new-gallery-main">
+    <div class="new-slider-container">
+      {% for image in product.images %}
+        {% if image.alt contains 'youtube' or image.alt contains 'vimeo' %}
+          {% assign src = image.alt | split: 'src="' %}
+          {% assign src = src[1] | split: '"' | first %}
+
+          {% if src contains '?' %}
+            {% assign src = src | append: '&amp;autoplay=1' %}
+          {% else %}
+            {% assign src = src | append: '?autoplay=1' %}
+          {% endif %}
+
+          <div class="new-video-slide {% if forloop.first %}active{% endif %}" data-slide="{{ forloop.index0 }}">
+            <div class="new-video-container">
+              <a href="{{ src }}" class="new-video-link" title="{{ product.title | escape }}">
+                {{ image.alt }}
+              </a>
+            </div>
+          </div>
         {% else %}
-          {% assign src = src | append: '?autoplay=1' %}
+          <div class="new-image-slide {% if forloop.first %}active{% endif %}" data-slide="{{ forloop.index0 }}">
+            <img src="{{ image | product_img_url: 'master' }}" 
+                 alt="{{ image.alt | escape }}"
+                 {% if featured_image.id == image.id %}id="featured_image"{% endif %}
+                 data-index="{{ forloop.index0 }}" 
+                 data-image-id="{{ image.id }}" 
+                 itemprop="image"
+                 class="new-gallery-image" />
+          </div>
         {% endif %}
-
-        <div class="video-container">
-          <a href="{{ src }}" class="" title="{{ product.title | escape }}">
-            {{ image.alt }}
-          </a>
-        </div>
-      {% else %}
-        <img src="{{ image | product_img_url: 'master' }}" alt="{{ image.alt | escape }}"
-             {% if featured_image.id == image.id %}id="featured_image"{% endif %}
-             data-index="{{ forloop.index0 }}" data-image-id="{{ image.id }}" itemprop="image"
-             class="" />
-      {% endif %}
-    {% endfor %}
+      {% endfor %}
+    </div>
+    
+    <!-- Navigation Arrows -->
+    {% if product.images.size > 1 %}
+      <button class="new-gallery-prev" aria-label="Previous image">‹</button>
+      <button class="new-gallery-next" aria-label="Next image">›</button>
+    {% endif %}
   </div>
-  <div class="sp-slider-verticalnav">
-    {% for image in product.images %}
-      <img src="{{ image | product_img_url: 'compact' }}" alt="{{ image.alt | escape }}"/>
-    {% endfor %}
-  </div>
+  
+  <!-- Thumbnail Navigation -->
+  {% if product.images.size > 1 %}
+    <div class="new-gallery-thumbs">
+      {% for image in product.images %}
+        <button class="new-thumb {% if forloop.first %}active{% endif %}" 
+                data-slide="{{ forloop.index0 }}"
+                aria-label="View image {{ forloop.index }}">
+          <img src="{{ image | product_img_url: 'compact' }}" 
+               alt="{{ image.alt | escape }}"
+               class="new-thumb-image" />
+        </button>
+      {% endfor %}
+    </div>
+  {% endif %}
 </div>
-<script>
-  $(function () {
-    $('.sp-slider').slick({
-      infinite: true,
-      slidesToShow: 1,
-      slidesToScroll: 1,
-      arrows: true,
-      asNavFor: '.sp-slider-verticalnav'
-    });
 
-    $('.sp-slider-verticalnav').slick({
-      infinite: true,
-      slidesToShow: 6,
-      slidesToScroll: 1,
-      asNavFor: '.sp-slider',
-      arrows: false,
-      centerMode: true,
-      focusOnSelect: true,
-      vertical: true,
-      verticalSwiping: true,
-      draggable: false,
-      responsive: [
-        {
-          breakpoint: 1000,
-          settings: {
-            slidesToShow: 5,
-            slidesToScroll: 1,
-            infinite: true,
-            verticalSwiping: true,
-            vertical: true,
-            centerMode: true,
-            draggable: true
-          }
-        },
-        {
-          breakpoint: 767,
-          settings: {
-            slidesToShow: 3,
-            slidesToScroll: 1,
-            infinite: true,
-            verticalSwiping: false,
-            vertical: false,
-            centerMode: false,
-            draggable: true
-          }
-        }
-      ]
-    })
+<script>
+$(document).ready(function() {
+  let currentSlide = 0;
+  const totalSlides = {{ product.images.size }};
+  
+  function showSlide(index) {
+    // Hide all slides
+    $('.new-image-slide, .new-video-slide').removeClass('active');
+    $('.new-thumb').removeClass('active');
+    
+    // Show current slide
+    $('[data-slide="' + index + '"]').addClass('active');
+    
+    currentSlide = index;
+  }
+  
+  // Thumbnail clicks
+  $('.new-thumb').on('click', function() {
+    const slideIndex = parseInt($(this).data('slide'));
+    showSlide(slideIndex);
   });
+  
+  // Arrow navigation
+  $('.new-gallery-next').on('click', function() {
+    const nextSlide = (currentSlide + 1) % totalSlides;
+    showSlide(nextSlide);
+  });
+  
+  $('.new-gallery-prev').on('click', function() {
+    const prevSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+    showSlide(prevSlide);
+  });
+  
+  // Keyboard navigation
+  $(document).on('keydown', function(e) {
+    if (e.key === 'ArrowRight') {
+      $('.new-gallery-next').click();
+    } else if (e.key === 'ArrowLeft') {
+      $('.new-gallery-prev').click();
+    }
+  });
+});
 </script>
-<!-- End ShopPad Product Slider -->
+
+<!-- End NEW DESIGN SYSTEM Product Gallery -->
