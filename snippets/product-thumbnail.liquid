@@ -1,122 +1,141 @@
-{% if product-thumbnail %}
-  <div class="{% if products_per_row == "2" %}six columns {% cycle 'alpha', 'omega' %}{% elsif products_per_row == "3" %}one-third columns {% cycle 'alpha', '', 'omega' %}{% else %}three columns {% cycle 'alpha', '', '', 'omega' %}{% endif %} thumbnail {% cycle 'even', 'odd' %}">
-{% else %}
-  <div class="{% if products_per_row == "2" %}eight columns {% cycle 'alpha', 'omega' %}{% elsif products_per_row == "3" %}one-third columns {% cycle 'alpha', '', 'omega' %}{% else %}four columns {% cycle 'alpha', '', '', 'omega' %}{% endif %} thumbnail {% cycle 'even', 'odd' %}">
-{% endif %}
+<!-- NEW DESIGN SYSTEM PRODUCT CARD - Mobile-First Golf Course Card -->
 
+<div class="new-product-card">
   {% if product.featured_image.alt contains 'youtube' or image.alt contains 'vimeo' %}
     {% assign alt_text = product.title %}
   {% else %}
     {% assign alt_text = product.featured_image.alt %}
   {% endif %}
 
-  <a href="{{ product.url | within: collection }}" title="{{ product.title | escape }}">
-    <img {% if settings.align_height %}style="max-height:{{ settings.collection_height }}px"{% endif %} src="{{ product.featured_image | product_img_url: 'large' }}" alt="{{ alt_text | escape }}" />
+  <a href="{{ product.url | within: collection }}" title="{{ product.title | escape }}" class="new-product-link">
+    <!-- Product Image -->
+    <div class="new-product-image-container">
+      <img 
+        {% if settings.align_height %}style="max-height:{{ settings.collection_height }}px"{% endif %} 
+        src="{{ product.featured_image | product_img_url: 'large' }}" 
+        alt="{{ alt_text | escape }}" 
+        class="new-product-image" />
+      
+      <!-- Sale Banner -->
+      {% if settings.sale_banner_enabled and product.compare_at_price > product.price %}
+        <div class="new-product-badge new-product-badge-sale">{{ 'collections.general.sale' | t }}</div>
+      {% endif %}
+      
+      <!-- New Banner -->
+      {% for col in product.collections %}
+        {% if col.handle == 'new' %}
+          <div class="new-product-badge new-product-badge-new">{{ 'collections.general.new' | t }}</div>
+        {% endif %}
+      {% endfor %}
+    </div>
 
-    <div class="info">
-      <span class="title">{{ product.title }}</span>
-      <div class="book-now-button">Book Now</div>
-      <span class="price">
+    <!-- Product Info -->
+    <div class="new-product-info">
+      <h3 class="new-product-title">{{ product.title }}</h3>
+      
+      <!-- Price Display -->
+      <div class="new-product-pricing">
         {% if product.available %}
           {% if product.price_varies %}       
-            <span class="from">{{ 'products.general.from' | t }}</span>
+            <span class="new-price-from">{{ 'products.general.from' | t }}</span>
           {% endif %}
         
-        <!--Bulk Variants Editor min price-->
-            {% assign minprice = false %}
-            {% for variant in product.variants %}
-                
-
-                {% if variant.metafields.sh_sbve.invisible  != '1'%}
-                    {% if minprice == false %}
-                    	{% assign minprice = variant.price %}
-                    {% endif %}
-                    {% if minprice > variant.price %}
-                        {% assign minprice = variant.price %}
-                    {% endif %}
-                {% endif %}
-            {% endfor %}
-         	{% if minprice == false %}
-                  {% assign minprice = 0 %} 
+          <!-- Bulk Variants Editor min price -->
+          {% assign minprice = false %}
+          {% for variant in product.variants %}
+            {% if variant.metafields.sh_sbve.invisible != '1' %}
+              {% if minprice == false %}
+                {% assign minprice = variant.price %}
+              {% endif %}
+              {% if minprice > variant.price %}
+                {% assign minprice = variant.price %}
+              {% endif %}
             {% endif %}
-         	<!--{{ product.price_min | money }}-->      
-         	{{ minprice | money }}    
-         <!--end Bulk Variants Editor min price-->
-       
-         
+          {% endfor %}
+          {% if minprice == false %}
+            {% assign minprice = 0 %} 
+          {% endif %}
+          
+          <span class="new-price-current">{{ minprice | money }}</span>
+          
+          <!-- Compare at price -->
+          {% if product.compare_at_price > product.price %}
+            <span class="new-price-compare">{{ product.compare_at_price | money }}</span>
+          {% endif %}
         {% else %}
-          <span class="sold_out">{{ 'products.product.sold_out' | t }} - </span>{{ product.price_min | money }}
+          <span class="new-price-soldout">{{ 'products.product.sold_out' | t }} - {{ product.price_min | money }}</span>
         {% endif %}        
-      </span>
-    
+      </div>
       
+      <!-- Book Now Button -->
+      <div class="new-product-action">
+        <span class="new-btn new-btn-primary new-btn-sm new-btn-full">Book Now</span>
+      </div>
     </div>
-    {% if settings.sale_banner_enabled and product.compare_at_price > product.price %}
-      <div class="sale_banner">{{ 'collections.general.sale' | t }}</div>
-    {% endif %}
-    {% for col in product.collections %}
-      {% if col.handle == 'new' %}
-        <div class="new_banner">{{ 'collections.general.new' | t }}</div>
-      {% endif %}
-    {% endfor %}
   </a>
 
+  <!-- Quick Shop Modal (Legacy Support) -->
   {% if settings.quick_shop_enabled %}
-    <a href="#product-{{ product.id }}" class="quick_shop action_button">
+    <a href="#product-{{ product.id }}" class="new-quick-shop-btn">
       {{ 'collections.general.quick_shop' | t }}
     </a>
 
-    <div id="product-{{ product.id }}" class="modal">
-      <div class="container section" style="width: inherit">
-        <div class="eight columns modal_image flex-active-slide">
-          <img src="{{ product.featured_image | product_img_url: 'large' }}" alt="{{ alt_text | escape }}" />
-        </div>
-        <div class="six columns">
-          <h3>{{ product.title }}</h3>
+    <div id="product-{{ product.id }}" class="new-modal" style="display: none;">
+      <div class="new-modal-content">
+        <div class="new-modal-close">×</div>
+        <div class="new-grid new-grid-cols-1 new-md:grid-cols-2 new-gap-6">
+          <div class="new-modal-image">
+            <img src="{{ product.featured_image | product_img_url: 'large' }}" alt="{{ alt_text | escape }}" class="new-img-responsive" />
+          </div>
+          <div class="new-modal-details">
+            <h3 class="new-h3 new-mb-4">{{ product.title }}</h3>
 
-          <p class="modal_price">
-            <span class="sold_out">{% if product.available == false %}{{ 'products.product.sold_out' | t }} - {% endif %}</span>
-            <span class="current_price {% if product.compare_at_price_max > product.price %}sale{% endif %}">
-              {{ product.price | money }}
-            </span>
-            <span class="was_price">
-              {% if product.price < product.compare_at_price_max %}
-                {{ product.compare_at_price | money }} 
-              {% endif %}
-            </span>
-          </p>
+            <div class="new-modal-price new-mb-4">
+              <span class="new-price-soldout">{% if product.available == false %}{{ 'products.product.sold_out' | t }} - {% endif %}</span>
+              <span class="new-price-current {% if product.compare_at_price_max > product.price %}new-price-sale{% endif %}">
+                {{ product.price | money }}
+              </span>
+              <span class="new-price-compare">
+                {% if product.price < product.compare_at_price_max %}
+                  {{ product.compare_at_price | money }} 
+                {% endif %}
+              </span>
+            </div>
 
-          {% include 'product-notify-me' %}
+            {% include 'product-notify-me' %}
 
-          {% if settings.product_description_position == "top" %}
-            {% if settings.quick_shop_full_description %}
-              {{ product.description | split: '<!-- split -->' | first }}
-            {% else %}
-              <p>
-                {{ product.description | strip_html | truncatewords: settings.description_words | replace: 'Description', '' | replace: 'Dimensions', '' | replace: 'Details', '' | replace: 'Specs', '' | replace: 'Shipping', ''  }}
-              </p>
+            {% if settings.product_description_position == "top" %}
+              <div class="new-product-description new-mb-4">
+                {% if settings.quick_shop_full_description %}
+                  {{ product.description | split: '<!-- split -->' | first }}
+                {% else %}
+                  <p class="new-body">
+                    {{ product.description | strip_html | truncatewords: settings.description_words | replace: 'Description', '' | replace: 'Dimensions', '' | replace: 'Details', '' | replace: 'Specs', '' | replace: 'Shipping', ''  }}
+                  </p>
+                {% endif %}
+                <p>
+                  <a href="{{ product.url | within: collection }}" class="new-link new-link-primary" title="{{ product.title | escape }}">{{ 'collections.general.view_product_details_html' | t }}</a>
+                </p>
+              </div>
             {% endif %}
-            <p>
-              <a href="{{ product.url | within: collection }}" class="view_product_info" title="{{ product.title | escape }}">{{ 'collections.general.view_product_details_html' | t }}</a>
-            </p>
-            <hr />
-          {% endif %}
-          
-          {% include 'product-form' %}
+            
+            {% include 'product-form' %}
 
-          {% if settings.product_description_position == "bottom" %}
-            <hr />
-            {% if settings.quick_shop_full_description %}
-              {{ product.description | split: '<!-- split -->' | first }}
-            {% else %}
-              <p>
-                {{ product.description | strip_html | truncatewords: settings.description_words | replace: 'Description', '' | replace: 'Dimensions', '' | replace: 'Details', '' | replace: 'Specs', '' | replace: 'Shipping', ''  }}
-              </p>
+            {% if settings.product_description_position == "bottom" %}
+              <div class="new-product-description new-mt-4">
+                {% if settings.quick_shop_full_description %}
+                  {{ product.description | split: '<!-- split -->' | first }}
+                {% else %}
+                  <p class="new-body">
+                    {{ product.description | strip_html | truncatewords: settings.description_words | replace: 'Description', '' | replace: 'Dimensions', '' | replace: 'Details', '' | replace: 'Specs', '' | replace: 'Shipping', ''  }}
+                  </p>
+                {% endif %}
+                <p>
+                  <a href="{{ product.url | within: collection }}" class="new-link new-link-primary" title="{{ product.title | escape }}">{{ 'collections.general.view_product_details_html' | t }}</a>
+                </p>
+              </div>
             {% endif %}
-            <p>
-              <a href="{{ product.url | within: collection }}" class="view_product_info" title="{{ product.title | escape }}">{{ 'collections.general.view_product_details_html' | t }}</a>
-            </p>
-          {% endif %}
+          </div>
         </div>
       </div>
     </div>
