@@ -1,136 +1,221 @@
-<main class="product_single clearfix mobile-full-width" style="overflow: hidden;">
-  <div class="sixteen columns product-page">
+<!-- NEW DESIGN SYSTEM PRODUCT PAGE - No Rates Display Golf Course -->
 
-    <h1 class="product_name top" itemprop="name">{{ product.title }}</h1>
+<!-- sh_sub-added -->
+{% render 'sh_sub-product-snippet' %}
+<!-- /sh_sub-added -->
 
-    <div itemscope itemtype="http://data-vocabulary.org/Product" id="product-{{ product.id }}">
-      {% include 'sp-slider' %}
-
-{% comment %}
-      <section class="course-detail">
-        <h1 class="section-title">Rates for {{ product.title }}</h1>
-        <dl class="rate">
-          <dt>Morning</dt>
-          <dd><strong>$105.00</strong> <span class="compare-price">$140.00</span></dd>
-        </dl>
-        <dl class="rate">
-          <dt>After 12pm</dt>
-          <dd><strong>$75.00</strong> <span class="compare-price">$80.00</span></dd>
-        </dl>
-      </section>
-{% endcomment %}
-      <section class="course-detail">
-        <h1 class="section-title">Rates</h1>
-
-
-		   
-   
-        {% include 'product-notify-me' %}
-
-        {% include 'product-form' with 'product' %}
-
-        <div id="sub-bs-container" style="display:none"></div>
-
-         <div class="meta">
-           {% if settings.display_collections %}
-             <p>
-               <span class="label">{{ 'products.product.collections' | t }}:</span>
-               <span>
-                {% for col in product.collections %}
-                  <a href="{{ col.url }}" title="{{ col.title }}">{{ col.title }}</a>{% unless forloop.last %},{% endunless %}
-                {% endfor %}
-              </span>
-            </p>
-           {% endif %}
-
-           {% if settings.display_tags %}
-              <p>
-                {% for tag in product.tags %}
-                  {% if forloop.first %}
-                    <span class="label">{{ 'products.product.tags' | t }}:</span>
-                  {% endif %}
-
-                  {% unless tag contains 'meta-related-collection-' %}
-                    <span>
-                      <a href="/collections/{% if collection %}{{ collection.handle }}{% else %}all{% endif %}/{{ tag | handle }}" title="{{ 'products.product.products_tagged' | t: tag: tag }}">{{ tag }}</a>{% unless forloop.last %},{% endunless %}
-                    </span>
-                  {% endunless %}
-                {% endfor %}
-              </p>
-           {% endif %}
-
-          {% if settings.display_type %}
-             <p>
-               <span class="label">{{ 'products.product.product_types' | t }}:</span> <span itemprop="category">{{ product.type | link_to_type }}</span>
-             </p>
-          {% endif %}
-
-          {% if settings.display_vendor %}
-             <p>
-               <span class="label">{{ 'products.product.vendor' | t }}:</span> <span itemprop="brand">{{ product.vendor | link_to_vendor }}</span>
-             </p>
-          {% endif %}
-         </div>
-       </section>
-
-      </div>
-
-    </div>
-
-
-    {% if product.description != blank %}
-    <div class="description clearfix" itemprop="description">
-      {{ product.description | split: '<!-- split -->' | first }}
-    </div>
-    {% endif %}
-
-    <!-- Tee Times -->
-    {% render "tee-times" with product %}
-
-  {% if settings.display_related_products %}
-    {% capture limit %}{{ settings.products_per_row | plus: 1 }}{% endcapture %}
-
-    {% assign found_a_collection = false %}
-    {% for c in product.collections %}
-      {% if found_a_collection == false and c.handle != 'frontpage' and c.handle != 'all' and c.all_products_count > 1 %}
-        {% assign found_a_collection = true %}
-        {% assign col = c.handle %}
-      {% endif %}
-    {% endfor %}
-
-    {% for tag in product.tags %}
-      {% if tag contains 'meta-related-collection-' %}
-        {% assign col = tag | remove: 'meta-related-collection-' %}
-        {% assign collection = collections[col] %}
-        {% capture limit %}{{ collection.products_count | plus: 1 }}{% endcapture %}
-      {% endif %}
-    {% endfor %}
-
-    {% if col and collections[col].all_products_count > 0 %}
-
-      <h2>{{ 'products.product.related_items' | t }}</h2>
-
-
-      {% assign skip_product = product %}
-      {% assign products = collections[col].products %}
-      {% assign products_per_row = settings.products_per_row %}
-      <div class="clearfix">
-        <div class="products-desktop">
-        {% include 'product-loop' %}
+<section class="new-section new-product-no-rates">
+  <div class="new-container">
+    
+    <!-- Product Header -->
+    <div class="new-product-header new-mb-8">
+      <h1 class="new-h1 new-product-title" itemprop="name">{{ product.title }}</h1>
+      
+      <!-- Breadcrumb -->
+      <nav class="new-breadcrumb new-mb-6" aria-label="Breadcrumb">
+        <div class="new-flex new-items-center new-gap-2 new-text-sm new-text-gray-600">
+          <a href="/" class="new-link-hover">Home</a>
+          <span>/</span>
+          {% for collection in product.collections limit:1 %}
+            <a href="{{ collection.url }}" class="new-link-hover">{{ collection.title }}</a>
+            <span>/</span>
+          {% endfor %}
+          <span class="new-text-gray-900">{{ product.title }}</span>
         </div>
-      </div>
-    {% endif %}
-
-  {% endif %}
-
-
-    <div class="products-mobile">
-      {% include 'product-loop-mobile' %}
+      </nav>
     </div>
+
+    <div class="new-product-content">
+      <div itemscope itemtype="http://data-vocabulary.org/Product" id="product-{{ product.id }}">
+        
+        <!-- Product Images Slider -->
+        <div class="new-product-images new-mb-8">
+          {% include 'sp-slider' %}
+        </div>
+
+        <!-- Golf Course Details Grid -->
+        <div class="new-grid new-grid-cols-1 new-lg:grid-cols-3 new-gap-8 new-mb-12">
+          
+          <!-- Main Content Column -->
+          <div class="new-lg:col-span-2">
+            
+            <!-- Booking Section (No Rates Display) -->
+            <section class="new-booking-section new-mb-8">
+              <div class="new-card new-p-6">
+                <h2 class="new-h2 new-mb-6">Golf Booking</h2>
+                <div class="new-alert new-alert-info new-mb-6">
+                  <p class="new-body">Contact us directly for current rates and availability.</p>
+                </div>
+           
+                <!-- Booking Form -->
+                {% include 'product-notify-me' %}
+                {% include 'product-form' with 'product' %}
+                <div id="sub-bs-container" style="display:none"></div>
+              </div>
+            </section>
+
+            <!-- Course Description -->
+            {% if product.description != blank %}
+              <section class="new-description-section new-mb-8">
+                <div class="new-card new-p-6">
+                  <h2 class="new-h2 new-mb-4">About {{ product.title }}</h2>
+                  <div class="new-prose new-prose-lg" itemprop="description">
+                    {{ product.description | split: '<!-- split -->' | first }}
+                  </div>
+                </div>
+              </section>
+            {% endif %}
+
+            <!-- Weather Widget -->
+            <section class="new-weather-section new-mb-8">
+              <div class="new-card new-p-6">
+                <h2 class="new-h2 new-mb-4">Local Weather Forecast</h2>
+                {% include 'weather-widget' %}
+              </div>
+            </section>
+            
+            <!-- Tee Times -->
+            <section class="new-teetimes-section new-mb-8">
+              <div class="new-card new-p-6">
+                <h2 class="new-h2 new-mb-4">Available Tee Times</h2>
+                {% render "tee-times" with product %}
+              </div>
+            </section>
+
+          </div>
+
+          <!-- Sidebar Column -->
+          <div class="new-product-sidebar">
+            
+            <!-- Course Info Card -->
+            <div class="new-card new-p-6 new-mb-6">
+              <h3 class="new-h3 new-mb-4">Course Information</h3>
+              
+              <div class="new-course-meta new-space-y-3">
+                {% if settings.display_collections %}
+                  <div class="new-meta-item">
+                    <span class="new-meta-label">Island:</span>
+                    <div class="new-meta-value">
+                      {% for col in product.collections limit:1 %}
+                        <a href="{{ col.url }}" class="new-link new-link-primary">{{ col.title }}</a>
+                      {% endfor %}
+                    </div>
+                  </div>
+                {% endif %}
+
+                {% if settings.display_type %}
+                  <div class="new-meta-item">
+                    <span class="new-meta-label">Course Type:</span>
+                    <div class="new-meta-value" itemprop="category">{{ product.type | link_to_type }}</div>
+                  </div>
+                {% endif %}
+
+                {% if settings.display_vendor %}
+                  <div class="new-meta-item">
+                    <span class="new-meta-label">Resort:</span>
+                    <div class="new-meta-value" itemprop="brand">{{ product.vendor | link_to_vendor }}</div>
+                  </div>
+                {% endif %}
+
+                {% if settings.display_tags %}
+                  <div class="new-meta-item">
+                    <span class="new-meta-label">Features:</span>
+                    <div class="new-meta-value">
+                      <div class="new-flex new-flex-wrap new-gap-1">
+                        {% for tag in product.tags %}
+                          {% unless tag contains 'meta-related-collection-' %}
+                            <a href="/collections/{% if collection %}{{ collection.handle }}{% else %}all{% endif %}/{{ tag | handle }}" 
+                               class="new-tag new-tag-sm" title="{{ 'products.product.products_tagged' | t: tag: tag }}">
+                              {{ tag }}
+                            </a>
+                          {% endunless %}
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+
+            <!-- Contact Card -->
+            <div class="new-card new-p-6 new-mb-6 new-text-center">
+              <h3 class="new-h3 new-mb-4">Need Help?</h3>
+              <p class="new-body new-mb-4">Call our golf specialists for personalized recommendations and group bookings.</p>
+              <a href="tel:1.877.465.3170" class="new-btn new-btn-primary new-btn-full">
+                📞 Call (877) 465-3170
+              </a>
+              <p class="new-text-sm new-text-gray-600 new-mt-2">
+                Located in Honolulu<br>
+                No booking fees ever!
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Related Courses -->
+    {% if settings.display_related_products %}
+      {% capture limit %}{{ settings.products_per_row | plus: 1 }}{% endcapture %}
+
+      {% assign found_a_collection = false %}
+      {% for c in product.collections %}
+        {% if found_a_collection == false and c.handle != 'frontpage' and c.handle != 'all' and c.all_products_count > 1 %}
+          {% assign found_a_collection = true %}
+          {% assign col = c.handle %}
+        {% endif %}
+      {% endfor %}
+
+      {% for tag in product.tags %}
+        {% if tag contains 'meta-related-collection-' %}
+          {% assign col = tag | remove: 'meta-related-collection-' %}
+          {% assign collection = collections[col] %}
+          {% capture limit %}{{ collection.products_count | plus: 1 }}{% endcapture %}
+        {% endif %}
+      {% endfor %}
+
+      <!-- Cross-promote other courses in same island -->
+      {% unless col %}
+        {% for collection in product.collections %}
+          {% if collection.handle contains '-golf-courses' %}
+            {% assign col = collection.handle %}
+            {% break %}
+          {% endif %}
+        {% endfor %}
+      {% endunless %}
+
+      {% if col and collections[col].all_products_count > 1 %}
+        <section class="new-related-section new-pt-12 new-border-t">
+          <div class="new-section-header new-text-center new-mb-8">
+            <h2 class="new-h2">Other Great Courses on This Island</h2>
+            <p class="new-section-subtitle">Discover more amazing golf experiences</p>
+          </div>
+
+          <div class="new-grid new-grid-cols-1 new-sm:grid-cols-2 new-lg:grid-cols-3 new-gap-6">
+            {% assign products = collections[col].products %}
+            {% assign products_per_row = 3 %}
+            {% for product in products limit: limit %}
+              {% unless product.id == product.id %}
+                {% include 'product-grid-item' %}
+              {% endunless %}
+            {% endfor %}
+          </div>
+
+          <div class="new-text-center new-mt-8">
+            <a href="{{ collections[col].url }}" class="new-btn new-btn-outline new-btn-lg">
+              View All {{ collections[col].title }}
+            </a>
+          </div>
+        </section>
+      {% endif %}
+    {% endif %}
 
   </div>
-</main>
+</section>
 
+<!-- Basic Tee Time Modal -->
 <div class="modal-mask" id="modal-teetime">
   <div class="modal-container">
     <a href="#" class="close"></a>

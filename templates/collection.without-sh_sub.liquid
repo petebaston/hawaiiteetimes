@@ -1,3 +1,5 @@
+<!-- NEW DESIGN SYSTEM COLLECTION PAGE - Mobile-First Golf Course Listings (without sh_sub) -->
+
 {% paginate collection.products by settings.pagination_limit %}
   {% assign tag_count = collection.all_tags | size %}
   {% assign tag_threshold = settings.tag_threshold | minus: 0 %}
@@ -7,135 +9,175 @@
     {% assign multi_day  = true %}
   {% endif %}
 
-  {% if settings.collection_sidebar %}
+<!-- NEW: Mobile-first container using new design system -->
+<section class="new-section new-collection-page">
+  <div class="new-container">
     
-    <div class="thirteen columns collection-page">
-  {% else %}
-    <div class="sixteen columns collection-page">
-  {% endif %}
+    {% if settings.collection_sidebar %}
+      <div class="new-grid new-grid-cols-1 new-lg:grid-cols-4 new-gap-8">
+        <div class="new-lg:col-span-3">
+    {% else %}
+      <div class="new-collection-main">
+    {% endif %}
 
+      <!-- Collection Hero Banner -->
       {% if collection.image %}
-      <div class="collection_image mobile-full-width">		
-		<img src="{{ collection.image.src | collection_img_url: 'original' }}" alt="{{collection.image.alt}}" usemap="#{{collection.handle}}" class="responsive-image">
-      </div>  
+        <div class="new-collection-banner new-mb-8">		
+          <img src="{{ collection.image.src | collection_img_url: 'original' }}" alt="{{collection.image.alt}}" usemap="#{{collection.handle}}" class="new-img-responsive new-rounded-xl">
+        </div>  
       {% endif %}
       
-      <div class="clearfix collection_nav">
-
-        <h1 class="collection_title{% if collection.image %} has_image{% endif %} {% if settings.collection_tags and tag_count < tag_threshold %}collection_title_tags{% endif %}">
+      <!-- Collection Header -->
+      <div class="new-collection-header new-mb-8">
+        <h1 class="new-h1 new-collection-title new-mb-4">
           {{ collection.title }}
         </h1>
+        <!-- Tag Navigation -->
         {% if settings.collection_tags %}
-        {% if tag_count < tag_threshold %}
-        <ul class="collection_menu">
-          <li>
-            <a href="{% if collection.handle == "all" %}/collections/all{% elsif collection.handle %}{{ collection.url }}{% elsif collection.all_products_count > 0 and collection.products.first.type == collection.title %}{{ collection.title | url_for_type }}{% elsif collection.all_products_count > 0 and collection.products.first.vendor == collection.title %}{{ collection.title | url_for_vendor }}{% endif %}">{% if current_tags %}{{ 'collections.general.view_all' | t }}{% else %}<span class="active">{{ 'collections.general.view_all' | t }}</span>{% endif %}</a>
-          </li>
-          {% for tag in collection.all_tags %}
-          {% unless tag contains 'meta-related-collection-' %}
-          <li>
-            {{ tag | highlight_active_tag | link_to_tag: tag }}
-          </li>
-          {% endunless %}
-          {% endfor %}
-        </ul>
-        {% endif %}
-        {% endif %}
-
-        {% if collection.handle != blank and collection.products_count > 0 %}
-          {% if settings.collection_tags %}
-            <div class="three columns section_select tag_filter {% unless settings.collection_sort %}offset-by-three omega{% endunless %}" {% if tag_count >= tag_threshold %}style="display:block"{% endif %}>
-              <select name="tag_filter" id="tag_filter">
-                <option {% unless current_tags %}selected="selected"{% endunless %} value="{% if collection.handle == "all" %}/collections/all{% elsif collection.handle %}{{ collection.url }}{% elsif collection.all_products_count > 0 and collection.products.first.type == collection.title %}{{ collection.title | url_for_type }}{% elsif collection.all_products_count > 0 and collection.products.first.vendor == collection.title %}{{ collection.title | url_for_vendor }}{% endif %}">{{ 'collections.general.view_all' | t }}</option>
+          {% if tag_count < tag_threshold %}
+            <div class="new-tag-nav new-mb-6">
+              <div class="new-flex new-flex-wrap new-gap-2">
+                <a href="{% if collection.handle == "all" %}/collections/all{% elsif collection.handle %}{{ collection.url }}{% elsif collection.all_products_count > 0 and collection.products.first.type == collection.title %}{{ collection.title | url_for_type }}{% elsif collection.all_products_count > 0 and collection.products.first.vendor == collection.title %}{{ collection.title | url_for_vendor }}{% endif %}" 
+                   class="new-btn {% unless current_tags %}new-btn-primary{% else %}new-btn-outline{% endunless %} new-btn-sm">
+                  {{ 'collections.general.view_all' | t }}
+                </a>
                 {% for tag in collection.all_tags %}
                   {% unless tag contains 'meta-related-collection-' %}
-                    <option {% if current_tags contains tag %}selected="selected"{% endif %} value="/collections/{% if collection.handle != blank %}{{ collection.handle }}{% else %}all{% endif %}/{{ tag | handleize }}">{{ tag }}</option>
+                    {{ tag | highlight_active_tag | link_to_tag: tag | replace: '<a', '<a class="new-btn new-btn-outline new-btn-sm"' }}
                   {% endunless %}
                 {% endfor %}
-              </select>
+              </div>
             </div>
           {% endif %}
+        {% endif %}
 
-          {% if settings.collection_sort %}
-            <div class="three columns section_select omega {% unless settings.collection_tags %}offset-by-three{% endunless %}">
-              <select id="sort-by">
-                <option value="manual">{{ 'collections.sorting.featured' | t }}</option>
-                <option value="best-selling">{{ 'collections.sorting.best_selling' | t }}</option>
-                <option value="title-ascending">{{ 'collections.sorting.az' | t }}</option>
-                <option value="title-descending">{{ 'collections.sorting.za' | t }}</option>
-                <option value="price-ascending">{{ 'collections.sorting.price_ascending' | t }}</option>
-                <option value="price-descending">{{ 'collections.sorting.price_descending' | t }}</option>
-                <option value="created-descending">{{ 'collections.sorting.date_descending' | t }}</option>
-                <option value="created-ascending">{{ 'collections.sorting.date_ascending' | t }}</option>
-              </select>
-              <script type="text/javascript">
-                // <![CDATA[  
-                  $('#sort-by')
-                    .val('{{ collection.sort_by | default: collection.default_sort_by | escape }}')
-                    .bind('change', function() {
-                      Shopify.queryParams.sort_by = $(this).val();
-                      location.search = $.param(Shopify.queryParams).replace(/\+/g, '%20');
-                  });
-                // ]]>
-              </script>
+        <!-- Filter and Sort Controls -->
+        {% if collection.handle != blank and collection.products_count > 0 %}
+          <div class="new-collection-controls new-mb-8">
+            <div class="new-grid new-grid-cols-1 new-sm:grid-cols-2 new-gap-4">
+              {% if settings.collection_tags %}
+                <div class="new-form-field {% if tag_count < tag_threshold %}new-hidden{% endif %}">
+                  <label for="tag_filter" class="new-form-label">Filter by Category</label>
+                  <select name="tag_filter" id="tag_filter" class="new-form-select">
+                    <option {% unless current_tags %}selected="selected"{% endunless %} value="{% if collection.handle == "all" %}/collections/all{% elsif collection.handle %}{{ collection.url }}{% elsif collection.all_products_count > 0 and collection.products.first.type == collection.title %}{{ collection.title | url_for_type }}{% elsif collection.all_products_count > 0 and collection.products.first.vendor == collection.title %}{{ collection.title | url_for_vendor }}{% endif %}">{{ 'collections.general.view_all' | t }}</option>
+                    {% for tag in collection.all_tags %}
+                      {% unless tag contains 'meta-related-collection-' %}
+                        <option {% if current_tags contains tag %}selected="selected"{% endif %} value="/collections/{% if collection.handle != blank %}{{ collection.handle }}{% else %}all{% endif %}/{{ tag | handleize }}">{{ tag }}</option>
+                      {% endunless %}
+                    {% endfor %}
+                  </select>
+                </div>
+              {% endif %}
+
+              {% if settings.collection_sort %}
+                <div class="new-form-field">
+                  <label for="sort-by" class="new-form-label">Sort Courses</label>
+                  <select id="sort-by" class="new-form-select">
+                    <option value="manual">{{ 'collections.sorting.featured' | t }}</option>
+                    <option value="best-selling">{{ 'collections.sorting.best_selling' | t }}</option>
+                    <option value="title-ascending">{{ 'collections.sorting.az' | t }}</option>
+                    <option value="title-descending">{{ 'collections.sorting.za' | t }}</option>
+                    <option value="price-ascending">{{ 'collections.sorting.price_ascending' | t }}</option>
+                    <option value="price-descending">{{ 'collections.sorting.price_descending' | t }}</option>
+                    <option value="created-descending">{{ 'collections.sorting.date_descending' | t }}</option>
+                    <option value="created-ascending">{{ 'collections.sorting.date_ascending' | t }}</option>
+                  </select>
+                  <script type="text/javascript">
+                    // <![CDATA[  
+                      $('#sort-by')
+                        .val('{{ collection.sort_by | default: collection.default_sort_by | escape }}')
+                        .bind('change', function() {
+                          Shopify.queryParams.sort_by = $(this).val();
+                          location.search = $.param(Shopify.queryParams).replace(/\+/g, '%20');
+                      });
+                    // ]]>
+                  </script>
+                </div>
+              {% endif %}
             </div>
-          {% endif %}
+          </div>
         {% endif %}
 
       </div>
       
-            {% if collection.description != blank %}
-      <div class="collection_description description section clearfix{% unless multi_day %} large-black{% endunless %}">
-        {% if collection.handle == 'lanai-golf-courses' or collection.handle == 'kauai-golf-courses' or collection.handle == 'maui-golf-courses' or collection.handle == 'oahu-golf-courses' %}
-        <!-- <img class="icon" src="{{ 'collection-description-icon.png' | asset_url }}" aria-hidden="true"> -->
-        {% endif %}
-        {{ collection.description }}
-        {% if multi_day %}
-        <div class="clearfix">
-          <div class="thumbnail four columns alpha even">
-            <a href="http://hawaiiteetimes.com/collections/multi-day-golf-maui" title="Maui Golf Specials">
-              <img src="//cdn.shopify.com/s/files/1/0191/3924/files/maui_a7229731-d524-4a48-b3ce-e13a2ef1773a.jpg?10526" />
-            </a>
+      <!-- Collection Description -->
+      {% if collection.description != blank %}
+        <div class="new-collection-description new-mb-8">
+          <div class="new-prose new-prose-lg">
+            {{ collection.description }}
           </div>
-          <div class="thumbnail four columns odd">
-            <a href="http://hawaiiteetimes.com/collections/multi-day-golf-oahu" title="Oahu Golf Specials">
-              <img src="//cdn.shopify.com/s/files/1/0191/3924/files/oahu_1b427771-e549-42ce-9d20-48c9b42df174.jpg?10526" />
-            </a>
-          </div>
-          <div class="thumbnail four columns even">
-            <a href="http://hawaiiteetimes.com/collections/multi-day-golf-big-island" title="Big Island Golf Specials">
-              <img src="//cdn.shopify.com/s/files/1/0191/3924/files/bigisland_dd7ed96a-f904-4411-ba21-4e198b2cdb81.jpg?10526" />
-            </a>
-          </div>
-          <div class="thumbnail four columns omega odd">
-            <a href="http://hawaiiteetimes.com/collections/multi-day-golf-kauai" title="Kauai Golf Specials">
-              <img src="//cdn.shopify.com/s/files/1/0191/3924/files/kauai_afff5458-0458-4638-b008-c78f8de00343.jpg?10526" />
-            </a>
-          </div>          
+          <!-- Multi-Day Golf Islands Grid -->
+          {% if multi_day %}
+            <div class="new-island-packages new-mt-8">
+              <div class="new-grid new-grid-cols-1 new-sm:grid-cols-2 new-lg:grid-cols-4 new-gap-6">
+                <a href="http://hawaiiteetimes.com/collections/multi-day-golf-maui" title="Maui Golf Specials" class="new-package-card">
+                  <img src="//cdn.shopify.com/s/files/1/0191/3924/files/maui_a7229731-d524-4a48-b3ce-e13a2ef1773a.jpg?10526" alt="Maui Golf Packages" class="new-img-responsive new-rounded-lg" />
+                  <div class="new-package-overlay">
+                    <h3 class="new-h3">Maui Golf Packages</h3>
+                  </div>
+                </a>
+                <a href="http://hawaiiteetimes.com/collections/multi-day-golf-oahu" title="Oahu Golf Specials" class="new-package-card">
+                  <img src="//cdn.shopify.com/s/files/1/0191/3924/files/oahu_1b427771-e549-42ce-9d20-48c9b42df174.jpg?10526" alt="Oahu Golf Packages" class="new-img-responsive new-rounded-lg" />
+                  <div class="new-package-overlay">
+                    <h3 class="new-h3">Oahu Golf Packages</h3>
+                  </div>
+                </a>
+                <a href="http://hawaiiteetimes.com/collections/multi-day-golf-big-island" title="Big Island Golf Specials" class="new-package-card">
+                  <img src="//cdn.shopify.com/s/files/1/0191/3924/files/bigisland_dd7ed96a-f904-4411-ba21-4e198b2cdb81.jpg?10526" alt="Big Island Golf Packages" class="new-img-responsive new-rounded-lg" />
+                  <div class="new-package-overlay">
+                    <h3 class="new-h3">Big Island Golf Packages</h3>
+                  </div>
+                </a>
+                <a href="http://hawaiiteetimes.com/collections/multi-day-golf-kauai" title="Kauai Golf Specials" class="new-package-card">
+                  <img src="//cdn.shopify.com/s/files/1/0191/3924/files/kauai_afff5458-0458-4638-b008-c78f8de00343.jpg?10526" alt="Kauai Golf Packages" class="new-img-responsive new-rounded-lg" />
+                  <div class="new-package-overlay">
+                    <h3 class="new-h3">Kauai Golf Packages</h3>
+                  </div>
+                </a>
+              </div>
+            </div>
+          {% endif %}
         </div>
-        {% endif %}
-      </div>
       {% endif %}      
 
       
-  <div class="clearfix">
-    {% if collection.products.size == 0 %}
-    {% unless multi_day %}
-      <div class="center">
-        <div class="section clearfix">     
-          <p class="quote">{{ 'collections.general.no_matches' | t }}</p>
+    <!-- Products Grid -->
+    <div class="new-products-section new-mt-12">
+      {% if collection.products.size == 0 %}
+        {% unless multi_day %}
+          <div class="new-text-center new-py-16">
+            <div class="new-empty-state">
+              <h3 class="new-h3 new-mb-4">{{ 'collections.general.no_matches' | t }}</h3>
+              <p class="new-body new-text-gray-600">Try adjusting your filters or search terms.</p>
+              <a href="{{ collection.url }}" class="new-btn new-btn-primary new-mt-6">View All Courses</a>
+            </div>
+          </div>
+        {% endunless %}
+      {% else %}
+        {% assign products = collection.products %}
+        {% assign products_per_row = settings.products_per_row %}
+        {% include 'product-loop' with settings.collection_sidebar %}
+      {% endif %}
+    </div>
+
+    <!-- Sidebar for filters (if enabled) -->
+    {% if settings.collection_sidebar %}
+      </div>
+      <div class="new-collection-sidebar">
+        <div class="new-card new-p-6">
+          <h3 class="new-h3 new-mb-4">Filter Courses</h3>
+          <!-- Sidebar content would go here -->
         </div>
       </div>
-    {% endunless %}
+      </div>
     {% else %}
-      {% assign products = collection.products %}
-      {% assign products_per_row = settings.products_per_row %}
-      {% include 'product-loop' with settings.collection_sidebar %}
+      </div>
     {% endif %}
-    </div>
+    
   </div>
-      
+</section>
 
+<!-- Pagination -->
+{% include 'pagination' with settings.collection_sidebar %}
 
-  {% include 'pagination' with settings.collection_sidebar %}
 {% endpaginate %}
