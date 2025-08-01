@@ -7588,6 +7588,25 @@ ul#available-teetimes li a[data-price=''] {
   height: 100%;
 }
 
+/* Desktop Grid Improvements */
+@media (min-width: 768px) {
+  .new-products-grid {
+    gap: var(--space-8); /* Increase gap on tablet+ */
+  }
+}
+
+@media (min-width: 1024px) {
+  .new-products-grid {
+    gap: var(--space-10); /* Even larger gap on desktop */
+    margin: var(--space-8) 0;
+  }
+  
+  /* Ensure proper card proportions on desktop */
+  .new-products-grid .new-product-card {
+    min-height: 400px;
+  }
+}
+
 /* Responsive Grid for Product Cards */
 @media (min-width: 640px) {
   .new-product-image-container {

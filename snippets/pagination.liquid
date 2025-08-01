@@ -1,22 +1,12 @@
 {% comment %}
-
-  This snippet renders a custom widget based on the current 'paginate' context,
-  defined in { % paginate XXXX by 5 % } tags wrapping the content.
-
-  Replace Text Example:
-    <div class="pagination">
-      {{ paginate | default_pagination | replace: 'Previous', 'Newer articles' | replace: 'Next', 'Older articles' }}
-    </div>
-
-  More information:
-   - http://docs.shopify.com/themes/liquid-variables/paginate
-
+NEW DESIGN SYSTEM PAGINATION - Mobile-First Responsive Pagination
+Responsive pagination that works well on all devices
 {% endcomment %}
 
 {% if paginate.pages > 1 %}  
-  <div class="{% if pagination %}twelve{% else %}sixteen{% endif %} columns mobile-pagination">
-    <div class="section clearfix">    
-      <div class="paginate mobile-paginate">
+  <div class="new-pagination-container new-mt-12">
+    <div class="new-container">    
+      <div class="new-pagination new-flex new-justify-center new-items-center new-gap-2">
         {{ paginate | default_pagination }}
       </div>  
     </div>
@@ -24,25 +14,65 @@
 {% endif %}
 
 <style>
+.new-pagination-container {
+  margin-top: var(--space-12);
+  padding: var(--space-6) 0;
+  border-top: 1px solid var(--color-gray-200);
+}
+
+.new-pagination {
+  text-align: center;
+}
+
+.new-pagination a,
+.new-pagination span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+}
+
+.new-pagination a {
+  background: var(--color-white);
+  color: var(--color-gray-700);
+  border: 1px solid var(--color-gray-300);
+}
+
+.new-pagination a:hover {
+  background: var(--color-primary);
+  color: var(--color-white);
+  border-color: var(--color-primary);
+}
+
+.new-pagination span.current {
+  background: var(--color-primary);
+  color: var(--color-white);
+  border: 1px solid var(--color-primary);
+}
+
+.new-pagination span.deco {
+  background: transparent;
+  border: none;
+  color: var(--color-gray-500);
+}
+
 @media (max-width: 767px) {
-  .mobile-pagination {
-    width: 100% !important;
-    margin-left: -20px;
-    margin-right: -20px;
-    width: calc(100% + 40px);
-    padding: 0 20px;
+  .new-pagination a,
+  .new-pagination span {
+    min-height: 48px;
+    min-width: 48px;
+    font-size: var(--text-lg);
   }
   
-  .mobile-paginate {
-    text-align: center;
-  }
-  
-  .mobile-paginate a,
-  .mobile-paginate span {
-    min-height: 44px;
-    line-height: 44px;
-    padding: 0 15px;
-    font-size: 16px;
+  .new-pagination {
+    gap: var(--space-1);
   }
 }
 </style>

@@ -18,12 +18,8 @@
 <section class="new-section new-collection-page">
   <div class="new-container">
     
-    {% if settings.collection_sidebar %}
-      <div class="new-grid new-grid-cols-1 new-lg:grid-cols-4 new-gap-8">
-        <div class="new-lg:col-span-3">
-    {% else %}
-      <div class="new-collection-main">
-    {% endif %}
+    <!-- Use simple main container (sidebar disabled) -->
+    <div class="new-collection-main">
 
       <!-- Collection Hero Banner -->
       {% if collection.image %}
@@ -167,7 +163,9 @@
       {% endif %}
     </div>
 
-    <!-- Sidebar for filters (if enabled) -->
+    <!-- Sidebar for filters (disabled - no content to display) -->
+    {% comment %}
+    Sidebar functionality disabled until filter content is implemented
     {% if settings.collection_sidebar %}
       </div>
       <div class="new-collection-sidebar">
@@ -180,6 +178,8 @@
     {% else %}
       </div>
     {% endif %}
+    {% endcomment %}
+    </div>
     
   </div>
 </section>
