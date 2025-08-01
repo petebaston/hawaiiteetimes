@@ -7723,6 +7723,53 @@ ul#available-teetimes li a[data-price=''] {
   margin-bottom: var(--space-8);
 }
 
+/* Mobile-friendly product description content */
+.new-prose table {
+  width: 100%;
+  font-size: 14px;
+  border-collapse: collapse;
+  margin: var(--space-6) 0;
+  overflow-x: auto;
+  display: block;
+  white-space: nowrap;
+}
+
+.new-prose table td,
+.new-prose table th {
+  padding: var(--space-2);
+  border: 1px solid #e5e5e5;
+  text-align: left;
+  min-width: 120px;
+}
+
+.new-prose iframe {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 16/9;
+}
+
+/* Mobile table wrapper for horizontal scrolling */
+@media (max-width: 768px) {
+  .new-prose table {
+    font-size: 12px;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .new-prose table td,
+  .new-prose table th {
+    min-width: 100px;
+    padding: var(--space-1);
+  }
+  
+  .new-prose iframe {
+    height: 200px;
+  }
+}
+
 .new-product-gallery {
   width: 100%;
   margin-bottom: 0;
