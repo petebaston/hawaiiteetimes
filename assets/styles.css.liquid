@@ -8022,3 +8022,39 @@ ul#available-teetimes li a[data-price=''] {
     height: 75px;
   }
 }
+
+/* Header with New Design System - Keep old layout but update styling */
+#head.header .container.content.mobile-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+}
+
+/* Fix dropdown white background in header navigation */
+#head .main.menu ul,
+#head .main.menu ul ul {
+  background-color: var(--color-white) !important;
+  border: 1px solid var(--color-gray-200) !important;
+  box-shadow: var(--shadow-md) !important;
+  border-radius: var(--radius-md) !important;
+}
+
+#head .main.menu ul li a,
+#head .main.menu ul ul li a {
+  background-color: transparent !important;
+  color: var(--color-gray-900) !important;
+  padding: var(--space-2) var(--space-3) !important;
+  transition: background-color 0.15s ease !important;
+}
+
+#head .main.menu ul li a:hover,
+#head .main.menu ul ul li a:hover {
+  background-color: var(--color-gray-50) !important;
+  color: var(--color-primary-600) !important;
+}
+
+/* Ensure header dropdowns don't have conflicting white backgrounds */
+#head .main.menu ul li,
+#head .main.menu ul ul li {
+  background-color: transparent !important;
+}
