@@ -7,7 +7,7 @@ Responsive grid that displays course cards using CSS Grid
 {% assign skip = false %}
 
 <!-- Golf Course Grid Container -->
-<div class="new-products-grid new-grid new-grid-cols-1 new-sm:grid-cols-2 new-lg:grid-cols-3 new-gap-6">
+<div class="new-products-grid new-grid new-grid-cols-1 new-sm:grid-cols-2 new-lg:grid-cols-3 new-gap-4">
   {% for product in products limit: limit %}
     {% if product.id == skip_product.id or skip == true %}
       {% assign product_found = true %}

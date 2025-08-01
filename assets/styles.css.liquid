@@ -7361,6 +7361,8 @@ ul#available-teetimes li a[data-price=''] {
   height: 100%;
   display: flex;
   flex-direction: column;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .new-product-card:hover {
@@ -7595,10 +7597,14 @@ ul#available-teetimes li a[data-price=''] {
 /* Products Grid Container */
 .new-products-grid {
   margin: var(--space-6) 0;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .new-products-grid .new-product-card {
   height: 100%;
+  min-width: 0; /* Prevent flex items from overflowing */
 }
 
 /* Mobile Products Grid */
@@ -7644,22 +7650,29 @@ ul#available-teetimes li a[data-price=''] {
   font-weight: var(--font-weight-bold);
 }
 
-/* Desktop Grid Improvements */
-@media (min-width: 768px) {
+/* Responsive Grid Spacing */
+@media (max-width: 639px) {
   .new-products-grid {
-    gap: var(--space-8); /* Increase gap on tablet+ */
+    gap: var(--space-3); /* Smaller gap on mobile */
+    margin: var(--space-4) 0;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .new-products-grid {
+    gap: var(--space-4); /* Moderate gap on tablet */
   }
 }
 
 @media (min-width: 1024px) {
   .new-products-grid {
-    gap: var(--space-10); /* Even larger gap on desktop */
-    margin: var(--space-8) 0;
+    gap: var(--space-5); /* Comfortable gap on desktop */
+    margin: var(--space-6) 0;
   }
   
   /* Ensure proper card proportions on desktop */
   .new-products-grid .new-product-card {
-    min-height: 400px;
+    min-height: 340px;
   }
 }
 
