@@ -291,8 +291,22 @@
 
       <div class="fixed_header"></div>
 
-      {% unless template contains "index" and settings.slideshow_enabled %}
-        <div class="container main content mobile-main">
+      {% comment %}
+        Skip old container for templates using new design system
+      {% endcomment %}
+      {% assign new_design_templates = 'collection,product,index' | split: ',' %}
+      {% assign uses_new_design = false %}
+      {% for new_template in new_design_templates %}
+        {% if template contains new_template %}
+          {% assign uses_new_design = true %}
+          {% break %}
+        {% endif %}
+      {% endfor %}
+
+      {% unless uses_new_design %}
+        {% unless template contains "index" and settings.slideshow_enabled %}
+          <div class="container main content mobile-main">
+        {% endunless %}
       {% endunless %}
 
       {% if template contains 'list-collections' %}
@@ -300,7 +314,10 @@
       {% else %}
         {{ content_for_layout }}
       {% endif %}
+      
+      {% unless uses_new_design %}
     	</div> <!-- end container -->
+      {% endunless %}
 
     <div class="footer">
       <div class="container">
