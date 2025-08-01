@@ -25,24 +25,24 @@
       </nav>
     </div>
 
+    <!-- Product Images Slider - Edge to Edge -->
+    <div class="new-product-images-full">
+      {% include 'sp-slider' %}
+    </div>
+
     <div class="new-product-content">
       <div itemscope itemtype="http://data-vocabulary.org/Product" id="product-{{ product.id }}">
-        
-        <!-- Product Images Slider -->
-        <div class="new-product-images new-mb-8">
-          {% include 'sp-slider' %}
-        </div>
 
         <!-- Golf Course Details Grid -->
-        <div class="new-grid new-grid-cols-1 new-lg:grid-cols-3 new-gap-8 new-mb-12">
+        <div class="new-grid new-grid-cols-1 new-lg:grid-cols-3 new-gap-6 new-mb-8">
           
           <!-- Main Content Column -->
           <div class="new-lg:col-span-2">
             
             <!-- Rates Section -->
-            <section class="new-rates-section new-mb-8">
-              <div class="new-card new-p-6">
-                <h2 class="new-h2 new-mb-6">Golf Rates & Booking</h2>
+            <section class="new-rates-section new-mb-6">
+              <div class="new-card new-p-4">
+                <h2 class="new-h2 new-mb-4">Golf Rates & Booking</h2>
 
                 {% if product.variants.size <= 1 %}
                   {% assign variant = product.selected_or_first_available_variant %}
@@ -85,9 +85,9 @@
 
             <!-- Course Description -->
             {% if product.description != blank %}
-              <section class="new-description-section new-mb-8">
-                <div class="new-card new-p-6">
-                  <h2 class="new-h2 new-mb-4">About {{ product.title }}</h2>
+              <section class="new-description-section new-mb-6">
+                <div class="new-card new-p-4">
+                  <h2 class="new-h2 new-mb-3">About {{ product.title }}</h2>
                   <div class="new-prose new-prose-lg" itemprop="description">
                     {{ product.description | split: '<!-- split -->' | first }}
                   </div>
@@ -95,18 +95,10 @@
               </section>
             {% endif %}
 
-            <!-- Weather Widget -->
-            <section class="new-weather-section new-mb-8">
-              <div class="new-card new-p-6">
-                <h2 class="new-h2 new-mb-4">Local Weather Forecast</h2>
-                {% include 'weather-widget' %}
-              </div>
-            </section>
-            
             <!-- Tee Times -->
-            <section class="new-teetimes-section new-mb-8">
-              <div class="new-card new-p-6">
-                <h2 class="new-h2 new-mb-4">Available Tee Times</h2>
+            <section class="new-teetimes-section new-mb-6">
+              <div class="new-card new-p-4">
+                <h2 class="new-h2 new-mb-3">Available Tee Times</h2>
                 {% render "tee-times" with product %}
               </div>
             </section>
@@ -117,8 +109,8 @@
           <div class="new-product-sidebar">
             
             <!-- Course Info Card -->
-            <div class="new-card new-p-6 new-mb-6">
-              <h3 class="new-h3 new-mb-4">Course Information</h3>
+            <div class="new-card new-p-4 new-mb-4">
+              <h3 class="new-h3 new-mb-3">Course Information</h3>
               
               <div class="new-course-meta new-space-y-3">
                 {% if settings.display_collections %}
@@ -167,9 +159,9 @@
             </div>
 
             <!-- Contact Card -->
-            <div class="new-card new-p-6 new-mb-6 new-text-center">
-              <h3 class="new-h3 new-mb-4">Need Help?</h3>
-              <p class="new-body new-mb-4">Call our golf specialists for personalized recommendations and group bookings.</p>
+            <div class="new-card new-p-4 new-mb-4 new-text-center">
+              <h3 class="new-h3 new-mb-3">Need Help?</h3>
+              <p class="new-body new-mb-3">Call our golf specialists for personalized recommendations and group bookings.</p>
               <a href="tel:1.877.465.3170" class="new-btn new-btn-primary new-btn-full">
                 📞 Call (877) 465-3170
               </a>
