@@ -6976,6 +6976,14 @@ ul#available-teetimes li a[data-price=''] {
 /* Collection & Product Classes */
 .new-collection-page {
   background-color: var(--color-gray-50);
+  min-height: 100vh;
+}
+
+/* Ensure full page background */
+.new-section.new-collection-page {
+  background-color: var(--color-gray-50);
+  padding-top: var(--space-6);
+  padding-bottom: var(--space-6);
 }
 
 .new-collection-banner {
@@ -7699,7 +7707,7 @@ ul#available-teetimes li a[data-price=''] {
     gap: var(--space-4); /* Reduced gap to prevent overflow */
     margin: var(--space-6) 0;
     grid-template-columns: repeat(3, minmax(0, 1fr)); /* minmax prevents overflow */
-    padding: 0 var(--space-2); /* Add internal padding to prevent edge overflow */
+    padding: 0; /* Remove padding to prevent overflow */
   }
   
   /* Ensure proper card proportions on desktop */
